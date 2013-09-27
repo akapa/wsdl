@@ -9,6 +9,6 @@ requirejs.config({
 	}
 });
 
-requirejs(['underscore'], function (_) {
-	console.log('running');
+requirejs(['underscore', 'wsconfig'], function (_, wsconfig) {
+	console.log(wsconfig);
 });
