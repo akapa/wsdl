@@ -1,9 +1,9 @@
 define(['underscore'], function (_) {
 	var Library = {
-		items: {},
-		type: null,
-		nameProperty: 'name',
 		init: function (defs) {
+			this.items = {};
+			this.type = null;
+			this.nameProperty = 'name';
 			this.addItems(defs);
 			return this;
 		},
@@ -16,7 +16,7 @@ define(['underscore'], function (_) {
 				this.addItem(val);
 			}, this);
 		},
-		getDefinition: function (name) {
+		getItem: function (name) {
 			return this.items[name];
 		}
 	};
