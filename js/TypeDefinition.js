@@ -1,7 +1,6 @@
 define(function () {
 	var TypeDefinition = {
-		name: null,
-		type: null,
+		type: 'anyType',
 		ns: 'http://www.w3.org/2001/XMLSchema',
 		multiple: false,
 		complex: false,
