@@ -4,6 +4,7 @@ define(['underscore'], function (_) {
 			this.serializer = serializer;
 			this.methodLibrary = methodLibrary;
 			this.typeLibrary = typeLibrary;
+			return this;
 		},
 		call: function (method, requestObj, onSuccess, onError) {
 			

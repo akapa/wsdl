@@ -10,5 +10,5 @@ requirejs.config({
 });
 
 requirejs(['underscore', 'wsconfig'], function (_, wsconfig) {
-	console.log(wsconfig);
+	console.log(wsconfig.service);
 });
