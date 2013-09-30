@@ -1,15 +1,12 @@
-define(['TypeDefinition'], function (TypeDefinition) {
-	var TypeLibrary = {
-		init: function (definitions) {
-			this.definitions = definitions;
-		},
-		getTypeDefinition: function (s) {
-			return this.definitions[s];
-		},
+define(['underscore', 'Library', 'TypeDefinition'],
+function (_, Library, TypeDefinition) {
+	var TypeLibrary = _(Library).extend({
+		type: TypeDefinition,
+		nameProperty: 'type',
 		getObjectType: function (obj) {
 			return obj.classify();
 		}
-	};
+	});
 
 	return TypeLibrary;
 });
