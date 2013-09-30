@@ -1,6 +1,6 @@
 define(['underscore', 'WebService', 'TypeLibrary', 'TypeDefinition', 
-	'MethodLibrary', 'MethodDefinition', 'SoapSerializer'], 
-function (_, WebService, TypeLibrary, TypeDefinition, MethodLibrary, MethodDefinition, SoapSerializer) {
+	'MethodLibrary', 'MethodDefinition', 'SoapSerializer', 'Factory'], 
+function (_, WebService, TypeLibrary, TypeDefinition, MethodLibrary, MethodDefinition, SoapSerializer, Factory) {
 	var ns = 'http://budget.kapa.org';
 	var url = 'Service';
 
@@ -23,20 +23,20 @@ function (_, WebService, TypeLibrary, TypeDefinition, MethodLibrary, MethodDefin
 	};
 
 	var types = [
-		_(TypeDefinition).extend({
-				type: 'event',
+		_(Object.create(TypeDefinition)).extend({
+				type: 'Event',
 				ns: ns,
 				complex: true,
 				proto: objects.Event
 			}),
-		_(TypeDefinition).extend({
-				type: 'getEventsInRange',
+		_(Object.create(TypeDefinition)).extend({
+				type: 'GetEventsInRange',
 				ns: ns,
 				complex: true,
 				proto: objects.GetEventsInRange
 			}),
-		_(TypeDefinition).extend({
-			type: 'getEventsInRangeResponse',
+		_(Object.create(TypeDefinition)).extend({
+			type: 'GetEventsInRangeResponse',
 			ns: ns,
 			complex: true,
 			proto: objects.GetEventsInRangeResponse
@@ -44,7 +44,7 @@ function (_, WebService, TypeLibrary, TypeDefinition, MethodLibrary, MethodDefin
 	];
 
 	var methods = [
-		_(MethodDefinition).extend({
+		_(Object.create(MethodDefinition)).extend({
 			name: 'getEventsInRange',
 			requestObj: objects.getEventsInRange,
 			responseObj: objects.getEventsInRangeResponse,
@@ -54,17 +54,15 @@ function (_, WebService, TypeLibrary, TypeDefinition, MethodLibrary, MethodDefin
 
 	var typeLib = Object.create(TypeLibrary).init(types);
 	var methodLib = Object.create(MethodLibrary).init(methods);
+	var factory = Object.create(Factory).init(typeLib);
 	var serializer = Object.create(SoapSerializer).init(typeLib);
-	var ws = _(WebService).extend({
-		'getEventsInRange': function () {
+	var ws = _(Object.create(WebService)).extend({
+		'getEventsInRange': function (params, onSuccess, onError) {
 
 		}
-	}).init(serializer, methodLib, typeLib);
+	}).init(serializer, factory, methodLib, typeLib);
 
 	return {
-		service: ws,
-		objects: objects,
-		typeLib: typeLib,
-		methodLib: methodLib
+		service: ws
 	};
 });

@@ -10,5 +10,8 @@ requirejs.config({
 });
 
 requirejs(['underscore', 'wsconfig'], function (_, wsconfig) {
-	console.log(wsconfig.service);
+	var service = wsconfig.service;
+	console.log(service);
+	var event = service.factory.make('Event');
+	console.log(event);
 });
