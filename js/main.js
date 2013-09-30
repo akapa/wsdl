@@ -12,6 +12,6 @@ requirejs.config({
 requirejs(['underscore', 'wsconfig'], function (_, wsconfig) {
 	var service = wsconfig.service;
 	console.log(service);
-	var event = service.factory.make('Event');
-	console.log(event);
+	var reqObj = service.factory.make('GetEventsInRange');
+	service.call('getEventsInRange', reqObj);
 });

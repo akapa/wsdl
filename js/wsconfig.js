@@ -46,8 +46,8 @@ function (_, WebService, TypeLibrary, TypeDefinition, MethodLibrary, MethodDefin
 	var methods = [
 		_(Object.create(MethodDefinition)).extend({
 			name: 'getEventsInRange',
-			requestObj: objects.getEventsInRange,
-			responseObj: objects.getEventsInRangeResponse,
+			requestObject: 'GetEventsInRange',
+			responseObject: 'GetEventsInRangeResponse',
 			endpoint: url
 		})
 	];

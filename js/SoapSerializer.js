@@ -5,10 +5,10 @@ define(['underscore', 'Serializer'], function (_, Serializer) {
 			return this;
 		},
 		serialize: function (value, typeDef, name) {
-
+			return 'blabla';
 		},
 		unserialize: function (s) {
-
+			return {};
 		}
 	});
 
