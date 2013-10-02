@@ -18,6 +18,9 @@ define(['underscore'], function (_) {
 		},
 		getItem: function (name) {
 			return this.items[name];
+		},
+		exists: function (name) {
+			return name in this.items;
 		}
 	};
 
