@@ -1,4 +1,4 @@
-define(['underscore', 'Serializer'], function (_, Serializer) {
+define(['underscore', 'Serializer', 'Xml'], function (_, Serializer, Xml) {
 	var SoapSerializer = _(Serializer).extend({
 		init: function (typeLibrary) {
 			this.typeLibrary = typeLibrary;
@@ -18,7 +18,7 @@ define(['underscore', 'Serializer'], function (_, Serializer) {
 				xml += this.serializeComplex(value, typeDef, name);
 			}
 			else {
-				xml += value;
+				xml += Xml.getTag(name, value);
 			}
 			return xml;
 		},
@@ -26,14 +26,26 @@ define(['underscore', 'Serializer'], function (_, Serializer) {
 			return {};
 		},
 		serializeMultiple: function (obj, typeDef, name) {
-
+			typeDef = _(typeDef).omit('multiple');
+			var xml = '';
+			_(obj).each(function (value) {
+				xml += this.serialize(value, typeDef, name);
+			}, this);
+			return xml;
 		},
 		serializeComplex: function (obj, typeDef, name) {
 			var xml = '';
 			_(typeDef.properties).each(function (propDef, key) {
-				
-			});
-			return xml;
+				var value = obj[key];
+				var isNull = _(value).isNull();
+				var attribs = {};
+				var serValue = isNull ? '' : this.serialize(value, propDef, key);
+				if (isNull) {
+					attribs['xs:nil'] = 'true';
+				}
+				xml += !propDef.multiple ? Xml.getTag(key, value, attribs) : serValue;
+			}, this);
+			return Xml.getTag(name, xml);
 		}
 	});
 
