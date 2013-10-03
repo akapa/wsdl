@@ -11,8 +11,12 @@ define(function () {
 			return ['</', name, '>'].join('');
 		},
 		getTag: function (name, val, att) {
+			var value = val;
+			if (!name) {
+				return value;
+			}
 			return this.getOpenTag(name, att)
-				+ val
+				+ value
 				+ this.getCloseTag(name);
 		},
 		getHeader : function () {

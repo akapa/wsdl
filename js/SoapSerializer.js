@@ -8,19 +8,19 @@ define(['underscore', 'Serializer', 'Xml'], function (_, Serializer, Xml) {
 			typeDef = _(typeDef).isString()
 				? this.typeLibrary.getItem(typeDef)
 				: typeDef;
-			name = name || typeDef.type;
 
-			var xml = '';
 			if (typeDef.multiple) {
-				xml += this.serializeMultiple(value, typeDef, name);
+				return this.serializeMultiple(value, typeDef, name);
+			}
+			else if (_(value).isNull()) {
+				return Xml.getTag(name, '', { 'xs:nil': 'true' });
 			}
 			else if (typeDef.complex) {
-				xml += this.serializeComplex(value, typeDef, name);
+				return this.serializeComplex(value, typeDef, name);
 			}
 			else {
-				xml += Xml.getTag(name, value);
+				return Xml.getTag(name, value);
 			}
-			return xml;
 		},
 		unserialize: function (s) {
 			return {};
@@ -37,15 +37,19 @@ define(['underscore', 'Serializer', 'Xml'], function (_, Serializer, Xml) {
 			var xml = '';
 			_(typeDef.properties).each(function (propDef, key) {
 				var value = obj[key];
-				var isNull = _(value).isNull();
-				var attribs = {};
-				var serValue = isNull ? '' : this.serialize(value, propDef, key);
-				if (isNull) {
-					attribs['xs:nil'] = 'true';
-				}
-				xml += !propDef.multiple ? Xml.getTag(key, value, attribs) : serValue;
+				xml += this.serialize(value, propDef, key);
 			}, this);
-			return Xml.getTag(name, xml);
+
+			var attribs = {};
+			var objType = this.typeLibrary.getObjectType(obj);
+			if (this.typeLibrary.exists(objType)) {
+				attribs['type'] = objType;
+			}
+
+			return Xml.getTag(name, xml, attribs);
+		},
+		unserialize: function (s) {
+			return {};
 		}
 	});
 

@@ -9,7 +9,13 @@ function (_, Library, TypeDefinition) {
 			return this;
 		},
 		getObjectType: function (obj) {
-			return obj.classify();
+			if (!_(obj).isObject()) {
+				return null;
+			}
+			if ('classify' in obj) {
+				return obj.classify();
+			}
+			return 'Object';
 		}
 	});
 

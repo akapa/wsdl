@@ -17,7 +17,9 @@ requirejs(['underscore', 'wsconfig'], function (_, wsconfig) {
 	var test = {
 		test1: true,
 		multis: [1,2,3.5,Infinity],
-		obj: null
+		obj: /*{
+			classify: function () { return 'event'; }
+		}*/null
 	};
 	var testType = {
 		type: 'TestObject',
