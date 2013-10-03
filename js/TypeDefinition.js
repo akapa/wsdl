@@ -4,7 +4,7 @@ define(function () {
 		ns: 'http://www.w3.org/2001/XMLSchema',
 		multiple: false,
 		complex: false,
-		properties: [],
+		properties: {},
 		proto: null
 	};
 

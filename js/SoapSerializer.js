@@ -12,7 +12,7 @@ define(['underscore', 'Serializer', 'Xml'], function (_, Serializer, Xml) {
 			if (typeDef.multiple) {
 				return this.serializeMultiple(value, typeDef, name);
 			}
-			else if (_(value).isNull()) {
+			else if (_(value).isNull() || _(value).isUndefined()) {
 				return Xml.getTag(name, '', { 'xs:nil': 'true' });
 			}
 			else if (typeDef.complex) {

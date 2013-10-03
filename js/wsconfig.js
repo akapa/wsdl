@@ -5,49 +5,72 @@ function (_, WebService, TypeLibrary, TypeDefinition, MethodLibrary, MethodDefin
 	var url = 'Service';
 
 	var objects = {
-		Event: {
+		event: {
 			'amount': 0,
 			'description': '',
 			'id': 0,
 			'time': new Date(),
 			'type': '',
-			'user': null
+			'user': null,
+			classify: function () { return 'event'; }
 		},
-		GetEventsInRange: {
+		getEventsInRange: {
 			'timeFrom': new Date(),
-			'timeTo': new Date
+			'timeTo': new Date,
+			classify: function () { return 'getEventsInRange'; }
 		},
-		GetEventsInRangeResponse: {
-			'return': []
+		getEventsInRangeResponse: {
+			'return': [],
+			classify: function () { return 'getEventsInRangeResponse'; }
 		}
 	};
 
 	var types = [
 		_(Object.create(TypeDefinition)).extend({
-				type: 'Event',
+				type: 'event',
 				ns: ns,
 				complex: true,
-				proto: objects.Event
+				proto: objects.event,
+				properties: {
+					'amount': {
+						type: 'float'
+					},
+					'description': {
+						type: 'string'
+					},
+					'id': {
+						type: 'int'
+					},
+					'time': {
+						type: 'dateTime'
+					},
+					'type': {
+						type: 'string'
+					},
+					'user': {
+						type: 'User'
+					}
+				}
 			}),
 		_(Object.create(TypeDefinition)).extend({
-				type: 'GetEventsInRange',
+				type: 'getEventsInRange',
 				ns: ns,
 				complex: true,
-				proto: objects.GetEventsInRange
+				proto: objects.getEventsInRange
 			}),
 		_(Object.create(TypeDefinition)).extend({
-			type: 'GetEventsInRangeResponse',
+			type: 'getEventsInRangeResponse',
 			ns: ns,
 			complex: true,
-			proto: objects.GetEventsInRangeResponse
+			proto: objects.getEventsInRangeResponse
 		})
 	];
 
 	var methods = [
 		_(Object.create(MethodDefinition)).extend({
 			name: 'getEventsInRange',
-			requestObject: 'GetEventsInRange',
-			responseObject: 'GetEventsInRangeResponse',
+			requestObject: 'getEventsInRange',
+			responseObject: 'getEventsInRangeResponse',
 			endpoint: url
 		})
 	];
