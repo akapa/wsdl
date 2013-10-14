@@ -31,9 +31,6 @@ define(['underscore', 'Serializer', 'Xml'], function (_, Serializer, Xml) {
 				return Xml.getTag(name, value);
 			}
 		},
-		unserialize: function (s) {
-			return {};
-		},
 		serializeMultiple: function (obj, name, typeDef) {
 			typeDef = _(typeDef).omit('multiple');
 			var xml = '';
