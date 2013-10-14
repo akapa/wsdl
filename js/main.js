@@ -43,5 +43,5 @@ requirejs(['underscore', 'wsconfig'], function (_, wsconfig) {
 			'obj2': 'event'
 		}
 	};
-	console.log(service.serializer.serialize(test, testType, 'testObject'));
+	console.log(service.serializer.serialize(test, 'testObject', testType));
 });
