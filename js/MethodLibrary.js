@@ -1,6 +1,6 @@
-define(['underscore', 'Library', 'MethodDefinition'],
-function (_, Library, MethodDefinition) {
-	var MethodLibrary = _(Object.create(Library)).extend({
+define(['underscore', 'Library', 'MethodDefinition', 'makeObject'],
+function (_, Library, MethodDefinition, make) {
+	var MethodLibrary = make(Library, {
 		init: function (defs) {
 			this.items = {};
 			this.type = MethodDefinition;

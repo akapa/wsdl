@@ -1,5 +1,5 @@
-define(['underscore', 'Serializer', 'Xml'], function (_, Serializer, Xml) {
-	var SoapSerializer = _(Object.create(Serializer)).extend({
+define(['underscore', 'Serializer', 'Xml', 'makeObject'], function (_, Serializer, Xml, make) {
+	var SoapSerializer = make(Serializer, {
 		init: function (typeLibrary) {
 			this.typeLibrary = typeLibrary;
 			return this;

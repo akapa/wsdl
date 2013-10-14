@@ -9,11 +9,7 @@ requirejs.config({
 	}
 });
 
-makeObject = function (name) {
-
-};
-
-requirejs(['underscore', 'wsconfig', 'makeObject'], function (_, wsconfig, make) {
+requirejs(['underscore', 'wsconfig'], function (_, wsconfig) {
 	var service = wsconfig.service;
 	console.log(service);
 	var reqObj = service.factory.make('getEventsInRange');
