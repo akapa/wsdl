@@ -1,6 +1,6 @@
-define(['underscore', 'WebService', 'TypeLibrary', 'TypeDefinition', 
+define(['underscore', 'makeObject', 'WebService', 'TypeLibrary', 'TypeDefinition', 
 	'MethodLibrary', 'MethodDefinition', 'SoapSerializer', 'Factory'], 
-function (_, WebService, TypeLibrary, TypeDefinition, MethodLibrary, MethodDefinition, SoapSerializer, Factory) {
+function (_, make, WebService, TypeLibrary, TypeDefinition, MethodLibrary, MethodDefinition, SoapSerializer, Factory) {
 	var ns = 'http://budget.kapa.org';
 	var url = 'Service';
 
@@ -26,39 +26,39 @@ function (_, WebService, TypeLibrary, TypeDefinition, MethodLibrary, MethodDefin
 	};
 
 	var types = [
-		_(Object.create(TypeDefinition)).extend({
-				type: 'event',
-				ns: ns,
-				complex: true,
-				proto: objects.event,
-				properties: {
-					'amount': {
-						type: 'float'
-					},
-					'description': {
-						type: 'string'
-					},
-					'id': {
-						type: 'int'
-					},
-					'time': {
-						type: 'dateTime'
-					},
-					'type': {
-						type: 'string'
-					},
-					'user': {
-						type: 'User'
-					}
+		make(TypeDefinition, {
+			type: 'event',
+			ns: ns,
+			complex: true,
+			proto: objects.event,
+			properties: {
+				'amount': {
+					type: 'float'
+				},
+				'description': {
+					type: 'string'
+				},
+				'id': {
+					type: 'int'
+				},
+				'time': {
+					type: 'dateTime'
+				},
+				'type': {
+					type: 'string'
+				},
+				'user': {
+					type: 'User'
 				}
-			}),
-		_(Object.create(TypeDefinition)).extend({
-				type: 'getEventsInRange',
-				ns: ns,
-				complex: true,
-				proto: objects.getEventsInRange
-			}),
-		_(Object.create(TypeDefinition)).extend({
+			}
+		}),
+		make(TypeDefinition, {
+			type: 'getEventsInRange',
+			ns: ns,
+			complex: true,
+			proto: objects.getEventsInRange
+		}),
+		make(TypeDefinition, {
 			type: 'getEventsInRangeResponse',
 			ns: ns,
 			complex: true,
@@ -67,7 +67,7 @@ function (_, WebService, TypeLibrary, TypeDefinition, MethodLibrary, MethodDefin
 	];
 
 	var methods = [
-		_(Object.create(MethodDefinition)).extend({
+		make(MethodDefinition, {
 			name: 'getEventsInRange',
 			requestObject: 'getEventsInRange',
 			responseObject: 'getEventsInRangeResponse',
@@ -75,11 +75,11 @@ function (_, WebService, TypeLibrary, TypeDefinition, MethodLibrary, MethodDefin
 		})
 	];
 
-	var typeLib = Object.create(TypeLibrary).init(types);
-	var methodLib = Object.create(MethodLibrary).init(methods);
-	var factory = Object.create(Factory).init(typeLib);
-	var serializer = Object.create(SoapSerializer).init(typeLib);
-	var ws = _(Object.create(WebService)).extend({
+	var typeLib = make(TypeLibrary).init(types);
+	var methodLib = make(MethodLibrary).init(methods);
+	var factory = make(Factory).init(typeLib);
+	var serializer = make(SoapSerializer).init(typeLib);
+	var ws = make(WebService, {
 		'getEventsInRange': function (params, onSuccess, onError) {
 
 		}
