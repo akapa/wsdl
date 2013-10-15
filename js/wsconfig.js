@@ -2,6 +2,7 @@ define(['underscore', 'makeObject', 'WebService', 'TypeLibrary', 'TypeDefinition
 	'MethodLibrary', 'MethodDefinition', 'SoapSerializer', 'Factory'], 
 function (_, make, WebService, TypeLibrary, TypeDefinition, MethodLibrary, MethodDefinition, SoapSerializer, Factory) {
 	var ns = 'http://budget.kapa.org';
+	var schemaNs = 'http://www.w3.org/2001/XMLSchema';
 	var url = 'Service';
 
 	var objects = {
@@ -13,6 +14,12 @@ function (_, make, WebService, TypeLibrary, TypeDefinition, MethodLibrary, Metho
 			'type': '',
 			'user': null,
 			classify: function () { return 'event'; }
+		},
+		user: {
+			'events': [],
+			'id': 0,
+			'name': '',
+			classify: function () { return 'user'; }
 		},
 		getEventsInRange: {
 			'timeFrom': new Date(),
@@ -32,37 +39,84 @@ function (_, make, WebService, TypeLibrary, TypeDefinition, MethodLibrary, Metho
 			complex: true,
 			proto: objects.event,
 			properties: {
-				'amount': {
+				'amount': make(TypeDefinition, {
+					ns: schemaNs,
 					type: 'float'
-				},
-				'description': {
+				}),
+				'description': make(TypeDefinition, {
+					ns: schemaNs,
 					type: 'string'
-				},
-				'id': {
+				}),
+				'id': make(TypeDefinition, {
+					ns: schemaNs,
 					type: 'int'
-				},
-				'time': {
+				}),
+				'time': make(TypeDefinition, {
+					ns: schemaNs,
 					type: 'dateTime'
-				},
-				'type': {
+				}),
+				'type': make(TypeDefinition, {
+					ns: schemaNs,
 					type: 'string'
-				},
-				'user': {
-					type: 'User'
-				}
+				}),
+				'user': make(TypeDefinition, {
+					ns: ns,
+					complex: true,
+					type: 'user'
+				})
+			}
+		}),
+		make(TypeDefinition, {
+			type: 'user',
+			ns: ns,
+			complex: true,
+			proto: objects.user,
+			properties: {
+				'events': make(TypeDefinition, {
+					ns: ns,
+					type: 'event',
+					multiple: true,
+					complex: true
+				}),
+				'id': make(TypeDefinition, {
+					ns: schemaNs,
+					type: 'int'
+				}),
+				'name': make(TypeDefinition, {
+					ns: schemaNs,
+					type: 'string'
+				})
 			}
 		}),
 		make(TypeDefinition, {
 			type: 'getEventsInRange',
 			ns: ns,
 			complex: true,
-			proto: objects.getEventsInRange
+			proto: objects.getEventsInRange,
+			properties: {
+				'timeFrom': make(TypeDefinition, {
+					ns: schemaNs,
+					type: 'dateTime'
+				}),
+				'timeTo': make(TypeDefinition, {
+					ns: schemaNs,
+					type: 'dateTime'
+				})
+			}
 		}),
 		make(TypeDefinition, {
 			type: 'getEventsInRangeResponse',
 			ns: ns,
 			complex: true,
-			proto: objects.getEventsInRangeResponse
+			proto: objects.getEventsInRangeResponse,
+			properties: {
+				'return': make(TypeDefinition, {
+					ns: ns,
+					complex: true,
+					multiple: true,
+					type: 'event'
+				})
+			}
 		})
 	];
 
