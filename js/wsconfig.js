@@ -10,7 +10,7 @@ function (_, make, WebService, TypeLibrary, TypeDefinition, MethodLibrary, Metho
 			'amount': 0,
 			'description': '',
 			'id': 0,
-			'time': new Date(),
+			'time': null,
 			'type': '',
 			'user': null,
 			classify: function () { return 'event'; }
@@ -22,8 +22,8 @@ function (_, make, WebService, TypeLibrary, TypeDefinition, MethodLibrary, Metho
 			classify: function () { return 'user'; }
 		},
 		getEventsInRange: {
-			'timeFrom': new Date(),
-			'timeTo': new Date,
+			'timeFrom': null,
+			'timeTo': null,
 			classify: function () { return 'getEventsInRange'; }
 		},
 		getEventsInRangeResponse: {
@@ -135,7 +135,8 @@ function (_, make, WebService, TypeLibrary, TypeDefinition, MethodLibrary, Metho
 	var serializer = make(SoapSerializer).init(typeLib);
 	var ws = make(WebService, {
 		'getEventsInRange': function (params, onSuccess, onError) {
-
+			var reqObj = make(this.methodLibrary.getItem('getEventsInRange').requestObject, params);
+			this.call('getEventsInRange', reqObj, onSuccess, onError);
 		}
 	}).init(serializer, factory, methodLib, typeLib);
 
