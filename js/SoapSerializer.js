@@ -22,7 +22,7 @@ define(['underscore', 'Serializer', 'Xml', 'makeObject'], function (_, Serialize
 				return Xml.getTag(name, '', { 'xs:nil': 'true' });
 			}
 			else if (typeDef.complex) {
-				return this.serializeComplex(value, name, typeDef);
+				return this.serializeComplex(value, name);
 			}
 			else if (typeDef.type in primitiveSerializers) {
 				return Xml.getTag(name, primitiveSerializers[typeDef.type](value, typeDef));
@@ -39,9 +39,9 @@ define(['underscore', 'Serializer', 'Xml', 'makeObject'], function (_, Serialize
 			}, this);
 			return xml;
 		},
-		serializeComplex: function (obj, name, typeDef) {
+		serializeComplex: function (obj, name) {
 			var xml = '';
-			console.log(obj, name, typeDef);
+			var typeDef = this.typeLibrary.getItem(this.typeLibrary.getObjectType(obj));
 			_(typeDef.properties).each(function (propDef, key) {
 				var value = obj[key];
 				xml += this.serialize(value, key, propDef);
