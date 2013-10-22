@@ -41,6 +41,7 @@ define(['underscore', 'Serializer', 'Xml', 'makeObject'], function (_, Serialize
 		},
 		serializeComplex: function (obj, name, typeDef) {
 			var xml = '';
+			console.log(obj, name, typeDef);
 			_(typeDef.properties).each(function (propDef, key) {
 				var value = obj[key];
 				xml += this.serialize(value, key, propDef);
