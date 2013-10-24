@@ -1,7 +1,8 @@
 define(['underscore', 'objTools', 'Serializer', 'Xml'], function (_, objTools, Serializer, Xml) {
 	var soapSerializer = objTools.make(Serializer, {
-		init: function (typeLibrary) {
+		init: function (typeLibrary, factory) {
 			this.typeLibrary = typeLibrary;
+			this.factory = factory;
 			return this;
 		},
 		serialize: function (value, name, typeDef) {
@@ -55,8 +56,20 @@ define(['underscore', 'objTools', 'Serializer', 'Xml'], function (_, objTools, S
 
 			return Xml.getTag(name, xml, attribs);
 		},
-		unserialize: function (s) {
-			return {};
+		unserialize: function (s, name, typeDef) {
+			return this.unserializeDOM(Xml.parse(s), name, typeDef);
+		},
+		unserializeDOM: function (dom, name, typeDef) {
+			var res;
+			var elem = dom.querySelector(name);
+			if (typeDef.complex) {
+				res = this.factory.make(typeDef.type);
+				_(typeDef.properties).each(function (prop, propName) {
+					this.typeLibrary.setValue(res, propName, this.unserializeDOM(elem, propName, prop));
+				}, this);
+			}
+
+			return res;
 		}
 	});
 
