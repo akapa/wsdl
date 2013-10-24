@@ -1,6 +1,6 @@
-define(['underscore', 'makeObject', 'WebService', 'TypeLibrary', 'TypeDefinition', 
+define(['underscore', 'objTools', 'WebService', 'TypeLibrary', 'TypeDefinition', 
 	'MethodLibrary', 'MethodDefinition', 'SoapSerializer', 'Factory'], 
-function (_, make, WebService, TypeLibrary, TypeDefinition, MethodLibrary, MethodDefinition, SoapSerializer, Factory) {
+function (_, objTools, WebService, TypeLibrary, TypeDefinition, MethodLibrary, MethodDefinition, SoapSerializer, Factory) {
 	var ns = 'http://budget.kapa.org';
 	var schemaNs = 'http://www.w3.org/2001/XMLSchema';
 	var url = 'Service';
@@ -46,92 +46,92 @@ function (_, make, WebService, TypeLibrary, TypeDefinition, MethodLibrary, Metho
 	});
 
 	var types = [
-		make(TypeDefinition, {
+		objTools.make(TypeDefinition, {
 			type: 'event',
 			ns: ns,
 			complex: true,
 			constructorFunction: function Event () {
-				return Object.create(objects.event);
+				return objTools.construct(objects.event, Event);
 			},
 			properties: {
-				'amount': make(TypeDefinition, {
+				'amount': objTools.make(TypeDefinition, {
 					ns: schemaNs,
 					type: 'float'
 				}),
-				'description': make(TypeDefinition, {
+				'description': objTools.make(TypeDefinition, {
 					ns: schemaNs,
 					type: 'string'
 				}),
-				'id': make(TypeDefinition, {
+				'id': objTools.make(TypeDefinition, {
 					ns: schemaNs,
 					type: 'int'
 				}),
-				'time': make(TypeDefinition, {
+				'time': objTools.make(TypeDefinition, {
 					ns: schemaNs,
 					type: 'dateTime'
 				}),
-				'type': make(TypeDefinition, {
+				'type': objTools.make(TypeDefinition, {
 					ns: schemaNs,
 					type: 'string'
 				}),
-				'user': make(TypeDefinition, {
+				'user': objTools.make(TypeDefinition, {
 					ns: ns,
 					complex: true,
 					type: 'user'
 				})
 			}
 		}),
-		make(TypeDefinition, {
+		objTools.make(TypeDefinition, {
 			type: 'user',
 			ns: ns,
 			complex: true,
 			constructorFunction: function User () {
-				return Object.create(objects.user);
+				return objTools.construct(objects.user, User);
 			},
 			properties: {
-				'events': make(TypeDefinition, {
+				'events': objTools.make(TypeDefinition, {
 					ns: ns,
 					type: 'event',
 					multiple: true,
 					complex: true
 				}),
-				'id': make(TypeDefinition, {
+				'id': objTools.make(TypeDefinition, {
 					ns: schemaNs,
 					type: 'int'
 				}),
-				'name': make(TypeDefinition, {
+				'name': objTools.make(TypeDefinition, {
 					ns: schemaNs,
 					type: 'string'
 				})
 			}
 		}),
-		make(TypeDefinition, {
+		objTools.make(TypeDefinition, {
 			type: 'getEventsInRange',
 			ns: ns,
 			complex: true,
 			constructorFunction: function GetEventsInRange () {
-				return Object.create(objects.getEventsInRange);
+				return objTools.construct(objects.getEventsInRange, GetEventsInRange);
 			},
 			properties: {
-				'timeFrom': make(TypeDefinition, {
+				'timeFrom': objTools.make(TypeDefinition, {
 					ns: schemaNs,
 					type: 'dateTime'
 				}),
-				'timeTo': make(TypeDefinition, {
+				'timeTo': objTools.make(TypeDefinition, {
 					ns: schemaNs,
 					type: 'dateTime'
 				})
 			}
 		}),
-		make(TypeDefinition, {
+		objTools.make(TypeDefinition, {
 			type: 'getEventsInRangeResponse',
 			ns: ns,
 			complex: true,
-			constructorFunction: function GetEventsInRangeResponse () {
-				return Object.create(objects.getEventsInRangeResponse);
+			constructorFunction: function getEventsInRangeResponse () {
+				return objTools.construct(objects.getEventsInRangeResponse, getEventsInRangeResponse);
 			},
 			properties: {
-				'return': make(TypeDefinition, {
+				'return': objTools.make(TypeDefinition, {
 					ns: ns,
 					complex: true,
 					multiple: true,
@@ -142,7 +142,7 @@ function (_, make, WebService, TypeLibrary, TypeDefinition, MethodLibrary, Metho
 	];
 
 	var methods = [
-		make(MethodDefinition, {
+		objTools.make(MethodDefinition, {
 			name: 'getEventsInRange',
 			requestObject: 'getEventsInRange',
 			responseObject: 'getEventsInRangeResponse',
@@ -157,7 +157,7 @@ function (_, make, WebService, TypeLibrary, TypeDefinition, MethodLibrary, Metho
 	var ws = new WebService(serializer, factory, methodLib, typeLib);
 	_(ws).extend({
 		'getEventsInRange': function (params, onSuccess, onError) {
-			var reqObj = make(this.methodLibrary.getItem('getEventsInRange').requestObject, params);
+			var reqObj = objTools.make(this.methodLibrary.getItem('getEventsInRange').requestObject, params);
 			this.call('getEventsInRange', reqObj, onSuccess, onError);
 		}
 	});

@@ -8,7 +8,6 @@ define(['underscore'], function (_) {
 			return this;
 		},
 		addItem: function (def, name) {
-			console.log(def, this.type, def instanceof this.type);
 			name = name || def[this.nameProperty];
 			this.items[name] = def;
 		},

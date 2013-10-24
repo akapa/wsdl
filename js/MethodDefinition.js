@@ -1,4 +1,4 @@
-define(function () {
+define(['objTools'], function (objTools) {
 	var methodDefinition = {
 		name: null,
 		requestObj: null,
@@ -7,9 +7,6 @@ define(function () {
 	};
 
 	return function MethodDefinition() {
-		var obj = Object.create(methodDefinition, {
-			constructor: { value: MethodDefinition }
-		});
-		return obj;
+		return objTools.construct(methodDefinition, MethodDefinition);
 	};
 });

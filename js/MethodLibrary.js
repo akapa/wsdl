@@ -1,6 +1,6 @@
-define(['underscore', 'Library', 'MethodDefinition', 'makeObject'],
-function (_, Library, MethodDefinition, make) {
-	var methodLibrary = make(Library, {
+define(['underscore', 'objTools', 'Library', 'MethodDefinition'],
+function (_, objTools, Library, MethodDefinition) {
+	var methodLibrary = objTools.make(Library, {
 		init: function (defs) {
 			this.items = {};
 			this.type = MethodDefinition;
@@ -11,9 +11,7 @@ function (_, Library, MethodDefinition, make) {
 	});
 
 	return function MethodLibrary () {
-		var obj = Object.create(methodLibrary, {
-			constructor: { value: MethodLibrary }
-		});
+		var obj = objTools.construct(methodLibrary, MethodLibrary);
 		return obj.init.apply(obj, arguments);
 	};
 });

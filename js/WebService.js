@@ -1,4 +1,4 @@
-define(['underscore'], function (_) {
+define(['underscore', 'objTools'], function (_, objTools) {
 	var webService = {
 		init: function (serializer, factory, methodLibrary, typeLibrary) {
 			this.serializer = serializer;
@@ -16,9 +16,7 @@ define(['underscore'], function (_) {
 	};
 
 	return function WebService () {
-		var obj = Object.create(webService, {
-			constructor: { value: WebService }
-		});
+		var obj = objTools.construct(webService, WebService);
 		return obj.init.apply(obj, arguments);
 	};
 });

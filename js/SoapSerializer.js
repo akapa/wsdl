@@ -1,5 +1,5 @@
-define(['underscore', 'Serializer', 'Xml', 'makeObject'], function (_, Serializer, Xml, make) {
-	var soapSerializer = make(Serializer, {
+define(['underscore', 'objTools', 'Serializer', 'Xml'], function (_, objTools, Serializer, Xml) {
+	var soapSerializer = objTools.make(Serializer, {
 		init: function (typeLibrary) {
 			this.typeLibrary = typeLibrary;
 			return this;
@@ -98,9 +98,7 @@ define(['underscore', 'Serializer', 'Xml', 'makeObject'], function (_, Serialize
 	};
 
 	return function SoapSerializer () {
-		var obj = Object.create(soapSerializer, {
-			constructor: { value: SoapSerializer }
-		});
+		var obj = objTools.construct(soapSerializer, SoapSerializer);
 		return obj.init.apply(obj, arguments);
 	};
 });

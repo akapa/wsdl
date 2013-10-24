@@ -38,7 +38,6 @@ requirejs(['underscore', 'wsconfig'], function (_, wsconfig) {
 		type: 'income',
 		user: user
 	});
-	console.log(ev2);
 
 	var resp = _.extend(service.factory.make('getEventsInRangeResponse'), {
 		return: [

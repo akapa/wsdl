@@ -1,4 +1,4 @@
-define(function () {
+define(['objTools'], function (objTools) {
 	var typeDefinition = {
 		type: 'anyType',
 		ns: 'http://www.w3.org/2001/XMLSchema',
@@ -9,9 +9,6 @@ define(function () {
 	};
 
 	return function TypeDefinition() {
-		var obj = Object.create(typeDefinition, {
-			constructor: { value: TypeDefinition }
-		});
-		return obj;
+		return objTools.construct(typeDefinition, TypeDefinition);
 	};
 });

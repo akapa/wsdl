@@ -1,4 +1,4 @@
-define(function () {
+define(['objTools'], function (objTools) {
 	var serializer = {
 		serialize: function (value) {
 			return JSON.stringify(value);
@@ -9,9 +9,6 @@ define(function () {
 	};
 
 	return function Serializer () {
-		var obj = Object.create(serializer, {
-			constructor: { value: Serializer }
-		});
-		return obj;
+		return objTools.construct(serializer, Serializer);
 	};
 });
