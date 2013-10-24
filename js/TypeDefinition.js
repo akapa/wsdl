@@ -1,5 +1,5 @@
 define(function () {
-	var TypeDefinition = {
+	var typeDefinition = {
 		type: 'anyType',
 		ns: 'http://www.w3.org/2001/XMLSchema',
 		multiple: false,
@@ -8,5 +8,10 @@ define(function () {
 		proto: null
 	};
 
-	return TypeDefinition;
+	return function TypeDefinition() {
+		var obj = Object.create(typeDefinition, {
+			constructor: { value: TypeDefinition }
+		});
+		return obj;
+	};
 });

@@ -9,19 +9,19 @@ requirejs.config({
 	}
 });
 
-requirejs(['underscore', 'wsconfig', 'makeObject'], function (_, wsconfig, make) {
+requirejs(['underscore', 'wsconfig'], function (_, wsconfig) {
 	var service = wsconfig.service;
 	console.log(service);
 
 	var reqObj = service.factory.make('getEventsInRange');
 	service.call('getEventsInRange', reqObj);
 
-	var user = make(service.factory.make('user'), {
+	var user = _.extend(service.factory.make('user'), {
 		id: 11,
 		name: 'Gipsz Jakab'
 	});
 
-	var ev = make(service.factory.make('event'), {
+	var ev = _.extend(service.factory.make('event'), {
 		amount: 10.5,
 		description: 'This is a test',
 		id: 56,
@@ -30,7 +30,7 @@ requirejs(['underscore', 'wsconfig', 'makeObject'], function (_, wsconfig, make)
 		user: user
 	});
 
-	var ev2 = make(service.factory.make('event'), {
+	var ev2 = _.extend(service.factory.make('event'), {
 		amount: 29.11,
 		description: 'Another one',
 		id: 101,
@@ -38,8 +38,9 @@ requirejs(['underscore', 'wsconfig', 'makeObject'], function (_, wsconfig, make)
 		type: 'income',
 		user: user
 	});
+	console.log(ev2);
 
-	var resp = make(service.factory.make('getEventsInRangeResponse'), {
+	var resp = _.extend(service.factory.make('getEventsInRangeResponse'), {
 		return: [
 			ev,
 			ev2

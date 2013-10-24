@@ -31,13 +31,28 @@ function (_, make, WebService, TypeLibrary, TypeDefinition, MethodLibrary, Metho
 			classify: function () { return 'getEventsInRangeResponse'; }
 		}
 	};
+	_(objects).each(function (obj) {
+		_(obj).each(function (val, name) {
+			if (!_(val).isFunction()) {
+				var postfix = name[0].toUpperCase() + name.slice(1);
+				obj['get' + postfix] = function () {
+					return this[name];
+				};
+				obj['set' + postfix] = function (newValue) {
+					this[name] = newValue;
+				};
+			}
+		});
+	});
 
 	var types = [
 		make(TypeDefinition, {
 			type: 'event',
 			ns: ns,
 			complex: true,
-			proto: objects.event,
+			constructorFunction: function Event () {
+				return Object.create(objects.event);
+			},
 			properties: {
 				'amount': make(TypeDefinition, {
 					ns: schemaNs,
@@ -70,7 +85,9 @@ function (_, make, WebService, TypeLibrary, TypeDefinition, MethodLibrary, Metho
 			type: 'user',
 			ns: ns,
 			complex: true,
-			proto: objects.user,
+			constructorFunction: function User () {
+				return Object.create(objects.user);
+			},
 			properties: {
 				'events': make(TypeDefinition, {
 					ns: ns,
@@ -92,7 +109,9 @@ function (_, make, WebService, TypeLibrary, TypeDefinition, MethodLibrary, Metho
 			type: 'getEventsInRange',
 			ns: ns,
 			complex: true,
-			proto: objects.getEventsInRange,
+			constructorFunction: function GetEventsInRange () {
+				return Object.create(objects.getEventsInRange);
+			},
 			properties: {
 				'timeFrom': make(TypeDefinition, {
 					ns: schemaNs,
@@ -108,7 +127,9 @@ function (_, make, WebService, TypeLibrary, TypeDefinition, MethodLibrary, Metho
 			type: 'getEventsInRangeResponse',
 			ns: ns,
 			complex: true,
-			proto: objects.getEventsInRangeResponse,
+			constructorFunction: function GetEventsInRangeResponse () {
+				return Object.create(objects.getEventsInRangeResponse);
+			},
 			properties: {
 				'return': make(TypeDefinition, {
 					ns: ns,
@@ -129,16 +150,17 @@ function (_, make, WebService, TypeLibrary, TypeDefinition, MethodLibrary, Metho
 		})
 	];
 
-	var typeLib = make(TypeLibrary).init(types);
-	var methodLib = make(MethodLibrary).init(methods);
-	var factory = make(Factory).init(typeLib);
-	var serializer = make(SoapSerializer).init(typeLib);
-	var ws = make(WebService, {
+	var typeLib = new TypeLibrary(types);
+	var methodLib = new MethodLibrary(methods);
+	var factory = new Factory(typeLib);
+	var serializer = new SoapSerializer(typeLib);
+	var ws = new WebService(serializer, factory, methodLib, typeLib);
+	_(ws).extend({
 		'getEventsInRange': function (params, onSuccess, onError) {
 			var reqObj = make(this.methodLibrary.getItem('getEventsInRange').requestObject, params);
 			this.call('getEventsInRange', reqObj, onSuccess, onError);
 		}
-	}).init(serializer, factory, methodLib, typeLib);
+	});
 
 	return {
 		service: ws

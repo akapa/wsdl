@@ -1,5 +1,5 @@
 define(['underscore'], function (_) {
-	var Library = {
+	var library = {
 		init: function (defs) {
 			this.items = {};
 			this.type = null;
@@ -8,6 +8,7 @@ define(['underscore'], function (_) {
 			return this;
 		},
 		addItem: function (def, name) {
+			console.log(def, this.type, def instanceof this.type);
 			name = name || def[this.nameProperty];
 			this.items[name] = def;
 		},
@@ -24,5 +25,10 @@ define(['underscore'], function (_) {
 		}
 	};
 
-	return Library;
+	return function Library () {
+		var obj = Object.create(library, {
+			constructor: { value: Library }
+		});
+		return obj.init.apply(obj, arguments);
+	};
 });

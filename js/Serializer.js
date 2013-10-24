@@ -1,5 +1,5 @@
 define(function () {
-	var Serializer = {
+	var serializer = {
 		serialize: function (value) {
 			return JSON.stringify(value);
 		},
@@ -8,5 +8,10 @@ define(function () {
 		}
 	};
 
-	return Serializer;
+	return function Serializer () {
+		var obj = Object.create(serializer, {
+			constructor: { value: Serializer }
+		});
+		return obj;
+	};
 });

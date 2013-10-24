@@ -1,6 +1,6 @@
 define(['underscore', 'Library', 'TypeDefinition', 'makeObject'],
 function (_, Library, TypeDefinition, make) {
-	var TypeLibrary = make(Library, {
+	var typeLibrary = make(Library, {
 		init: function (defs) {
 			this.items = {};
 			this.type = TypeDefinition;
@@ -19,5 +19,10 @@ function (_, Library, TypeDefinition, make) {
 		}
 	});
 
-	return TypeLibrary;
+	return function TypeLibrary () {
+		var obj = Object.create(typeLibrary, {
+			constructor: { value: TypeLibrary }
+		});
+		return obj.init.apply(obj, arguments);
+	};
 });

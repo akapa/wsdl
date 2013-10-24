@@ -1,10 +1,15 @@
 define(function () {
-	var MethodDefinition = {
+	var methodDefinition = {
 		name: null,
 		requestObj: null,
 		responseObj: null,
 		endpoint: ''
 	};
 
-	return MethodDefinition;
+	return function MethodDefinition() {
+		var obj = Object.create(methodDefinition, {
+			constructor: { value: MethodDefinition }
+		});
+		return obj;
+	};
 });

@@ -1,5 +1,5 @@
 define(['underscore'], function (_) {
-	var WebService = {
+	var webService = {
 		init: function (serializer, factory, methodLibrary, typeLibrary) {
 			this.serializer = serializer;
 			this.factory = factory;
@@ -9,13 +9,16 @@ define(['underscore'], function (_) {
 		},
 		call: function (method, requestObj, onSuccess, onError) {
 			var methodDef = this.methodLibrary.getItem(method);
-			var requestObjType = this.typeLibrary.getItem(method.requestObject);
-
-			//var serializeRequestObj = this.serializer.serialize(requestObj, requestObjType);
+			var serializedRequestObj = this.serializer.serialize(requestObj);
 
 			//make a call using methodDef.endpoint and the callback functions
 		}
 	};
 
-	return WebService;
+	return function WebService () {
+		var obj = Object.create(webService, {
+			constructor: { value: WebService }
+		});
+		return obj.init.apply(obj, arguments);
+	};
 });
