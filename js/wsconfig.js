@@ -5,6 +5,8 @@ function (_, objTools, WebService, TypeLibrary, TypeDefinition, MethodLibrary, M
 	var schemaNs = 'http://www.w3.org/2001/XMLSchema';
 	var url = 'Service';
 
+	//PROTO OBJECTS FOR XSD COMPLEX TYPES
+
 	var objects = {
 		event: {
 			'amount': 0,
@@ -31,19 +33,8 @@ function (_, objTools, WebService, TypeLibrary, TypeDefinition, MethodLibrary, M
 			classify: function () { return 'getEventsInRangeResponse'; }
 		}
 	};
-	_(objects).each(function (obj) {
-		_(obj).each(function (val, name) {
-			if (!_(val).isFunction()) {
-				var postfix = name[0].toUpperCase() + name.slice(1);
-				obj['get' + postfix] = function () {
-					return this[name];
-				};
-				obj['set' + postfix] = function (newValue) {
-					this[name] = newValue;
-				};
-			}
-		});
-	});
+
+	//TYPE DEFINITIONS FOR XSD COMPLEX TYPE
 
 	var types = [
 		objTools.make(TypeDefinition, {
@@ -141,6 +132,26 @@ function (_, objTools, WebService, TypeLibrary, TypeDefinition, MethodLibrary, M
 		})
 	];
 
+	//initializing Type Library with the xsd types
+	var typeLib = new TypeLibrary(types);
+
+	//generating getters and setters for XSD proto objects
+	/*_(objects).each(function (obj) {
+		_(obj).each(function (val, name) {
+			if (!_(val).isFunction()) {
+				var postfix = name[0].toUpperCase() + name.slice(1);
+				obj['get' + postfix] = function () {
+					return this[name];
+				};
+				obj['set' + postfix] = function (newValue) {
+					this[name] = newValue;
+				};
+			}
+		});
+	});*/
+
+	//WSDL METHOD DEFINITIONS
+
 	var methods = [
 		objTools.make(MethodDefinition, {
 			name: 'getEventsInRange',
@@ -150,11 +161,17 @@ function (_, objTools, WebService, TypeLibrary, TypeDefinition, MethodLibrary, M
 		})
 	];
 
-	var typeLib = new TypeLibrary(types);
+	//initializing Method Library with wsdl methods
 	var methodLib = new MethodLibrary(methods);
+
+	//creating Factory and Serializer
 	var factory = new Factory(typeLib);
-	var serializer = new SoapSerializer(typeLib);
+	var serializer = new SoapSerializer(typeLib, factory);
+
+	//creating the Web Service
 	var ws = new WebService(serializer, factory, methodLib, typeLib);
+
+	//adding Web Service methods to easily call WSDL methods
 	_(ws).extend({
 		'getEventsInRange': function (params, onSuccess, onError) {
 			var reqObj = objTools.make(this.methodLibrary.getItem('getEventsInRange').requestObject, params);
