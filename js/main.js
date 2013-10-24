@@ -25,7 +25,7 @@ requirejs(['underscore', 'wsconfig'], function (_, wsconfig) {
 		amount: 10.5,
 		description: 'This is a test',
 		id: 56,
-		time: new Date('05/05/76 13:35'),
+		time: new Date('08/31/96 12:55'),
 		type: 'income',
 		user: user
 	});
@@ -34,20 +34,20 @@ requirejs(['underscore', 'wsconfig'], function (_, wsconfig) {
 		amount: 29.11,
 		description: 'Another one',
 		id: 101,
-		time: new Date('05/15/76 13:35'),
+		time: new Date('05/15/86 22:00'),
 		type: 'income',
 		user: user
 	});
 
 	var resp = _.extend(service.factory.make('getEventsInRangeResponse'), {
-		return: [
-			ev,
-			ev2
-		]
+		return: [ev, ev2]
 	});
 
 	var xml = service.serializer.serialize(resp, 'getEventsInRangeResponse');
 	document.getElementById('show').innerText = formatXml(xml);
+
+	var td = service.typeLibrary.getItem('getEventsInRangeResponse');
+	console.log(td, service.serializer.unserialize(xml, 'getEventsInRangeResponse', td));
 });
 
 function formatXml(xml) {
