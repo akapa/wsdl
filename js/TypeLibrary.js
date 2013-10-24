@@ -16,6 +16,15 @@ function (_, objTools, Library, TypeDefinition) {
 				return obj.classify();
 			}
 			return 'Object';
+		},
+		getValue: function (obj, key) {
+			return obj[key];
+		},
+		setValue: function (obj, key, value) {
+			obj[key] = value;
+		},
+		ensureType: function () {
+
 		}
 	});
 
