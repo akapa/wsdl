@@ -32,6 +32,19 @@ define(['underscore', 'objTools', 'Serializer', 'Xml'], function (_, objTools, S
 				return Xml.getTag(name, value);
 			}
 		},
+		serializeWithNamespaces: function (value, name, namespaces, typeDef) {
+			var xml = this.serialize(value, name, typeDef);
+			var ns = '';
+			_(namespaces).each(function (name, key) {
+				var attrKey = 'xmlns' + (key == 0 ? '' : ':' + key);
+				ns += Xml.makeAttribute(attrKey, name);
+			});
+			var pos = xml.indexOf('>');
+			if (pos && ns) {
+				xml = [xml.slice(0, pos), ns, xml.slice(pos)].join('');
+			}
+			return xml;
+		},
 		serializeMultiple: function (obj, name, typeDef) {
 			typeDef = _(typeDef).omit('multiple');
 			var xml = '';
@@ -61,14 +74,29 @@ define(['underscore', 'objTools', 'Serializer', 'Xml'], function (_, objTools, S
 		},
 		unserializeDOM: function (dom, name, typeDef) {
 			var res;
-			var elem = dom.querySelector(name);
-			if (typeDef.complex) {
+			var elem = dom.tagName === name ? dom : dom.querySelector(name);
+			if (typeDef.multiple) {
+				res = [];
+				while (elem && elem.tagName === name) {
+					typeDef = _(typeDef).omit('multiple');
+					res.push(this.unserializeDOM(elem, name, typeDef));
+					elem = elem.nextSibling;
+				}
+			}
+			else if (elem.getAttribute('xs:nil') === 'true') {
+				res = null;
+			}
+			else if (typeDef.complex) {
 				res = this.factory.make(typeDef.type);
+				typeDef = this.typeLibrary.getItem(typeDef.type);
 				_(typeDef.properties).each(function (prop, propName) {
-					this.typeLibrary.setValue(res, propName, this.unserializeDOM(elem, propName, prop));
+					var propVal = this.unserializeDOM(elem, propName, prop);
+					this.typeLibrary.setValue(res, propName, propVal);
 				}, this);
 			}
-
+			else {
+				return Xml.getNodeText(elem);
+			}
 			return res;
 		}
 	});

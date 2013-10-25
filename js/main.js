@@ -36,14 +36,17 @@ requirejs(['underscore', 'wsconfig'], function (_, wsconfig) {
 		id: 101,
 		time: new Date('05/15/86 22:00'),
 		type: 'income',
-		user: user
+		user: null
 	});
 
 	var resp = _.extend(service.factory.make('getEventsInRangeResponse'), {
 		return: [ev, ev2]
 	});
 
-	var xml = service.serializer.serialize(resp, 'getEventsInRangeResponse');
+	var xml = service.serializer.serializeWithNamespaces(resp, 'getEventsInRangeResponse', {
+		0: 'http://budget.kapa.org',
+		'xs': 'http://www.w3.org/2001/XMLSchema'
+	});
 	document.getElementById('show').innerText = formatXml(xml);
 
 	var td = service.typeLibrary.getItem('getEventsInRangeResponse');
