@@ -1,6 +1,6 @@
 define(['underscore', 'objTools', 'WebService', 'TypeLibrary', 'TypeDefinition', 
-	'MethodLibrary', 'MethodDefinition', 'SoapSerializer', 'Factory'], 
-function (_, objTools, WebService, TypeLibrary, TypeDefinition, MethodLibrary, MethodDefinition, SoapSerializer, Factory) {
+	'MethodLibrary', 'MethodDefinition', 'XmlSerializer', 'Factory'], 
+function (_, objTools, WebService, TypeLibrary, TypeDefinition, MethodLibrary, MethodDefinition, XmlSerializer, Factory) {
 	var namespaces = {
 		0: 'http://budget.kapa.org',
 		'xs': 'http://www.w3.org/2001/XMLSchema'
@@ -169,7 +169,7 @@ function (_, objTools, WebService, TypeLibrary, TypeDefinition, MethodLibrary, M
 
 	//creating Factory and Serializer
 	var factory = new Factory(typeLib);
-	var serializer = new SoapSerializer(typeLib, factory, namespaces);
+	var serializer = new XmlSerializer(typeLib, factory, namespaces);
 
 	//creating the Web Service
 	var ws = new WebService(serializer, factory, methodLib, typeLib);

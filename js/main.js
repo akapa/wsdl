@@ -14,7 +14,7 @@ requirejs(['underscore', 'wsconfig'], function (_, wsconfig) {
 	console.log(service);
 
 	var reqObj = service.factory.make('getEventsInRange');
-	//service.call('getEventsInRange', reqObj);
+	service.call('getEventsInRange', reqObj);
 
 	var user = _.extend(service.factory.make('user'), {
 		id: 11,

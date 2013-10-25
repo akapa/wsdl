@@ -9,7 +9,8 @@ define(['underscore', 'objTools'], function (_, objTools) {
 		},
 		call: function (method, requestObj, onSuccess, onError) {
 			var methodDef = this.methodLibrary.getItem(method);
-			var serializedRequestObj = this.serializer.serialize(requestObj);
+			var serializedRequestObj = this.serializer.serialize(requestObj, methodDef.requestObject);
+			console.log(serializedRequestObj);
 
 			//make a call using methodDef.endpoint and the callback functions
 		}
