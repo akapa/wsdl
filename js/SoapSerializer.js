@@ -20,16 +20,16 @@ define(['underscore', 'objTools', 'Serializer', 'Xml'], function (_, objTools, S
 				return this.serializeMultiple(value, name, typeDef);
 			}
 			else if (_(value).isNull() || _(value).isUndefined()) {
-				return Xml.getTag(name, '', { 'xs:nil': 'true' });
+				return Xml.makeTag(name, '', { 'xs:nil': 'true' });
 			}
 			else if (typeDef.complex) {
 				return this.serializeComplex(value, name);
 			}
 			else if (typeDef.type in primitiveSerializers) {
-				return Xml.getTag(name, primitiveSerializers[typeDef.type](value, typeDef));
+				return Xml.makeTag(name, primitiveSerializers[typeDef.type](value, typeDef));
 			}
 			else {
-				return Xml.getTag(name, value);
+				return Xml.makeTag(name, value);
 			}
 		},
 		serializeWithNamespaces: function (value, name, namespaces, typeDef) {
@@ -67,10 +67,10 @@ define(['underscore', 'objTools', 'Serializer', 'Xml'], function (_, objTools, S
 				attribs['type'] = objType;
 			}
 
-			return Xml.getTag(name, xml, attribs);
+			return Xml.makeTag(name, xml, attribs);
 		},
 		unserialize: function (s, name, typeDef) {
-			return this.unserializeDOM(Xml.parse(s), name, typeDef);
+			return this.unserializeDOM(Xml.parseXml(s), name, typeDef);
 		},
 		unserializeDOM: function (dom, name, typeDef) {
 			var res;

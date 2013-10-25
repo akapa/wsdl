@@ -3,29 +3,29 @@ define(function () {
 		makeAttribute: function (key, value) {
 			return [' ', key, '="', value, '"'].join('');
 		},
-		getOpenTag : function (name, att) {
+		makeOpenTag : function (name, att) {
 			var att = att || {};
 			var a = _.map(att, function (value, key) {
 					return [' ', key, '="', value, '"'].join('');
 				}).join('');
 			return ['<', name, a, '>'].join('');
 		},
-		getCloseTag : function (name) {
+		makeCloseTag : function (name) {
 			return ['</', name, '>'].join('');
 		},
-		getTag: function (name, val, att) {
+		makeTag: function (name, val, att) {
 			var value = val;
 			if (!name) {
 				return value;
 			}
-			return this.getOpenTag(name, att)
+			return this.makeOpenTag(name, att)
 				+ value
-				+ this.getCloseTag(name);
+				+ this.makeCloseTag(name);
 		},
-		getHeader : function () {
+		makeXmlHeader : function () {
 			return '<?xml version="1.0" encoding="UTF-8"?>';
 		},
-		parse: function (s) {
+		parseXml: function (s) {
 			if (typeof window.DOMParser != "undefined") {
 		        return ( new window.DOMParser() ).parseFromString(s, "text/xml");
 			} else if (typeof window.ActiveXObject != "undefined" && new window.ActiveXObject("Microsoft.XMLDOM")) {
