@@ -39,6 +39,25 @@ define(function () {
 		},
 		getNodeText: function (node) {
 			return node.textContent;
+		},
+		setNodeText: function (node, value) {
+			node.textContent = value;
+		},
+		domToXml: function (dom) {
+			return new XMLSerializer().serializeToString(dom);
+		},
+		createDocument: function (name, namespaces) {
+			var doc = document.implementation.createDocument(namespaces[0], name, null);
+			_(namespaces).each(function (ns, nskey) {
+				if (nskey != 0) {
+					doc.documentElement.setAttributeNS(
+						'http://www.w3.org/2000/xmlns/', 
+						'xmlns:' + nskey, 
+						ns
+					);
+				}
+			});
+			return doc;
 		}
 	};
 	return Xml;

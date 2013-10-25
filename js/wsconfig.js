@@ -41,7 +41,7 @@ function (_, objTools, WebService, TypeLibrary, TypeDefinition, MethodLibrary, M
 	var types = [
 		objTools.make(TypeDefinition, {
 			type: 'event',
-			ns: namespaces['tns'],
+			ns: namespaces[0],
 			complex: true,
 			constructorFunction: function Event () {
 				return objTools.construct(objects.event, Event);
@@ -68,7 +68,7 @@ function (_, objTools, WebService, TypeLibrary, TypeDefinition, MethodLibrary, M
 					type: 'string'
 				}),
 				'user': objTools.make(TypeDefinition, {
-					ns: namespaces['tns'],
+					ns: namespaces[0],
 					complex: true,
 					type: 'user'
 				})
@@ -83,7 +83,7 @@ function (_, objTools, WebService, TypeLibrary, TypeDefinition, MethodLibrary, M
 			},
 			properties: {
 				'events': objTools.make(TypeDefinition, {
-					ns: namespaces['tns'],
+					ns: namespaces[0],
 					type: 'event',
 					multiple: true,
 					complex: true
@@ -100,7 +100,7 @@ function (_, objTools, WebService, TypeLibrary, TypeDefinition, MethodLibrary, M
 		}),
 		objTools.make(TypeDefinition, {
 			type: 'getEventsInRange',
-			ns: namespaces['tns'],
+			ns: namespaces[0],
 			complex: true,
 			constructorFunction: function GetEventsInRange () {
 				return objTools.construct(objects.getEventsInRange, GetEventsInRange);
@@ -118,14 +118,14 @@ function (_, objTools, WebService, TypeLibrary, TypeDefinition, MethodLibrary, M
 		}),
 		objTools.make(TypeDefinition, {
 			type: 'getEventsInRangeResponse',
-			ns: namespaces['tns'],
+			ns: namespaces[0],
 			complex: true,
 			constructorFunction: function getEventsInRangeResponse () {
 				return objTools.construct(objects.getEventsInRangeResponse, getEventsInRangeResponse);
 			},
 			properties: {
 				'return': objTools.make(TypeDefinition, {
-					ns: namespaces['tns'],
+					ns: namespaces[0],
 					complex: true,
 					multiple: true,
 					type: 'event'
@@ -169,7 +169,7 @@ function (_, objTools, WebService, TypeLibrary, TypeDefinition, MethodLibrary, M
 
 	//creating Factory and Serializer
 	var factory = new Factory(typeLib);
-	var serializer = new SoapSerializer(typeLib, factory);
+	var serializer = new SoapSerializer(typeLib, factory, namespaces);
 
 	//creating the Web Service
 	var ws = new WebService(serializer, factory, methodLib, typeLib);

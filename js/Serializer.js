@@ -1,6 +1,6 @@
 define(['objTools'], function (objTools) {
 	var serializer = {
-		serialize: function (value, name, typeDef) {
+		serialize: function (value, name) {
 			return JSON.stringify(value);
 		},
 		unserialize: function (s, name, typeDef) {

@@ -14,7 +14,7 @@ requirejs(['underscore', 'wsconfig'], function (_, wsconfig) {
 	console.log(service);
 
 	var reqObj = service.factory.make('getEventsInRange');
-	service.call('getEventsInRange', reqObj);
+	//service.call('getEventsInRange', reqObj);
 
 	var user = _.extend(service.factory.make('user'), {
 		id: 11,
@@ -43,10 +43,7 @@ requirejs(['underscore', 'wsconfig'], function (_, wsconfig) {
 		return: [ev, ev2]
 	});
 
-	var xml = service.serializer.serializeWithNamespaces(resp, 'getEventsInRangeResponse', {
-		0: 'http://budget.kapa.org',
-		'xs': 'http://www.w3.org/2001/XMLSchema'
-	});
+	var xml = service.serializer.serialize(resp, 'getEventsInRangeResponse');
 	document.getElementById('show').innerText = formatXml(xml);
 
 	var td = service.typeLibrary.getItem('getEventsInRangeResponse');
