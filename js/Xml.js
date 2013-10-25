@@ -1,5 +1,8 @@
 define(function () {
 	var Xml = {
+		makeAttribute: function (key, value) {
+			return [' ', key, '="', value, '"'].join('');
+		},
 		getOpenTag : function (name, att) {
 			var att = att || {};
 			var a = _.map(att, function (value, key) {
@@ -33,6 +36,9 @@ define(function () {
 			} else {
 			    throw new Error("No XML parser found");
 			}
+		},
+		getNodeText: function (node) {
+			return node.textContent;
 		}
 	};
 	return Xml;
