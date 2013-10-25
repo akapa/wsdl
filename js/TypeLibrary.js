@@ -17,6 +17,7 @@ function (_, objTools, Library, TypeDefinition) {
 			}
 			return 'Object';
 		},
+		//TMP: get and set should come from the corresponding type object!
 		getValue: function (obj, key) {
 			return obj[key];
 		},
