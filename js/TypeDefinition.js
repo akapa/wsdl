@@ -5,7 +5,8 @@ define(['objTools'], function (objTools) {
 		multiple: false,
 		complex: false,
 		properties: {},
-		proto: null
+		proto: null,
+		valueStrategy: 'property'
 	};
 
 	return function TypeDefinition() {

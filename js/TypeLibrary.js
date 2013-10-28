@@ -1,5 +1,9 @@
 define(['underscore', 'objTools', 'Library', 'TypeDefinition'],
 function (_, objTools, Library, TypeDefinition) {
+	var capitalizeFirst = function (s) {
+		return s[0].toUpperCase() + s.slice(1);
+	};
+
 	var typeLibrary = objTools.make(Library, {
 		init: function (defs) {
 			this.items = {};
@@ -17,12 +21,37 @@ function (_, objTools, Library, TypeDefinition) {
 			}
 			return 'Object';
 		},
-		//TMP: get and set should come from the corresponding type object!
-		getValue: function (obj, key) {
-			return obj[key];
+		getValueStrategy: function (obj, strategy) {
+			var typeObj = this.getItem(this.getObjectType(obj));
+			return typeObj.strategy || strategy;
 		},
-		setValue: function (obj, key, value) {
-			obj[key] = value;
+		getValue: function (obj, key, strategy) {
+			var s = this.getValueStrategy(obj, strategy);
+			if (_(s).isFunction()) {
+				return s(key);
+			}
+			switch (s) {
+				case 'gettersetter':
+					return obj['get' + capitalizeFirst(key)]();
+				case 'property':
+				default:
+					return obj[key];
+			}
+		},
+		setValue: function (obj, key, value, strategy) {
+			var s = this.getValueStrategy(obj, strategy);
+			if (_(s).isFunction()) {
+				s(key, value);
+			}
+			else {
+				switch (s) {
+					case 'gettersetter':
+						obj['set' + capitalizeFirst(key)](value);
+					case 'property':
+					default:
+						obj[key] = value;
+				}
+			}
 		},
 		ensureType: function () {
 
