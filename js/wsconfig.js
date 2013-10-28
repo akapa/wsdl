@@ -61,7 +61,7 @@ function (_, objTools, WebService, TypeLibrary, TypeDefinition, MethodLibrary, M
 				}),
 				'time': objTools.make(TypeDefinition, {
 					ns: namespaces['xs'],
-					type: 'dateTime'
+					type: 'time'
 				}),
 				'type': objTools.make(TypeDefinition, {
 					ns: namespaces['xs'],

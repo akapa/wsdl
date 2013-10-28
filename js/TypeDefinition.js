@@ -6,7 +6,7 @@ define(['objTools'], function (objTools) {
 		complex: false,
 		properties: {},
 		proto: null,
-		valueStrategy: 'property'
+		valueStrategy: 'property' //'property', 'gettersetter' or object { get: function, set: function }
 	};
 
 	return function TypeDefinition() {

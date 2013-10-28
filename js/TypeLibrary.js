@@ -27,7 +27,7 @@ function (_, objTools, Library, TypeDefinition) {
 		},
 		getValue: function (obj, key, strategy) {
 			var s = this.getValueStrategy(obj, strategy);
-			if (_(s).isFunction()) {
+			if (_(s).isObject() && _(s.get).isFunction()) {
 				return s(key);
 			}
 			switch (s) {
@@ -40,7 +40,7 @@ function (_, objTools, Library, TypeDefinition) {
 		},
 		setValue: function (obj, key, value, strategy) {
 			var s = this.getValueStrategy(obj, strategy);
-			if (_(s).isFunction()) {
+			if (_(s).isObject() && _(s.set).isFunction()) {
 				s(key, value);
 			}
 			else {

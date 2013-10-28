@@ -148,6 +148,9 @@ define(['underscore', 'objTools', 'Serializer', 'Xml'], function (_, objTools, S
 			}
 			return parseFloat(s);
 		},
+		'decimal': function (s) {
+			return parseFloat(s);
+		},
 		'int': function (s) {
 			switch (s) {
 				case 'INF':
@@ -169,7 +172,13 @@ define(['underscore', 'objTools', 'Serializer', 'Xml'], function (_, objTools, S
 			return new Date(s);
 		},
 		'time': function (s) {
-			return new Date(s);
+			var time = s.match(/(\d{2}):(\d{2}):(\d{2}).(\d{3})/);
+			var d = new Date();
+			d.setUTCHours(time[1]);
+			d.setUTCMinutes(time[2]);
+			d.setUTCSeconds(time[3]);
+			d.setUTCMilliseconds(time[4]);
+			return d;
 		},
 		'gYearMonth': function (s) {
 			return new Date(s);
