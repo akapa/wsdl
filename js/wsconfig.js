@@ -150,6 +150,7 @@ function (_, objTools, WebService, TypeLibrary, TypeDefinition, MethodLibrary, M
 				};
 			}
 		});
+		typeLib.getItem(typeLib.getObjectType(obj)).valueStrategy = 'gettersetter';
 	});*/
 
 	//WSDL METHOD DEFINITIONS

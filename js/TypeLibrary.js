@@ -23,7 +23,7 @@ function (_, objTools, Library, TypeDefinition) {
 		},
 		getValueStrategy: function (obj, strategy) {
 			var typeObj = this.getItem(this.getObjectType(obj));
-			return typeObj.strategy || strategy;
+			return typeObj.valueStrategy || strategy;
 		},
 		getValue: function (obj, key, strategy) {
 			var s = this.getValueStrategy(obj, strategy);
