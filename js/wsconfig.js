@@ -35,7 +35,5 @@ function (_, objTools, WebService, MethodLibrary, MethodDefinition, XmlSerialize
 		}
 	});
 
-	return {
-		service: ws
-	};
+	return ws;
 });
