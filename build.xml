@@ -1,0 +1,36 @@
+<project name="xsltsample" default="dist" basedir=".">
+	<description>
+		Create sample blah blah
+	</description>
+
+	<!-- set global properties for this build -->
+	<property name="src" location="wsdl"/>
+	<property name="dist" location="dist"/>
+	<property name="out" location="js/gen"/>
+	<property name="debug" value="true"/>
+
+	<target name="init">
+		<!-- Create the time stamp -->
+		<tstamp/>
+		<!-- Create the build directory structure used by compile -->
+		<mkdir dir="${dist}"/>
+		<mkdir dir="${out}"/>
+	</target>
+
+	<target name="compile" depends="init" description="compile the source">
+		<xslt in="${src}/BudgetService.wsdl" out="${out}/wsconfig.js" style="${src}/wsdl2js.xslt">
+		</xslt>
+		<xslt in="${src}/BudgetService_schema1.xsd" out="${out}/typeconfig.js" style="${src}/xsd2js.xslt">
+		</xslt>
+	</target>
+
+	<target name="dist" depends="compile" description="generate the distribution">
+	</target>
+
+        <target name="clean" description="clean up">
+	    <!-- Delete the ${out} and ${dist} directory trees -->
+                <delete dir="${out}"/>
+                <delete dir="${dist}"/>
+        </target>
+
+</project>
