@@ -5,157 +5,64 @@
 define(['underscore', 'objTools', 'TypeLibrary', 'TypeDefinition'], 
 function (_, objTools, TypeLibrary, TypeDefinition) {
 	var namespaces = {
-		0: 'http://budget.kapa.org',
+		0: '<xsl:value-of select="xs:schema/@targetNamespace"/>',
 		'xs': 'http://www.w3.org/2001/XMLSchema'
 	};
 
 	//PROTO OBJECTS FOR XSD COMPLEX TYPES
 
 	var objects = {
-		event: {
-			'amount': 0,
-			'description': '',
-			'id': 0,
-			'time': null,
-			'type': '',
-			'user': null,
-			classify: function () { return 'event'; }
+	<xsl:for-each select=".//xs:complexType">
+		'<xsl:value-of select="@name" />': {<xsl:apply-templates select=".//xs:element" />
+			classify: function () { return '<xsl:value-of select="@name" />'; }
 		},
-		user: {
-			'events': [],
-			'id': 0,
-			'name': '',
-			classify: function () { return 'user'; }
-		},
-		getEventsInRange: {
-			'timeFrom': null,
-			'timeTo': null,
-			classify: function () { return 'getEventsInRange'; }
-		},
-		getEventsInRangeResponse: {
-			'return': [],
-			classify: function () { return 'getEventsInRangeResponse'; }
-		}
+	</xsl:for-each>
 	};
 
 	//TYPE DEFINITIONS FOR XSD COMPLEX TYPE
 
 	var types = [
+	<xsl:for-each select=".//xs:complexType">
 		objTools.make(TypeDefinition, {
-			type: 'event',
+			type: '<xsl:value-of select="@name" />',
 			ns: namespaces[0],
 			complex: true,
-			constructorFunction: function Event () {
-				return objTools.construct(objects.event, Event);
+			constructorFunction: function <xsl:call-template name="capitalizeName" /> () {
+				return objTools.construct(objects.<xsl:value-of select="@name" />, <xsl:call-template name="capitalizeName" />);
 			},
 			properties: {
-				'amount': objTools.make(TypeDefinition, {
-					ns: namespaces['xs'],
-					type: 'float'
-				}),
-				'description': objTools.make(TypeDefinition, {
-					ns: namespaces['xs'],
-					type: 'string'
-				}),
-				'id': objTools.make(TypeDefinition, {
-					ns: namespaces['xs'],
-					type: 'int'
-				}),
-				'time': objTools.make(TypeDefinition, {
-					ns: namespaces['xs'],
-					type: 'time'
-				}),
-				'type': objTools.make(TypeDefinition, {
-					ns: namespaces['xs'],
-					type: 'string'
-				}),
-				'user': objTools.make(TypeDefinition, {
-					ns: namespaces[0],
-					complex: true,
-					type: 'user'
-				})
 			}
 		}),
-		objTools.make(TypeDefinition, {
-			type: 'user',
-			ns: namespaces['tns'],
-			complex: true,
-			constructorFunction: function User () {
-				return objTools.construct(objects.user, User);
-			},
-			properties: {
-				'events': objTools.make(TypeDefinition, {
-					ns: namespaces[0],
-					type: 'event',
-					multiple: true,
-					complex: true
-				}),
-				'id': objTools.make(TypeDefinition, {
-					ns: namespaces['xs'],
-					type: 'int'
-				}),
-				'name': objTools.make(TypeDefinition, {
-					ns: namespaces['xs'],
-					type: 'string'
-				})
-			}
-		}),
-		objTools.make(TypeDefinition, {
-			type: 'getEventsInRange',
-			ns: namespaces[0],
-			complex: true,
-			constructorFunction: function GetEventsInRange () {
-				return objTools.construct(objects.getEventsInRange, GetEventsInRange);
-			},
-			properties: {
-				'timeFrom': objTools.make(TypeDefinition, {
-					ns: namespaces['xs'],
-					type: 'dateTime'
-				}),
-				'timeTo': objTools.make(TypeDefinition, {
-					ns: namespaces['xs'],
-					type: 'dateTime'
-				})
-			}
-		}),
-		objTools.make(TypeDefinition, {
-			type: 'getEventsInRangeResponse',
-			ns: namespaces[0],
-			complex: true,
-			constructorFunction: function getEventsInRangeResponse () {
-				return objTools.construct(objects.getEventsInRangeResponse, getEventsInRangeResponse);
-			},
-			properties: {
-				'return': objTools.make(TypeDefinition, {
-					ns: namespaces[0],
-					complex: true,
-					multiple: true,
-					type: 'event'
-				})
-			}
-		})
+	</xsl:for-each>
 	];
 
 	//initializing Type Library with the xsd types
 	var typeLib = new TypeLibrary(types);
 
-	//generating getters and setters for XSD proto objects
-	/*_(objects).each(function (obj) {
-		_(obj).each(function (val, name) {
-			if (!_(val).isFunction()) {
-				var postfix = name[0].toUpperCase() + name.slice(1);
-				obj['get' + postfix] = function () {
-					return this[name];
-				};
-				obj['set' + postfix] = function (newValue) {
-					this[name] = newValue;
-				};
-			}
-		});
-		typeLib.getItem(typeLib.getObjectType(obj)).valueStrategy = 'gettersetter';
-	});*/
-
 	return typeLib;
 });
 </xsl:template>
+
+<xsl:template match="xs:element">
+			'<xsl:value-of select="@name" />': <xsl:call-template name="defaultValue">
+	<xsl:with-param name="type" select="."></xsl:with-param>
+</xsl:call-template>,</xsl:template>
+
+<xsl:template name="defaultValue">
+	<xsl:param name="type" />
+	<xsl:choose>
+		<xsl:when test="@maxOccurs = 'unbounded'">[]</xsl:when>
+		<xsl:when test="@type = 'xs:string'">''</xsl:when>
+		<xsl:when test="@type = 'xs:float'">0</xsl:when>
+		<xsl:when test="@type = 'xs:decimal'">0</xsl:when>
+		<xsl:when test="@type = 'xs:int'">0</xsl:when>
+		<xsl:when test="@type = 'xs:integer'">0</xsl:when>
+		<xsl:otherwise>null</xsl:otherwise>
+	</xsl:choose>
+</xsl:template>
+
+<xsl:template name="capitalizeName">
+    <xsl:value-of select="concat(translate(substring(@name, 1, 1), 'abcdefghijklmnopqrstuvwxyz', 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'), substring(@name, 2))"/>
+</xsl:template>
+
 </xsl:stylesheet>
