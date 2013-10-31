@@ -91,6 +91,11 @@ function (_, objTools, TypeLibrary, TypeDefinition) {
 				return objTools.construct(objects.getRecentEventsResponse, GetRecentEventsResponse);
 			},
 			properties: {
+				'return': objTools.make(TypeDefinition, {
+					multiple: true,
+					ns: 'http://budget.kapa.org/',
+					type: 'event'
+				}),
 			}
 		}),
 	
@@ -102,6 +107,30 @@ function (_, objTools, TypeLibrary, TypeDefinition) {
 				return objTools.construct(objects.event, Event);
 			},
 			properties: {
+				'amount': objTools.make(TypeDefinition, {
+					ns: 'http://www.w3.org/2001/XMLSchema',
+					type: 'float'
+				}),
+				'description': objTools.make(TypeDefinition, {
+					ns: 'http://www.w3.org/2001/XMLSchema',
+					type: 'string'
+				}),
+				'id': objTools.make(TypeDefinition, {
+					ns: 'http://www.w3.org/2001/XMLSchema',
+					type: 'int'
+				}),
+				'time': objTools.make(TypeDefinition, {
+					ns: 'http://www.w3.org/2001/XMLSchema',
+					type: 'dateTime'
+				}),
+				'type': objTools.make(TypeDefinition, {
+					ns: 'http://www.w3.org/2001/XMLSchema',
+					type: 'string'
+				}),
+				'user': objTools.make(TypeDefinition, {
+					ns: 'http://budget.kapa.org/',
+					type: 'user'
+				}),
 			}
 		}),
 	
@@ -113,6 +142,19 @@ function (_, objTools, TypeLibrary, TypeDefinition) {
 				return objTools.construct(objects.user, User);
 			},
 			properties: {
+				'events': objTools.make(TypeDefinition, {
+					multiple: true,
+					ns: 'http://budget.kapa.org/',
+					type: 'event'
+				}),
+				'id': objTools.make(TypeDefinition, {
+					ns: 'http://www.w3.org/2001/XMLSchema',
+					type: 'int'
+				}),
+				'name': objTools.make(TypeDefinition, {
+					ns: 'http://www.w3.org/2001/XMLSchema',
+					type: 'string'
+				}),
 			}
 		}),
 	
@@ -124,6 +166,14 @@ function (_, objTools, TypeLibrary, TypeDefinition) {
 				return objTools.construct(objects.getEventsInRange, GetEventsInRange);
 			},
 			properties: {
+				'timeFrom': objTools.make(TypeDefinition, {
+					ns: 'http://www.w3.org/2001/XMLSchema',
+					type: 'dateTime'
+				}),
+				'timeTo': objTools.make(TypeDefinition, {
+					ns: 'http://www.w3.org/2001/XMLSchema',
+					type: 'dateTime'
+				}),
 			}
 		}),
 	
@@ -135,6 +185,11 @@ function (_, objTools, TypeLibrary, TypeDefinition) {
 				return objTools.construct(objects.getEventsInRangeResponse, GetEventsInRangeResponse);
 			},
 			properties: {
+				'return': objTools.make(TypeDefinition, {
+					multiple: true,
+					ns: 'http://budget.kapa.org/',
+					type: 'event'
+				}),
 			}
 		}),
 	
@@ -146,6 +201,11 @@ function (_, objTools, TypeLibrary, TypeDefinition) {
 				return objTools.construct(objects.storeObjects, StoreObjects);
 			},
 			properties: {
+				'objects': objTools.make(TypeDefinition, {
+					multiple: true,
+					ns: 'http://www.w3.org/2001/XMLSchema',
+					type: 'anyType'
+				}),
 			}
 		}),
 	
@@ -168,6 +228,10 @@ function (_, objTools, TypeLibrary, TypeDefinition) {
 				return objTools.construct(objects.getAmountResponse, GetAmountResponse);
 			},
 			properties: {
+				'return': objTools.make(TypeDefinition, {
+					ns: 'http://www.w3.org/2001/XMLSchema',
+					type: 'int'
+				}),
 			}
 		}),
 	
@@ -179,13 +243,15 @@ function (_, objTools, TypeLibrary, TypeDefinition) {
 				return objTools.construct(objects.deleteObjects, DeleteObjects);
 			},
 			properties: {
+				'objects': objTools.make(TypeDefinition, {
+					multiple: true,
+					ns: 'http://www.w3.org/2001/XMLSchema',
+					type: 'anyType'
+				}),
 			}
 		}),
 	
 	];
 
-	//initializing Type Library with the xsd types
-	var typeLib = new TypeLibrary(types);
-
-	return typeLib;
+	return new TypeLibrary(types);
 });
