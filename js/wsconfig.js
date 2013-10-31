@@ -1,4 +1,4 @@
-define(['underscore', 'objTools', 'WebService',	'MethodLibrary', 'MethodDefinition', 'XmlSerializer', 'Factory', 'typeconfig'], 
+define(['underscore', 'objTools', 'WebService',	'MethodLibrary', 'MethodDefinition', 'XmlSerializer', 'Factory', 'gen/typeconfig'], 
 function (_, objTools, WebService, MethodLibrary, MethodDefinition, XmlSerializer, Factory, typeLib) {
 	var namespaces = {
 		0: 'http://budget.kapa.org',

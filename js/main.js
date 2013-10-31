@@ -9,7 +9,7 @@ requirejs.config({
 	}
 });
 
-requirejs(['underscore', 'wsconfig', 'Xml'], function (_, service, Xml) {
+requirejs(['underscore', 'gen/wsconfig', 'Xml'], function (_, service, Xml) {
 	console.log(service);
 
 	var reqObj = service.factory.make('getEventsInRange');
