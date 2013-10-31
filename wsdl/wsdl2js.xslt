@@ -24,7 +24,7 @@ function (_, objTools, WebService, MethodLibrary, MethodDefinition, XmlSerialize
 					<xsl:otherwise>null</xsl:otherwise>
 				</xsl:choose>,
 			endpoint: '<xsl:value-of select="//wsdl:service/wsdl:port/soap:address/@location" />'
-		})
+		}),
 	</xsl:for-each>
 	];
 
@@ -44,7 +44,7 @@ function (_, objTools, WebService, MethodLibrary, MethodDefinition, XmlSerialize
 		'<xsl:value-of select="@name"/>': function (params, onSuccess, onError) {
 			var reqObj = objTools.make(this.methodLibrary.getItem('<xsl:value-of select="@name"/>').requestObject, params);
 			this.call('<xsl:value-of select="@name"/>', reqObj, onSuccess, onError);
-		}
+		},
 	</xsl:for-each>
 	});
 
