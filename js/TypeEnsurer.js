@@ -4,10 +4,44 @@ function (_, objTools) {
 	var typeEnsurer = {
 		init: function (typeLibrary) {
 			this.typeLibrary = typeLibrary;
+			this.ensurers = typeEnsurers;
 			return this;
 		},
+		ensureProperty: function (obj, key, value) {
+			var typeDef = this.typeLibrary.getItem(this.typeLibrary.getObjectType(obj));
+			var propDef = typeDef.properties[key];
+			return this.ensure(value, propDef);
+		},
 		ensure: function (value, typeDef) {
-
+			if (typeDef.multiple) {
+				if (!_.isArray(value)) {
+					throw new TypeError(errPrefix + 'value should be an Array.');
+				}
+				return _.map(value, function (current) {
+					return me(current, _.omit(typeDef, 'multiple'));
+				});
+			}
+			else if (typeDef.type === 'anyType') {
+				return value;
+			}
+			else if (typeDef.type in this.ensurers) {
+				try {
+					return this.ensurers[typeDef.type](value, typeDef);
+				}
+				catch (e) {
+					throw e instanceof TypeError
+						? new TypeError(errPrefix + 'value should be a(n) ' + typeDef.type + '.')
+						: e;
+				}
+			}
+			else if (typeDef.complex) {
+				var ot = this.typeLibrary.getObjectType();
+				if (!ot || ot !== typeDef.type) {
+					throw new TypeError(errPrefix + 'value should be the defined type: "' + typeDef.type + '".');
+				}
+				return value;
+			}
+			return value;
 		}
 	};
 

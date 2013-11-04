@@ -22,12 +22,12 @@ function (_, objTools, Library, TypeDefinition) {
 			}
 			return 'Object';
 		},
-		getValueStrategy: function (obj, strategy) {
+		getValueStrategy: function (obj) {
 			var typeObj = this.getItem(this.getObjectType(obj));
-			return typeObj.valueStrategy || strategy;
+			return typeObj.valueStrategy;
 		},
-		getValue: function (obj, key, strategy) {
-			var s = this.getValueStrategy(obj, strategy);
+		getValue: function (obj, key) {
+			var s = this.getValueStrategy(obj);
 			if (_(s).isObject() && _(s.get).isFunction()) {
 				return s(key);
 			}
@@ -39,8 +39,12 @@ function (_, objTools, Library, TypeDefinition) {
 					return obj[key];
 			}
 		},
-		setValue: function (obj, key, value, strategy) {
-			var s = this.getValueStrategy(obj, strategy);
+		setValue: function (obj, key, value) {
+			if (this.typeEnsurer) {
+				value = this.typeEnsurer.ensureProperty(obj, key, value);
+			}
+
+			var s = this.getValueStrategy(obj);
 			if (_(s).isObject() && _(s.set).isFunction()) {
 				s(key, value);
 			}
