@@ -18,8 +18,8 @@ function (_, objTools) {
 					throw new TypeError(errPrefix + 'value should be an Array.');
 				}
 				return _.map(value, function (current) {
-					return me(current, _.omit(typeDef, 'multiple'));
-				});
+					return this.ensure(current, _.omit(typeDef, 'multiple'));
+				}, this);
 			}
 			else if (typeDef.type === 'anyType') {
 				return value;
@@ -35,7 +35,10 @@ function (_, objTools) {
 				}
 			}
 			else if (typeDef.complex) {
-				var ot = this.typeLibrary.getObjectType();
+				var ot = this.typeLibrary.getObjectType(value);
+				if (_(value).isNull()) {
+					return null;
+				}
 				if (!ot || ot !== typeDef.type) {
 					throw new TypeError(errPrefix + 'value should be the defined type: "' + typeDef.type + '".');
 				}
