@@ -16,7 +16,7 @@ requirejs(['underscore', 'gen/wsconfig', 'Xml'], function (_, service, Xml) {
 	service.call('getEventsInRange', reqObj);
 
 	var user = service.factory.makeAndFill('user', {
-		id: 11,
+		id: '11',
 		name: 'Gipsz Jakab'
 	});
 
@@ -41,7 +41,6 @@ requirejs(['underscore', 'gen/wsconfig', 'Xml'], function (_, service, Xml) {
 	var resp = service.factory.makeAndFill('getEventsInRangeResponse', {
 		return: [ev, ev2]
 	});
-	console.log(resp);
 
 	var xml = service.serializer.serialize(resp, 'getEventsInRangeResponse');
 	document.getElementById('show').innerText = Xml.format(xml);
