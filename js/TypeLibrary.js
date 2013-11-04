@@ -10,6 +10,7 @@ function (_, objTools, Library, TypeDefinition) {
 			this.type = TypeDefinition;
 			this.nameProperty = 'type';
 			this.addItems(defs);
+			this.typeEnsurer = null;
 			return this;
 		},
 		getObjectType: function (obj) {
@@ -52,9 +53,6 @@ function (_, objTools, Library, TypeDefinition) {
 						obj[key] = value;
 				}
 			}
-		},
-		ensureType: function () {
-
 		}
 	});
 

@@ -1,6 +1,6 @@
 
-define(['underscore', 'objTools', 'TypeLibrary', 'TypeDefinition'], 
-function (_, objTools, TypeLibrary, TypeDefinition) {
+define(['underscore', 'objTools', 'TypeLibrary', 'TypeDefinition', 'TypeEnsurer'], 
+function (_, objTools, TypeLibrary, TypeDefinition, TypeEnsurer) {
 	var namespaces = {
 		0: 'http://budget.kapa.org/',
 		'xs': 'http://www.w3.org/2001/XMLSchema'
@@ -257,5 +257,7 @@ function (_, objTools, TypeLibrary, TypeDefinition) {
 	
 	];
 
-	return new TypeLibrary(types);
+	var tlib = new TypeLibrary(types);
+	tlib.typeEnsurer = new TypeEnsurer(tlib);
+	return tlib;
 });

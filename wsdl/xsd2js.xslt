@@ -2,8 +2,8 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xs="http://www.w3.org/2001/XMLSchema" version="1.0">
 <xsl:output method="text" omit-xml-declaration="yes"/>   
 <xsl:template match="/">
-define(['underscore', 'objTools', 'TypeLibrary', 'TypeDefinition'], 
-function (_, objTools, TypeLibrary, TypeDefinition) {
+define(['underscore', 'objTools', 'TypeLibrary', 'TypeDefinition', 'TypeEnsurer'], 
+function (_, objTools, TypeLibrary, TypeDefinition, TypeEnsurer) {
 	var namespaces = {
 		0: '<xsl:value-of select="xs:schema/@targetNamespace"/>',
 		'xs': 'http://www.w3.org/2001/XMLSchema'
@@ -36,7 +36,9 @@ function (_, objTools, TypeLibrary, TypeDefinition) {
 	</xsl:for-each>
 	];
 
-	return new TypeLibrary(types);
+	var tlib = new TypeLibrary(types);
+	tlib.typeEnsurer = new TypeEnsurer(tlib);
+	return tlib;
 });
 </xsl:template>
 
