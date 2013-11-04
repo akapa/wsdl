@@ -48,6 +48,7 @@ function (_, objTools, TypeLibrary, TypeDefinition) {
 <xsl:template match="xs:element" mode="TYPE">
 				'<xsl:value-of select="@name" />': objTools.make(TypeDefinition, {<xsl:if test="@maxOccurs = 'unbounded'">
 					multiple: true,</xsl:if>
+					<xsl:call-template name="iscomplex"></xsl:call-template>
 					ns: '<xsl:call-template name="nsname">
 						<xsl:with-param name="type" select="@type" />
 					</xsl:call-template>',
@@ -79,6 +80,14 @@ function (_, objTools, TypeLibrary, TypeDefinition) {
     <xsl:if test="substring-before($type, ':') != ''">
         <xsl:value-of select="namespace::*[local-name()=substring-before($type, ':')]"/>
     </xsl:if>
+</xsl:template>
+
+<xsl:template name="iscomplex">
+	<xsl:variable name="prefix" select="substring-before(@type, ':')"/>
+	<xsl:if test="$prefix != '' and namespace::*[local-name()=$prefix] = /xs:schema/@targetNamespace">
+		<xsl:text>
+					complex: true,</xsl:text>
+	</xsl:if>
 </xsl:template>
 
 </xsl:stylesheet>

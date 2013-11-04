@@ -93,6 +93,7 @@ function (_, objTools, TypeLibrary, TypeDefinition) {
 			properties: {
 				'return': objTools.make(TypeDefinition, {
 					multiple: true,
+					complex: true,
 					ns: 'http://budget.kapa.org/',
 					type: 'event'
 				}),
@@ -128,6 +129,7 @@ function (_, objTools, TypeLibrary, TypeDefinition) {
 					type: 'string'
 				}),
 				'user': objTools.make(TypeDefinition, {
+					complex: true,
 					ns: 'http://budget.kapa.org/',
 					type: 'user'
 				}),
@@ -144,6 +146,7 @@ function (_, objTools, TypeLibrary, TypeDefinition) {
 			properties: {
 				'events': objTools.make(TypeDefinition, {
 					multiple: true,
+					complex: true,
 					ns: 'http://budget.kapa.org/',
 					type: 'event'
 				}),
@@ -187,6 +190,7 @@ function (_, objTools, TypeLibrary, TypeDefinition) {
 			properties: {
 				'return': objTools.make(TypeDefinition, {
 					multiple: true,
+					complex: true,
 					ns: 'http://budget.kapa.org/',
 					type: 'event'
 				}),
