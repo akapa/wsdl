@@ -64,6 +64,7 @@ define(['underscore', 'objTools', 'Serializer', 'Xml'], function (_, objTools, S
 			return elem;
 		},
 		unserialize: function (s, name, typeDef) {
+			typeDef = this.typeLibrary.getItem(name) || typeDef;
 			return this.unserializeDOM(Xml.parseXml(s), name, typeDef);
 		},
 		unserializeDOM: function (dom, name, typeDef) {

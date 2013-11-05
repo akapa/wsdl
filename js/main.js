@@ -12,8 +12,16 @@ requirejs.config({
 requirejs(['underscore', 'gen/wsconfig', 'Xml'], function (_, service, Xml) {
 	console.log(service);
 
-	var reqObj = service.factory.make('getEventsInRange');
-	service.call('getEventsInRange', reqObj);
+	var reqObj = service.factory.makeAndFill('getEventsInRange', {
+		timeFrom: new Date('09/18/2013'),
+		timeTo: new Date('11/02/2013')
+	});
+	service.call(
+		'getEventsInRange', 
+		reqObj, 
+		function () { console.log(arguments); }, 
+		function () { console.log(arguments); }
+	);
 
 	var user = service.factory.makeAndFill('user', {
 		id: '11',
@@ -45,6 +53,16 @@ requirejs(['underscore', 'gen/wsconfig', 'Xml'], function (_, service, Xml) {
 	var xml = service.serializer.serialize(resp, 'getEventsInRangeResponse');
 	document.getElementById('show').innerText = Xml.format(xml);
 
-	var td = service.typeLibrary.getItem('getEventsInRangeResponse');
-	console.log(td, service.serializer.unserialize(xml, 'getEventsInRangeResponse', td));
+	/*var td = service.typeLibrary.getItem('getEventsInRangeResponse');
+	console.log(td, service.serializer.unserialize(xml, 'getEventsInRangeResponse', td));*/
+
+	service.handleSuccess(
+		service.methodLibrary.getItem('getEventsInRange'),
+		{
+			status: 200,
+			statusText: 'Fasza',
+			responseText: service.getSoapEnvelope(xml)
+		},
+		function () { console.log(arguments); }
+	);
 });
