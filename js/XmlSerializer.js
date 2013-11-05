@@ -4,6 +4,8 @@ define(['underscore', 'objTools', 'Serializer', 'Xml'], function (_, objTools, S
 			this.typeLibrary = typeLibrary;
 			this.factory = factory;
 			this.ns = namespaces;
+			this.primitiveSerializers = primitiveSerializers;
+			this.primitiveUnserializers = primitiveUnserializers;
 			return this;
 		},
 		serialize: function (value, name) {
@@ -55,7 +57,7 @@ define(['underscore', 'objTools', 'Serializer', 'Xml'], function (_, objTools, S
 				}
 				else {
 					Xml.setNodeText(elem, typeDef.type in primitiveSerializers
-						? primitiveSerializers[typeDef.type](value, typeDef)
+						? this.primitiveSerializers[typeDef.type](value, typeDef)
 						: value);
 				}
 			}
@@ -87,7 +89,7 @@ define(['underscore', 'objTools', 'Serializer', 'Xml'], function (_, objTools, S
 				}, this);
 			}
 			else if (typeDef.type in primitiveUnserializers) {
-				return primitiveUnserializers[typeDef.type](Xml.getNodeText(elem), typeDef);
+				return this.primitiveUnserializers[typeDef.type](Xml.getNodeText(elem), typeDef);
 			}
 			else {
 				return Xml.getNodeText(elem);
