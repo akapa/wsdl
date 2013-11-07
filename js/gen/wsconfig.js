@@ -1,5 +1,5 @@
 
-define('wsdl2', ['underscore', 'wsdl2/objTools', 'wsdl2/WebService',	'wsdl2/MethodLibrary', 'wsdl2/MethodDefinition', 'wsdl2/XmlSerializer', 'wsdl2/Factory', 'wsdl2/gen/typeconfig'], 
+define(['underscore', 'wsdl2/objTools', 'wsdl2/WebService',	'wsdl2/MethodLibrary', 'wsdl2/MethodDefinition', 'wsdl2/XmlSerializer', 'wsdl2/Factory', 'wsdl2/gen/typeconfig'], 
 function (_, objTools, WebService, MethodLibrary, MethodDefinition, XmlSerializer, Factory, typeLib) {
 	var namespaces = {
 		0: 'http://budget.kapa.org/',
