@@ -2,7 +2,7 @@
 <xsl:stylesheet xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" version="1.0">
 <xsl:output method="text" omit-xml-declaration="yes"/>   
 <xsl:template match="/">
-define(['underscore', 'objTools', 'WebService',	'MethodLibrary', 'MethodDefinition', 'XmlSerializer', 'Factory', 'typeconfig'], 
+define('wsdl2', ['underscore', 'wsdl2/objTools', 'wsdl2/WebService',	'wsdl2/MethodLibrary', 'wsdl2/MethodDefinition', 'wsdl2/XmlSerializer', 'wsdl2/Factory', 'wsdl2/gen/typeconfig'], 
 function (_, objTools, WebService, MethodLibrary, MethodDefinition, XmlSerializer, Factory, typeLib) {
 	var namespaces = {
 		0: '<xsl:value-of select="wsdl:definitions/@targetNamespace"/>',

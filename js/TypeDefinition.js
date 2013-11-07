@@ -1,4 +1,4 @@
-define(['objTools'], function (objTools) {
+define(['wsdl2/objTools'], function (objTools) {
 	var typeDefinition = {
 		type: 'anyType',
 		ns: 'http://www.w3.org/2001/XMLSchema',

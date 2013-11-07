@@ -1,4 +1,4 @@
-define(['objTools'], function (objTools) {
+define(['wsdl2/objTools'], function (objTools) {
 	var serializer = {
 		serialize: function (value, name) {
 			return JSON.stringify(value);

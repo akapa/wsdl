@@ -1,6 +1,7 @@
 requirejs.config({
 	paths: {
-		'underscore': 'lib/underscore'
+		'underscore': 'lib/underscore',
+		'wsdl2': '.'
 	},
 	shim: {
 		'underscore': {
@@ -9,7 +10,7 @@ requirejs.config({
 	}
 });
 
-requirejs(['underscore', 'gen/wsconfig', 'Xml'], function (_, service, Xml) {
+requirejs(['underscore', 'wsdl2/gen/wsconfig', 'wsdl2/Xml'], function (_, service, Xml) {
 	console.log(service);
 
 	var reqObj = service.factory.makeAndFill('getEventsInRange', {

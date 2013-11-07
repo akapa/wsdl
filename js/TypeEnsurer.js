@@ -1,4 +1,4 @@
-define(['underscore', 'objTools'],
+define(['underscore', 'wsdl2/objTools'],
 function (_, objTools) {
 
 	var typeEnsurer = {

@@ -1,4 +1,4 @@
-define(['underscore', 'objTools', 'Library', 'MethodDefinition'],
+define(['underscore', 'wsdl2/objTools', 'wsdl2/Library', 'wsdl2/MethodDefinition'],
 function (_, objTools, Library, MethodDefinition) {
 	var methodLibrary = objTools.make(Library, {
 		init: function (defs) {

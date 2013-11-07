@@ -1,4 +1,4 @@
-define(['underscore', 'objTools', 'Serializer', 'Xml'], function (_, objTools, Serializer, Xml) {
+define(['underscore', 'wsdl2/objTools', 'wsdl2/Serializer', 'wsdl2/Xml'], function (_, objTools, Serializer, Xml) {
 	var xmlSerializer = objTools.make(Serializer, {
 		init: function (typeLibrary, factory, namespaces) {
 			this.typeLibrary = typeLibrary;
