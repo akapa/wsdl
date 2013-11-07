@@ -32,7 +32,8 @@ define(['underscore', 'wsdl2/objTools', 'wsdl2/Xml'], function (_, objTools, Xml
 			}
 		},
 		handleSuccess: function (method, xhr, onSuccess) {
-			var obj = this.serializer.unserialize(xhr.responseText, method.responseObject);
+			var methodDef = this.methodLibrary.getItem(method);
+			var obj = this.serializer.unserialize(xhr.responseText, methodDef.responseObject);
 			onSuccess(obj, xhr.status, xhr.statusText);
 		},
 		handleError: function (method, xhr, onError) {
