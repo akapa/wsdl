@@ -13,16 +13,6 @@ requirejs.config({
 requirejs(['underscore', 'wsdl2/gen/wsconfig', 'wsdl2/Xml'], function (_, service, Xml) {
 	console.log(service);
 
-	/*var reqObj = service.factory.makeAndFill('getEventsInRange', {
-		timeFrom: new Date('09/18/2013'),
-		timeTo: new Date('11/02/2013')
-	});
-	service.call(
-		'getEventsInRange', 
-		reqObj, 
-		function () { console.log(arguments); }, 
-		function () { console.log(arguments); }
-	);*/
 	service.getEventsInRange({
 				timeFrom: new Date('09/18/2013'),
 				timeTo: new Date('11/02/2013')
@@ -65,7 +55,7 @@ requirejs(['underscore', 'wsdl2/gen/wsconfig', 'wsdl2/Xml'], function (_, servic
 	console.log(td, service.serializer.unserialize(xml, 'getEventsInRangeResponse', td));*/
 
 	service.handleSuccess(
-		service.methodLibrary.getItem('getEventsInRange'),
+		'getEventsInRange',
 		{
 			status: 200,
 			statusText: 'Fasza',

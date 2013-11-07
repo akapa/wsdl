@@ -69,7 +69,10 @@ define(['underscore', 'wsdl2/objTools', 'wsdl2/Serializer', 'wsdl2/Xml'], functi
 		},
 		unserializeDOM: function (dom, name, typeDef) {
 			var res;
-			var elem = dom.tagName === name ? dom : dom.getElementsByTagNameNS(this.ns[0], name)[0];
+			var elem = dom.tagName === name 
+				? dom 
+				: dom.getElementsByTagNameNS(this.ns[0], name)[0]
+					|| dom.getElementsByTagName(name)[0];
 			if (typeDef.multiple) {
 				res = [];
 				while (elem && elem.tagName === name) {
