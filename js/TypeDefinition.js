@@ -5,7 +5,7 @@ define(['wsdl2/objTools'], function (objTools) {
 		multiple: false,
 		complex: false,
 		properties: {},
-		proto: null,
+		constructorFunction: null,
 		valueStrategy: 'property' //'property', 'gettersetter' or object { get: function, set: function }
 	};
 

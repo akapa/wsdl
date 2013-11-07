@@ -13,7 +13,7 @@ requirejs.config({
 requirejs(['underscore', 'wsdl2/gen/wsconfig', 'wsdl2/Xml'], function (_, service, Xml) {
 	console.log(service);
 
-	var reqObj = service.factory.makeAndFill('getEventsInRange', {
+	/*var reqObj = service.factory.makeAndFill('getEventsInRange', {
 		timeFrom: new Date('09/18/2013'),
 		timeTo: new Date('11/02/2013')
 	});
@@ -22,7 +22,14 @@ requirejs(['underscore', 'wsdl2/gen/wsconfig', 'wsdl2/Xml'], function (_, servic
 		reqObj, 
 		function () { console.log(arguments); }, 
 		function () { console.log(arguments); }
-	);
+	);*/
+	service.getEventsInRange({
+				timeFrom: new Date('09/18/2013'),
+				timeTo: new Date('11/02/2013')
+			}, 
+			function () { console.log(arguments); }, 
+			function () { console.log(arguments); }
+		);
 
 	var user = service.factory.makeAndFill('user', {
 		id: '11',

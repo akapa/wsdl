@@ -61,27 +61,32 @@ function (_, objTools, WebService, MethodLibrary, MethodDefinition, XmlSerialize
 	_(ws).extend({
 	
 		'storeObjects': function (params, onSuccess, onError) {
-			var reqObj = objTools.make(this.methodLibrary.getItem('storeObjects').requestObject, params);
+			var reqObjName = this.methodLibrary.getItem('storeObjects').requestObject;
+			var reqObj = objTools.make(this.typeLibrary.getItem(reqObjName).constructorFunction, params);
 			this.call('storeObjects', reqObj, onSuccess, onError);
 		},
 	
 		'deleteObjects': function (params, onSuccess, onError) {
-			var reqObj = objTools.make(this.methodLibrary.getItem('deleteObjects').requestObject, params);
+			var reqObjName = this.methodLibrary.getItem('deleteObjects').requestObject;
+			var reqObj = objTools.make(this.typeLibrary.getItem(reqObjName).constructorFunction, params);
 			this.call('deleteObjects', reqObj, onSuccess, onError);
 		},
 	
 		'getAmount': function (params, onSuccess, onError) {
-			var reqObj = objTools.make(this.methodLibrary.getItem('getAmount').requestObject, params);
+			var reqObjName = this.methodLibrary.getItem('getAmount').requestObject;
+			var reqObj = objTools.make(this.typeLibrary.getItem(reqObjName).constructorFunction, params);
 			this.call('getAmount', reqObj, onSuccess, onError);
 		},
 	
 		'getRecentEvents': function (params, onSuccess, onError) {
-			var reqObj = objTools.make(this.methodLibrary.getItem('getRecentEvents').requestObject, params);
+			var reqObjName = this.methodLibrary.getItem('getRecentEvents').requestObject;
+			var reqObj = objTools.make(this.typeLibrary.getItem(reqObjName).constructorFunction, params);
 			this.call('getRecentEvents', reqObj, onSuccess, onError);
 		},
 	
 		'getEventsInRange': function (params, onSuccess, onError) {
-			var reqObj = objTools.make(this.methodLibrary.getItem('getEventsInRange').requestObject, params);
+			var reqObjName = this.methodLibrary.getItem('getEventsInRange').requestObject;
+			var reqObj = objTools.make(this.typeLibrary.getItem(reqObjName).constructorFunction, params);
 			this.call('getEventsInRange', reqObj, onSuccess, onError);
 		},
 	

@@ -42,7 +42,8 @@ function (_, objTools, WebService, MethodLibrary, MethodDefinition, XmlSerialize
 	_(ws).extend({
 	<xsl:for-each select=".//wsdl:portType/wsdl:operation">
 		'<xsl:value-of select="@name"/>': function (params, onSuccess, onError) {
-			var reqObj = objTools.make(this.methodLibrary.getItem('<xsl:value-of select="@name"/>').requestObject, params);
+			var reqObjName = this.methodLibrary.getItem('<xsl:value-of select="@name"/>').requestObject;
+			var reqObj = objTools.make(this.typeLibrary.getItem(reqObjName).constructorFunction, params);
 			this.call('<xsl:value-of select="@name"/>', reqObj, onSuccess, onError);
 		},
 	</xsl:for-each>
