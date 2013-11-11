@@ -31,7 +31,6 @@ define(['underscore', 'wsdl2/objTools', 'wsdl2/Serializer', 'wsdl2/Xml'], functi
 				}, this);
 			}
 			else {
-				var elem;
 				if (!doc) {
 					doc = Xml.createDocument(name, this.ns);
 					elem = doc.documentElement;
@@ -41,9 +40,9 @@ define(['underscore', 'wsdl2/objTools', 'wsdl2/Serializer', 'wsdl2/Xml'], functi
 				}
 
 				if (_(value).isNull() || _(value).isUndefined()) {
-					elem.setAttributeNS(this.ns['xs'], 'xs:nil', 'true');
+					elem.setAttributeNS(this.ns['xsi'], 'xsi:nil', 'true');
 				}
-				else if (typeDef.complex) {
+				else if (typeDef.complex || typeDef.type === 'anyType') {
 					typeDef = this.typeLibrary.getItem(this.typeLibrary.getObjectType(value));
 					_(typeDef.properties).each(function (propDef, key) {
 						var val = value[key];
@@ -52,7 +51,7 @@ define(['underscore', 'wsdl2/objTools', 'wsdl2/Serializer', 'wsdl2/Xml'], functi
 
 					var objType = this.typeLibrary.getObjectType(value);
 					if (this.typeLibrary.exists(objType)) {
-						elem.setAttribute('type', objType);
+						elem.setAttributeNS(this.ns['xsi'], 'xsi:type', objType);
 					}
 				}
 				else {
@@ -81,10 +80,10 @@ define(['underscore', 'wsdl2/objTools', 'wsdl2/Serializer', 'wsdl2/Xml'], functi
 					elem = elem.nextSibling;
 				}
 			}
-			else if (elem.getAttributeNS(this.ns['xs'], 'nil') === 'true') {
+			else if (elem.getAttributeNS(this.ns['xsi'], 'nil') === 'true') {
 				res = null;
 			}
-			else if (typeDef.complex) {
+			else if (typeDef.complex || typeDef.type === 'anyType') {
 				res = this.factory.make(typeDef.type);
 				typeDef = this.typeLibrary.getItem(typeDef.type);
 				_(typeDef.properties).each(function (prop, propName) {

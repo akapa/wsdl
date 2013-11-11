@@ -49,13 +49,14 @@ define(function () {
 		createDocument: function (name, namespaces) {
 			var doc = document.implementation.createDocument(namespaces[0], name, null);
 			_(namespaces).each(function (ns, nskey) {
-				if (nskey != 0) {
-					doc.documentElement.setAttributeNS(
-						'http://www.w3.org/2000/xmlns/', 
-						'xmlns:' + nskey, 
-						ns
-					);
+				if (!nskey || nskey == '0') {
+					nskey = 'a';
 				}
+				doc.documentElement.setAttributeNS(
+					'http://www.w3.org/2000/xmlns/', 
+					'xmlns:' + nskey, 
+					ns
+				);
 			});
 			return doc;
 		},
