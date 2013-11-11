@@ -50,7 +50,7 @@ define(function () {
 			var doc = document.implementation.createDocument(namespaces[0], name, null);
 			_(namespaces).each(function (ns, nskey) {
 				if (!nskey || nskey == '0') {
-					nskey = 'a';
+					nskey = 'my';
 				}
 				doc.documentElement.setAttributeNS(
 					'http://www.w3.org/2000/xmlns/', 

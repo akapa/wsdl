@@ -6,7 +6,8 @@ define(['underscore', 'wsdl2/objTools', 'wsdl2/WebService',	'wsdl2/MethodLibrary
 function (_, objTools, WebService, MethodLibrary, MethodDefinition, XmlSerializer, Factory, typeLib) {
 	var namespaces = {
 		0: '<xsl:value-of select="wsdl:definitions/@targetNamespace"/>',
-		'xs': 'http://www.w3.org/2001/XMLSchema'
+		'xs': 'http://www.w3.org/2001/XMLSchema',
+		'xsi': 'http://www.w3.org/2001/XMLSchema-instance'
 	};
 
 	//WSDL METHOD DEFINITIONS
@@ -36,7 +37,7 @@ function (_, objTools, WebService, MethodLibrary, MethodDefinition, XmlSerialize
 	var serializer = new XmlSerializer(typeLib, factory, namespaces);
 
 	//creating the Web Service
-	var ws = new WebService(serializer, factory, methodLib, typeLib);
+	var ws = new WebService('<xsl:value-of select="wsdl:definitions/@name"/>', serializer, factory, methodLib, typeLib);
 
 	//adding Web Service methods to easily call WSDL methods
 	_(ws).extend({

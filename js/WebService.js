@@ -1,6 +1,7 @@
 define(['underscore', 'wsdl2/objTools', 'wsdl2/Xml'], function (_, objTools, Xml) {
 	var webService = {
-		init: function (serializer, factory, methodLibrary, typeLibrary) {
+		init: function (name, serializer, factory, methodLibrary, typeLibrary) {
+			this.name = name;
 			this.serializer = serializer;
 			this.factory = factory;
 			this.methodLibrary = methodLibrary;
@@ -21,6 +22,12 @@ define(['underscore', 'wsdl2/objTools', 'wsdl2/Xml'], function (_, objTools, Xml
 			}.bind(this);
 			req.open('post', methodDef.endpoint, true);
 			req.setRequestHeader('Content-Type', 'text/xml');
+			var stuff = [
+				this.serializer.ns[0].replace(/\/+$/, ''),
+				this.name, 
+				methodDef.name
+			];
+			req.setRequestHeader('SOAPAction', stuff.join('/'));
 			req.send(envelope);
 		},
 		handleResponse: function (method, xhr, onSuccess, onError) {

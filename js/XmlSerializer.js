@@ -32,11 +32,11 @@ define(['underscore', 'wsdl2/objTools', 'wsdl2/Serializer', 'wsdl2/Xml'], functi
 			}
 			else {
 				if (!doc) {
-					doc = Xml.createDocument(name, this.ns);
+					doc = Xml.createDocument('my:' + name, this.ns);
 					elem = doc.documentElement;
 				}
 				else {
-					elem = doc.createElementNS(this.ns[0], name);
+					elem = doc.createElementNS(null, name);
 				}
 
 				if (_(value).isNull() || _(value).isUndefined()) {
@@ -51,7 +51,7 @@ define(['underscore', 'wsdl2/objTools', 'wsdl2/Serializer', 'wsdl2/Xml'], functi
 
 					var objType = this.typeLibrary.getObjectType(value);
 					if (this.typeLibrary.exists(objType)) {
-						elem.setAttributeNS(this.ns['xsi'], 'xsi:type', objType);
+						elem.setAttributeNS(this.ns['xsi'], 'xsi:type', 'my:' + objType);
 					}
 				}
 				else {
