@@ -12,13 +12,9 @@ function (_, objTools, TypeLibrary, TypeDefinition, TypeEnsurer) {
 
 	//PROTO OBJECTS FOR XSD COMPLEX TYPES
 
-	var objects = {
-	<xsl:for-each select=".//xs:complexType">
-		'<xsl:value-of select="@name" />': {<xsl:apply-templates select=".//xs:element" mode="OBJECT" />
-			classify: function () { return '<xsl:value-of select="@name" />'; }
-		},
-	</xsl:for-each>
-	};
+	var objects = {};
+	var constructors = {};
+	<xsl:apply-templates select=".//xs:complexType[not(descendant::xs:extension)]" mode="OBJECT" />
 
 	//TYPE DEFINITIONS FOR XSD COMPLEX TYPE
 
@@ -28,9 +24,7 @@ function (_, objTools, TypeLibrary, TypeDefinition, TypeEnsurer) {
 			type: '<xsl:value-of select="@name" />',
 			ns: namespaces[0],
 			complex: true,
-			constructorFunction: function <xsl:call-template name="capitalizeName" /> () {
-				return objTools.construct(objects.<xsl:value-of select="@name" />, <xsl:call-template name="capitalizeName" />);
-			},
+			constructorFunction: constructors['<xsl:value-of select="@name" />'],
 			properties: {<xsl:apply-templates select=".//xs:element" mode="TYPE" />
 			}
 		}),
@@ -43,8 +37,21 @@ function (_, objTools, TypeLibrary, TypeDefinition, TypeEnsurer) {
 });
 </xsl:template>
 
+<xsl:template match="xs:complexType" mode="OBJECT">
+	objects['<xsl:value-of select="@name" />'] = {<xsl:apply-templates select=".//xs:element" mode="OBJECT" />
+		classify: function () { return '<xsl:value-of select="@name" />'; }
+	};
+
+	constructors['<xsl:value-of select="@name" />'] = function <xsl:call-template name="capitalizeName" /> () {
+		return objTools.construct(<xsl:if test=".//xs:extension">objTools.make(new constructors['<xsl:value-of select="substring-after(.//xs:extension/@base, ':')" />'], </xsl:if>objects['<xsl:value-of select="@name" />']<xsl:if test=".//xs:extension">)</xsl:if>, <xsl:call-template name="capitalizeName" />);
+	};
+	<xsl:variable name="tns" select="local-name(namespace::*[.=/*/@targetNamespace])"/>
+	<xsl:variable name="type" select="@name"/>
+	<xsl:apply-templates select="../xs:complexType[descendant::xs:extension[@base = concat($tns, ':', $type)]]" mode="OBJECT" />
+</xsl:template>
+
 <xsl:template match="xs:element" mode="OBJECT">
-			'<xsl:value-of select="@name" />': <xsl:call-template name="defaultValue">
+		'<xsl:value-of select="@name" />': <xsl:call-template name="defaultValue">
 	<xsl:with-param name="type" select="."></xsl:with-param>
 </xsl:call-template>,</xsl:template>
 

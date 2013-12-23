@@ -9,65 +9,113 @@ function (_, objTools, TypeLibrary, TypeDefinition, TypeEnsurer) {
 
 	//PROTO OBJECTS FOR XSD COMPLEX TYPES
 
-	var objects = {
+	var objects = {};
+	var constructors = {};
 	
-		'getRecentEvents': {
-			classify: function () { return 'getRecentEvents'; }
-		},
-	
-		'getRecentEventsResponse': {
-			'return': [],
-			classify: function () { return 'getRecentEventsResponse'; }
-		},
-	
-		'event': {
-			'amount': 0,
-			'description': '',
-			'id': 0,
-			'time': null,
-			'type': '',
-			'user': null,
-			classify: function () { return 'event'; }
-		},
-	
-		'user': {
-			'events': [],
-			'id': 0,
-			'name': '',
-			classify: function () { return 'user'; }
-		},
-	
-		'getEventsInRange': {
-			'timeFrom': null,
-			'timeTo': null,
-			classify: function () { return 'getEventsInRange'; }
-		},
-	
-		'getEventsInRangeResponse': {
-			'return': [],
-			classify: function () { return 'getEventsInRangeResponse'; }
-		},
-	
-		'storeObjects': {
-			'objects': [],
-			classify: function () { return 'storeObjects'; }
-		},
-	
-		'getAmount': {
-			classify: function () { return 'getAmount'; }
-		},
-	
-		'getAmountResponse': {
-			'return': 0,
-			classify: function () { return 'getAmountResponse'; }
-		},
-	
-		'deleteObjects': {
-			'objects': [],
-			classify: function () { return 'deleteObjects'; }
-		},
-	
+	objects['getRecentEvents'] = {
+		classify: function () { return 'getRecentEvents'; }
 	};
+
+	constructors['getRecentEvents'] = function GetRecentEvents () {
+		return objTools.construct(objects['getRecentEvents'], GetRecentEvents);
+	};
+	
+	objects['getRecentEventsResponse'] = {
+		'return': [],
+		classify: function () { return 'getRecentEventsResponse'; }
+	};
+
+	constructors['getRecentEventsResponse'] = function GetRecentEventsResponse () {
+		return objTools.construct(objects['getRecentEventsResponse'], GetRecentEventsResponse);
+	};
+	
+	objects['basic'] = {
+		classify: function () { return 'basic'; }
+	};
+
+	constructors['basic'] = function Basic () {
+		return objTools.construct(objects['basic'], Basic);
+	};
+	
+	objects['event'] = {
+		'amount': 0,
+		'description': '',
+		'id': 0,
+		'time': null,
+		'type': '',
+		'user': null,
+		classify: function () { return 'event'; }
+	};
+
+	constructors['event'] = function Event () {
+		return objTools.construct(objTools.make(new constructors['basic'], objects['event']), Event);
+	};
+	
+	objects['user'] = {
+		'events': [],
+		'id': 0,
+		'name': '',
+		classify: function () { return 'user'; }
+	};
+
+	constructors['user'] = function User () {
+		return objTools.construct(objTools.make(new constructors['basic'], objects['user']), User);
+	};
+	
+	objects['getEventsInRange'] = {
+		'timeFrom': null,
+		'timeTo': null,
+		classify: function () { return 'getEventsInRange'; }
+	};
+
+	constructors['getEventsInRange'] = function GetEventsInRange () {
+		return objTools.construct(objects['getEventsInRange'], GetEventsInRange);
+	};
+	
+	objects['getEventsInRangeResponse'] = {
+		'return': [],
+		classify: function () { return 'getEventsInRangeResponse'; }
+	};
+
+	constructors['getEventsInRangeResponse'] = function GetEventsInRangeResponse () {
+		return objTools.construct(objects['getEventsInRangeResponse'], GetEventsInRangeResponse);
+	};
+	
+	objects['storeObjects'] = {
+		'objects': [],
+		classify: function () { return 'storeObjects'; }
+	};
+
+	constructors['storeObjects'] = function StoreObjects () {
+		return objTools.construct(objects['storeObjects'], StoreObjects);
+	};
+	
+	objects['getAmount'] = {
+		classify: function () { return 'getAmount'; }
+	};
+
+	constructors['getAmount'] = function GetAmount () {
+		return objTools.construct(objects['getAmount'], GetAmount);
+	};
+	
+	objects['getAmountResponse'] = {
+		'return': 0,
+		classify: function () { return 'getAmountResponse'; }
+	};
+
+	constructors['getAmountResponse'] = function GetAmountResponse () {
+		return objTools.construct(objects['getAmountResponse'], GetAmountResponse);
+	};
+	
+	objects['deleteObjects'] = {
+		'objects': [],
+		classify: function () { return 'deleteObjects'; }
+	};
+
+	constructors['deleteObjects'] = function DeleteObjects () {
+		return objTools.construct(objects['deleteObjects'], DeleteObjects);
+	};
+	
 
 	//TYPE DEFINITIONS FOR XSD COMPLEX TYPE
 
@@ -77,9 +125,7 @@ function (_, objTools, TypeLibrary, TypeDefinition, TypeEnsurer) {
 			type: 'getRecentEvents',
 			ns: namespaces[0],
 			complex: true,
-			constructorFunction: function GetRecentEvents () {
-				return objTools.construct(objects.getRecentEvents, GetRecentEvents);
-			},
+			constructorFunction: constructors['getRecentEvents'],
 			properties: {
 			}
 		}),
@@ -88,9 +134,7 @@ function (_, objTools, TypeLibrary, TypeDefinition, TypeEnsurer) {
 			type: 'getRecentEventsResponse',
 			ns: namespaces[0],
 			complex: true,
-			constructorFunction: function GetRecentEventsResponse () {
-				return objTools.construct(objects.getRecentEventsResponse, GetRecentEventsResponse);
-			},
+			constructorFunction: constructors['getRecentEventsResponse'],
 			properties: {
 				'return': objTools.make(TypeDefinition, {
 					multiple: true,
@@ -105,9 +149,7 @@ function (_, objTools, TypeLibrary, TypeDefinition, TypeEnsurer) {
 			type: 'event',
 			ns: namespaces[0],
 			complex: true,
-			constructorFunction: function Event () {
-				return objTools.construct(objects.event, Event);
-			},
+			constructorFunction: constructors['event'],
 			properties: {
 				'amount': objTools.make(TypeDefinition, {
 					ns: 'http://www.w3.org/2001/XMLSchema',
@@ -138,12 +180,19 @@ function (_, objTools, TypeLibrary, TypeDefinition, TypeEnsurer) {
 		}),
 	
 		objTools.make(TypeDefinition, {
+			type: 'basic',
+			ns: namespaces[0],
+			complex: true,
+			constructorFunction: constructors['basic'],
+			properties: {
+			}
+		}),
+	
+		objTools.make(TypeDefinition, {
 			type: 'user',
 			ns: namespaces[0],
 			complex: true,
-			constructorFunction: function User () {
-				return objTools.construct(objects.user, User);
-			},
+			constructorFunction: constructors['user'],
 			properties: {
 				'events': objTools.make(TypeDefinition, {
 					multiple: true,
@@ -166,9 +215,7 @@ function (_, objTools, TypeLibrary, TypeDefinition, TypeEnsurer) {
 			type: 'getEventsInRange',
 			ns: namespaces[0],
 			complex: true,
-			constructorFunction: function GetEventsInRange () {
-				return objTools.construct(objects.getEventsInRange, GetEventsInRange);
-			},
+			constructorFunction: constructors['getEventsInRange'],
 			properties: {
 				'timeFrom': objTools.make(TypeDefinition, {
 					ns: 'http://www.w3.org/2001/XMLSchema',
@@ -185,9 +232,7 @@ function (_, objTools, TypeLibrary, TypeDefinition, TypeEnsurer) {
 			type: 'getEventsInRangeResponse',
 			ns: namespaces[0],
 			complex: true,
-			constructorFunction: function GetEventsInRangeResponse () {
-				return objTools.construct(objects.getEventsInRangeResponse, GetEventsInRangeResponse);
-			},
+			constructorFunction: constructors['getEventsInRangeResponse'],
 			properties: {
 				'return': objTools.make(TypeDefinition, {
 					multiple: true,
@@ -202,14 +247,13 @@ function (_, objTools, TypeLibrary, TypeDefinition, TypeEnsurer) {
 			type: 'storeObjects',
 			ns: namespaces[0],
 			complex: true,
-			constructorFunction: function StoreObjects () {
-				return objTools.construct(objects.storeObjects, StoreObjects);
-			},
+			constructorFunction: constructors['storeObjects'],
 			properties: {
 				'objects': objTools.make(TypeDefinition, {
 					multiple: true,
-					ns: 'http://www.w3.org/2001/XMLSchema',
-					type: 'anyType'
+					complex: true,
+					ns: 'http://budget.kapa.org/',
+					type: 'basic'
 				}),
 			}
 		}),
@@ -218,9 +262,7 @@ function (_, objTools, TypeLibrary, TypeDefinition, TypeEnsurer) {
 			type: 'getAmount',
 			ns: namespaces[0],
 			complex: true,
-			constructorFunction: function GetAmount () {
-				return objTools.construct(objects.getAmount, GetAmount);
-			},
+			constructorFunction: constructors['getAmount'],
 			properties: {
 			}
 		}),
@@ -229,9 +271,7 @@ function (_, objTools, TypeLibrary, TypeDefinition, TypeEnsurer) {
 			type: 'getAmountResponse',
 			ns: namespaces[0],
 			complex: true,
-			constructorFunction: function GetAmountResponse () {
-				return objTools.construct(objects.getAmountResponse, GetAmountResponse);
-			},
+			constructorFunction: constructors['getAmountResponse'],
 			properties: {
 				'return': objTools.make(TypeDefinition, {
 					ns: 'http://www.w3.org/2001/XMLSchema',
@@ -244,14 +284,13 @@ function (_, objTools, TypeLibrary, TypeDefinition, TypeEnsurer) {
 			type: 'deleteObjects',
 			ns: namespaces[0],
 			complex: true,
-			constructorFunction: function DeleteObjects () {
-				return objTools.construct(objects.deleteObjects, DeleteObjects);
-			},
+			constructorFunction: constructors['deleteObjects'],
 			properties: {
 				'objects': objTools.make(TypeDefinition, {
 					multiple: true,
-					ns: 'http://www.w3.org/2001/XMLSchema',
-					type: 'anyType'
+					complex: true,
+					ns: 'http://budget.kapa.org/',
+					type: 'basic'
 				}),
 			}
 		}),
