@@ -7,12 +7,12 @@ function (_, objTools, TypeLibrary, TypeDefinition, TypeEnsurer) {
 		'xsi': 'http://www.w3.org/2001/XMLSchema-instance'
 	};
 
-	//PROTO OBJECTS FOR XSD COMPLEX TYPES
-
 	var objects = {};
 	var constructors = {};
 	var types = {};
 	
+	//getRecentEvents
+
 	objects['getRecentEvents'] = {
 		classify: function () { return 'getRecentEvents'; }
 	};
@@ -30,6 +30,8 @@ function (_, objTools, TypeLibrary, TypeDefinition, TypeEnsurer) {
 		}
 	});
 	
+	//getRecentEventsResponse
+
 	objects['getRecentEventsResponse'] = {
 		'return': [],
 		classify: function () { return 'getRecentEventsResponse'; }
@@ -45,15 +47,17 @@ function (_, objTools, TypeLibrary, TypeDefinition, TypeEnsurer) {
 		complex: true,
 		constructorFunction: constructors['getRecentEventsResponse'],
 		properties: {
-				'return': objTools.make(TypeDefinition, {
-					multiple: true,
+			'return': objTools.make(TypeDefinition, {
+				multiple: true,
 					complex: true,
-					ns: 'http://budget.kapa.org/',
-					type: 'event'
-				}),
+				ns: 'http://budget.kapa.org/',
+				type: 'event'
+			}),
 		}
 	});
 	
+	//basic
+
 	objects['basic'] = {
 		classify: function () { return 'basic'; }
 	};
@@ -71,6 +75,8 @@ function (_, objTools, TypeLibrary, TypeDefinition, TypeEnsurer) {
 		}
 	});
 	
+	//event
+
 	objects['event'] = {
 		'amount': 0,
 		'description': '',
@@ -91,34 +97,36 @@ function (_, objTools, TypeLibrary, TypeDefinition, TypeEnsurer) {
 		complex: true,
 		constructorFunction: constructors['event'],
 		properties: objTools.make(types['basic'].properties, {
-				'amount': objTools.make(TypeDefinition, {
-					ns: 'http://www.w3.org/2001/XMLSchema',
-					type: 'float'
-				}),
-				'description': objTools.make(TypeDefinition, {
-					ns: 'http://www.w3.org/2001/XMLSchema',
-					type: 'string'
-				}),
-				'id': objTools.make(TypeDefinition, {
-					ns: 'http://www.w3.org/2001/XMLSchema',
-					type: 'int'
-				}),
-				'time': objTools.make(TypeDefinition, {
-					ns: 'http://www.w3.org/2001/XMLSchema',
-					type: 'dateTime'
-				}),
-				'type': objTools.make(TypeDefinition, {
-					ns: 'http://www.w3.org/2001/XMLSchema',
-					type: 'string'
-				}),
-				'user': objTools.make(TypeDefinition, {
+			'amount': objTools.make(TypeDefinition, {
+				ns: 'http://www.w3.org/2001/XMLSchema',
+				type: 'float'
+			}),
+			'description': objTools.make(TypeDefinition, {
+				ns: 'http://www.w3.org/2001/XMLSchema',
+				type: 'string'
+			}),
+			'id': objTools.make(TypeDefinition, {
+				ns: 'http://www.w3.org/2001/XMLSchema',
+				type: 'int'
+			}),
+			'time': objTools.make(TypeDefinition, {
+				ns: 'http://www.w3.org/2001/XMLSchema',
+				type: 'dateTime'
+			}),
+			'type': objTools.make(TypeDefinition, {
+				ns: 'http://www.w3.org/2001/XMLSchema',
+				type: 'string'
+			}),
+			'user': objTools.make(TypeDefinition, {
 					complex: true,
-					ns: 'http://budget.kapa.org/',
-					type: 'user'
-				}),
+				ns: 'http://budget.kapa.org/',
+				type: 'user'
+			}),
 		})
 	});
 	
+	//user
+
 	objects['user'] = {
 		'events': [],
 		'id': 0,
@@ -136,23 +144,25 @@ function (_, objTools, TypeLibrary, TypeDefinition, TypeEnsurer) {
 		complex: true,
 		constructorFunction: constructors['user'],
 		properties: objTools.make(types['basic'].properties, {
-				'events': objTools.make(TypeDefinition, {
-					multiple: true,
+			'events': objTools.make(TypeDefinition, {
+				multiple: true,
 					complex: true,
-					ns: 'http://budget.kapa.org/',
-					type: 'event'
-				}),
-				'id': objTools.make(TypeDefinition, {
-					ns: 'http://www.w3.org/2001/XMLSchema',
-					type: 'int'
-				}),
-				'name': objTools.make(TypeDefinition, {
-					ns: 'http://www.w3.org/2001/XMLSchema',
-					type: 'string'
-				}),
+				ns: 'http://budget.kapa.org/',
+				type: 'event'
+			}),
+			'id': objTools.make(TypeDefinition, {
+				ns: 'http://www.w3.org/2001/XMLSchema',
+				type: 'int'
+			}),
+			'name': objTools.make(TypeDefinition, {
+				ns: 'http://www.w3.org/2001/XMLSchema',
+				type: 'string'
+			}),
 		})
 	});
 	
+	//getEventsInRange
+
 	objects['getEventsInRange'] = {
 		'timeFrom': null,
 		'timeTo': null,
@@ -169,17 +179,19 @@ function (_, objTools, TypeLibrary, TypeDefinition, TypeEnsurer) {
 		complex: true,
 		constructorFunction: constructors['getEventsInRange'],
 		properties: {
-				'timeFrom': objTools.make(TypeDefinition, {
-					ns: 'http://www.w3.org/2001/XMLSchema',
-					type: 'dateTime'
-				}),
-				'timeTo': objTools.make(TypeDefinition, {
-					ns: 'http://www.w3.org/2001/XMLSchema',
-					type: 'dateTime'
-				}),
+			'timeFrom': objTools.make(TypeDefinition, {
+				ns: 'http://www.w3.org/2001/XMLSchema',
+				type: 'dateTime'
+			}),
+			'timeTo': objTools.make(TypeDefinition, {
+				ns: 'http://www.w3.org/2001/XMLSchema',
+				type: 'dateTime'
+			}),
 		}
 	});
 	
+	//getEventsInRangeResponse
+
 	objects['getEventsInRangeResponse'] = {
 		'return': [],
 		classify: function () { return 'getEventsInRangeResponse'; }
@@ -195,15 +207,17 @@ function (_, objTools, TypeLibrary, TypeDefinition, TypeEnsurer) {
 		complex: true,
 		constructorFunction: constructors['getEventsInRangeResponse'],
 		properties: {
-				'return': objTools.make(TypeDefinition, {
-					multiple: true,
+			'return': objTools.make(TypeDefinition, {
+				multiple: true,
 					complex: true,
-					ns: 'http://budget.kapa.org/',
-					type: 'event'
-				}),
+				ns: 'http://budget.kapa.org/',
+				type: 'event'
+			}),
 		}
 	});
 	
+	//storeObjects
+
 	objects['storeObjects'] = {
 		'objects': [],
 		classify: function () { return 'storeObjects'; }
@@ -219,15 +233,17 @@ function (_, objTools, TypeLibrary, TypeDefinition, TypeEnsurer) {
 		complex: true,
 		constructorFunction: constructors['storeObjects'],
 		properties: {
-				'objects': objTools.make(TypeDefinition, {
-					multiple: true,
+			'objects': objTools.make(TypeDefinition, {
+				multiple: true,
 					complex: true,
-					ns: 'http://budget.kapa.org/',
-					type: 'basic'
-				}),
+				ns: 'http://budget.kapa.org/',
+				type: 'basic'
+			}),
 		}
 	});
 	
+	//getAmount
+
 	objects['getAmount'] = {
 		classify: function () { return 'getAmount'; }
 	};
@@ -245,6 +261,8 @@ function (_, objTools, TypeLibrary, TypeDefinition, TypeEnsurer) {
 		}
 	});
 	
+	//getAmountResponse
+
 	objects['getAmountResponse'] = {
 		'return': 0,
 		classify: function () { return 'getAmountResponse'; }
@@ -260,13 +278,15 @@ function (_, objTools, TypeLibrary, TypeDefinition, TypeEnsurer) {
 		complex: true,
 		constructorFunction: constructors['getAmountResponse'],
 		properties: {
-				'return': objTools.make(TypeDefinition, {
-					ns: 'http://www.w3.org/2001/XMLSchema',
-					type: 'int'
-				}),
+			'return': objTools.make(TypeDefinition, {
+				ns: 'http://www.w3.org/2001/XMLSchema',
+				type: 'int'
+			}),
 		}
 	});
 	
+	//deleteObjects
+
 	objects['deleteObjects'] = {
 		'objects': [],
 		classify: function () { return 'deleteObjects'; }
@@ -282,12 +302,12 @@ function (_, objTools, TypeLibrary, TypeDefinition, TypeEnsurer) {
 		complex: true,
 		constructorFunction: constructors['deleteObjects'],
 		properties: {
-				'objects': objTools.make(TypeDefinition, {
-					multiple: true,
+			'objects': objTools.make(TypeDefinition, {
+				multiple: true,
 					complex: true,
-					ns: 'http://budget.kapa.org/',
-					type: 'basic'
-				}),
+				ns: 'http://budget.kapa.org/',
+				type: 'basic'
+			}),
 		}
 	});
 	

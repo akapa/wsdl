@@ -10,8 +10,6 @@ function (_, objTools, TypeLibrary, TypeDefinition, TypeEnsurer) {
 		'xsi': 'http://www.w3.org/2001/XMLSchema-instance'
 	};
 
-	//PROTO OBJECTS FOR XSD COMPLEX TYPES
-
 	var objects = {};
 	var constructors = {};
 	var types = {};
@@ -25,6 +23,8 @@ function (_, objTools, TypeLibrary, TypeDefinition, TypeEnsurer) {
 
 <xsl:template match="xs:complexType" mode="OBJECT">
 	<xsl:variable name="base" select="substring-after(.//xs:extension/@base, ':')"/>
+	//<xsl:value-of select="@name" />
+
 	objects['<xsl:value-of select="@name" />'] = {<xsl:apply-templates select=".//xs:element" mode="OBJECT" />
 		classify: function () { return '<xsl:value-of select="@name" />'; }
 	};
@@ -52,14 +52,14 @@ function (_, objTools, TypeLibrary, TypeDefinition, TypeEnsurer) {
 </xsl:call-template>,</xsl:template>
 
 <xsl:template match="xs:element" mode="TYPE">
-				'<xsl:value-of select="@name" />': objTools.make(TypeDefinition, {<xsl:if test="@maxOccurs = 'unbounded'">
-					multiple: true,</xsl:if>
-					<xsl:call-template name="iscomplex"></xsl:call-template>
-					ns: '<xsl:call-template name="nsname">
-						<xsl:with-param name="type" select="@type" />
-					</xsl:call-template>',
-					type: '<xsl:value-of select="substring-after(@type, ':')" />'
-				}),</xsl:template>
+			'<xsl:value-of select="@name" />': objTools.make(TypeDefinition, {<xsl:if test="@maxOccurs = 'unbounded'">
+				multiple: true,</xsl:if>
+				<xsl:call-template name="iscomplex"></xsl:call-template>
+				ns: '<xsl:call-template name="nsname">
+					<xsl:with-param name="type" select="@type" />
+				</xsl:call-template>',
+				type: '<xsl:value-of select="substring-after(@type, ':')" />'
+			}),</xsl:template>
 
 <xsl:template name="defaultValue">
 	<xsl:param name="type" />
