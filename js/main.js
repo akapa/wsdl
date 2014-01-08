@@ -10,7 +10,13 @@ requirejs.config({
 	}
 });
 
-requirejs(['underscore', 'wsdl2/gen/wsconfig', 'wsdl2/Xml'], function (_, service, Xml) {
+requirejs(['underscore', 'wsdl2/gen/wsconfig', 'wsdl2/Xml', 'wsdl2/XmlValidator'],
+function (_, service, Xml, XmlValidator) {
+	var xsd = document.getElementById('xsd').value;
+	var validator = new XmlValidator();
+	validator.loadXsd(Xml.parseXml(xsd));
+	console.log(validator);
+
 	console.log(service);
 
 	service.getEventsInRange({
@@ -50,6 +56,10 @@ requirejs(['underscore', 'wsdl2/gen/wsconfig', 'wsdl2/Xml'], function (_, servic
 
 	var xml = service.serializer.serialize(resp, 'getEventsInRangeResponse');
 	document.getElementById('show').innerText = Xml.format(xml);
+
+	var dom = Xml.parseXml(xml);
+	var validationResult = validator.validate(dom);
+	console.log(validationResult);
 
 	/*var td = service.typeLibrary.getItem('getEventsInRangeResponse');
 	console.log(td, service.serializer.unserialize(xml, 'getEventsInRangeResponse', td));*/
