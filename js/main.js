@@ -59,7 +59,7 @@ function (_, service, Xml, XmlValidator) {
 
 	var dom = Xml.parseXml(xml);
 	var validationResult = validator.validate(dom);
-	console.log(validationResult);
+	//console.log(validationResult);
 
 	/*var td = service.typeLibrary.getItem('getEventsInRangeResponse');
 	console.log(td, service.serializer.unserialize(xml, 'getEventsInRangeResponse', td));*/

@@ -1,38 +1,39 @@
-define(['underscore', 'wsdl2/objTools', 'wsdl2/Xml', 'wsdl2/Library'], function (_, objTools, Xml, Library) {
+define(['underscore', 'wsdl2/objTools', 'wsdl2/Xml', 'wsdl2/XsdLibrary'], function (_, objTools, Xml, XsdLibrary) {
 	var xmlValidator = {
 		init: function () {
-			this.xsdLibrary = new Library();
+			this.xsdLibrary = new XsdLibrary();
 			return this;
 		},
 		loadXsd: function (xsdDocument) {
-			var ns = xsdDocument.documentElement.getAttributeNS(null, 'targetNamespace');
-			var xsdCollection = this.xsdLibrary.exists(ns) 
-				? this.xsdLibrary.getItem(ns)
-				: [];
-			xsdCollection.push(xsdDocument);
-			this.xsdLibrary.addItem(xsdCollection, ns);
+			this.xsdLibrary.addItem(xsdDocument);
 		},
-		validate: function (xmlNode) {
-			xmlNode = xmlNode instanceof Document ? xmlNode.documentElement : xmlNode;
-			var xsd = this.getValidatorXsdNode(xmlNode);
-			if (!xsd) {
+		validate: function (xmlNode, type) {
+			/*xmlNode = xmlNode instanceof Document ? xmlNode.documentElement : xmlNode;
+			var xsdNode = this.getValidatorXsdNode(xmlNode.namespaceURI, xmlNode.localName);
+			if (!xsdNode) {
 				throw new Error('No matching XSD document to be validated against was found!');
 			}
-
-			var result = new XmlValidationResult();
-			result.success = true;
-			return result;
-		},
-		getValidatorXsdNode: function (xmlNode) {
-			var ns = xmlNode.namespaceURI;
-			var type = xmlNode.localName;
-			var xsds = this.xsdLibrary.getItem(ns);
-			for (var i = 0, l = xsds.length; i < l; i++) {
-				if (xsds[i].querySelectorAll('complexType[name="' + type + '"]').length) {
-					return xsds[i];
-				}
-			}
+			var valRes = this.validateWithXsdNode(xmlNode, xsdNode);*/
 		}
+		/*,
+		validateWithXsdNode: function (xmlNode, xsdNode) {
+			var xsdNow, xmlNow;
+			for (xsdNow = this.getFirstXsdNode(xsdNode); xsdNow; xsdNow = this.getNextXsdNode(xsdNow)) {
+				xmlNow = _(xmlNode.children).filter(function (elem) {
+					return elem.tagName === xsdNow.getAttribute('name');
+				});
+				//minOccurs,maxOccurs validalas
+				//egyes nodeok validalasa ciklusban
+			}
+			return true;
+		},
+		getFirstXsdNode: function (xsdNode) {
+			var elems = xsdNode.getElementsByTagNameNS(xsdNode.namespaceURI, 'element');
+			return elems.length ? elems[0] : null;
+		},
+		getNextXsdNode: function (xsdCurrent) {
+			return xsdCurrent.nextElementSibling;
+		}*/
 	};
 
 	var xmlValidationResult = {

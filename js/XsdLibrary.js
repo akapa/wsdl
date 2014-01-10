@@ -1,0 +1,35 @@
+define(['underscore', 'wsdl2/objTools', 'wsdl2/Library'],
+function (_, objTools, Library) {
+	var xsdLibrary = objTools.make(Library, {
+		init: function (defs) {
+			this.items = {};
+			this.type = null;
+			this.addItems(defs);
+			return this;
+		},
+		addItem: function (def, name) {
+			var ns = name || def.documentElement.getAttributeNS(null, 'targetNamespace');
+			var xsdCollection = this.exists(ns) 
+				? this.getItem(ns)
+				: [];
+			xsdCollection.push(def);
+			this.items[ns] = xsdCollection;
+		},		
+		findXsdDefinition: function (fullname) {
+			var name = fullname.split(':');
+			var xsds = this.xsdLibrary.getItem(name[0]);
+			var nodes;
+			for (var i = 0, l = xsds.length; i < l; i++) {
+				nodes = xsds[i].querySelectorAll('complexType[name="' + name[1] + '"]');
+				if (nodes.length) {
+					return nodes[0];
+				}
+			}
+		}
+	});
+
+	return function XsdLibrary () {
+		var obj = objTools.construct(xsdLibrary, XsdLibrary);
+		return obj.init.apply(obj, arguments);
+	};
+});
