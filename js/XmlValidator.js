@@ -1,7 +1,9 @@
-define(['underscore', 'wsdl2/objTools', 'wsdl2/Xml', 'wsdl2/XsdLibrary'], function (_, objTools, Xml, XsdLibrary) {
+define(['underscore', 'wsdl2/objTools', 'wsdl2/Xml', 'wsdl2/XsdLibrary', 'wsdl2/NodeValidatorFactory'],
+function (_, objTools, Xml, XsdLibrary, NodeValidatorFactory) {
 	var xmlValidator = {
 		init: function () {
 			this.xsdLibrary = new XsdLibrary();
+			this.nodeValidatorFactory = new NodeValidatorFactory(this.xsdLibrary);
 			return this;
 		},
 		loadXsd: function (xsdDocument) {
@@ -13,7 +15,8 @@ define(['underscore', 'wsdl2/objTools', 'wsdl2/Xml', 'wsdl2/XsdLibrary'], functi
 				xmlNode.namespaceURI, 
 				xmlNode.localName
 			);
-			console.log(definition);
+			var validator = this.nodeValidatorFactory.getValidator(definition);
+			console.log(validator);
 		}
 		/*,
 		validateWithXsdNode: function (xmlNode, xsdNode) {

@@ -24,6 +24,7 @@ function (_, objTools, Library) {
 					return nodes[0];
 				}
 			}
+			return null;
 		}
 	});
 
