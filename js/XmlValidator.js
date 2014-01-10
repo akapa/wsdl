@@ -8,12 +8,12 @@ define(['underscore', 'wsdl2/objTools', 'wsdl2/Xml', 'wsdl2/XsdLibrary'], functi
 			this.xsdLibrary.addItem(xsdDocument);
 		},
 		validate: function (xmlNode, type) {
-			/*xmlNode = xmlNode instanceof Document ? xmlNode.documentElement : xmlNode;
-			var xsdNode = this.getValidatorXsdNode(xmlNode.namespaceURI, xmlNode.localName);
-			if (!xsdNode) {
-				throw new Error('No matching XSD document to be validated against was found!');
-			}
-			var valRes = this.validateWithXsdNode(xmlNode, xsdNode);*/
+			xmlNode = xmlNode instanceof Document ? xmlNode.documentElement : xmlNode;
+			var definition = this.xsdLibrary.findXsdDefinition(
+				xmlNode.namespaceURI, 
+				xmlNode.localName
+			);
+			console.log(definition);
 		}
 		/*,
 		validateWithXsdNode: function (xmlNode, xsdNode) {

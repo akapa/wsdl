@@ -15,12 +15,11 @@ function (_, objTools, Library) {
 			xsdCollection.push(def);
 			this.items[ns] = xsdCollection;
 		},		
-		findXsdDefinition: function (fullname) {
-			var name = fullname.split(':');
-			var xsds = this.xsdLibrary.getItem(name[0]);
+		findXsdDefinition: function (namespace, name) {
+			var xsds = this.getItem(namespace);
 			var nodes;
 			for (var i = 0, l = xsds.length; i < l; i++) {
-				nodes = xsds[i].querySelectorAll('complexType[name="' + name[1] + '"]');
+				nodes = xsds[i].querySelectorAll('complexType[name="' + name + '"]');
 				if (nodes.length) {
 					return nodes[0];
 				}
