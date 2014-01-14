@@ -7,6 +7,9 @@ function (_, objTools, Xml, NodeValidator, ComplexTypeNodeValidator) {
 			return this;
 		},
 		getValidator: function (definition, node) {
+			if (!definition) {
+				return new NodeValidator(node, definition, this);
+			}
 			if (definition.namespaceURI === Xml.xs && definition.localName === 'complexType') {
 				return new ComplexTypeNodeValidator(node, definition, this);
 			}

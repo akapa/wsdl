@@ -10,7 +10,7 @@ function (_, objTools, Library) {
 			this.items[ns] = xsdCollection;
 		},		
 		findXsdDefinition: function (namespace, name) {
-			var xsds = this.getItem(namespace);
+			var xsds = this.getItem(namespace) || [];
 			var nodes;
 			for (var i = 0, l = xsds.length; i < l; i++) {
 				nodes = xsds[i].querySelectorAll('complexType[name="' + name + '"], simpleType[name="' + name + '"]');

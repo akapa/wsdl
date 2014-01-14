@@ -4,7 +4,7 @@ function (_, objTools, Xml, NodeValidator, XmlValidationResult, XmlValidationErr
 	var complexTypeNodeValidator = objTools.make(NodeValidator, {
 		validate: function () {
 			var xsdNow = this.getFirstElement(this.definition);
-			var xmlNow, occurLimit;
+			var xmlNow, occurLimit, validator, childXsd;
 			var errors = [];
 			do {
 				//collecting XML nodes that are to be validated by the current XSD node
@@ -19,11 +19,29 @@ function (_, objTools, Xml, NodeValidator, XmlValidationResult, XmlValidationErr
 				}
 
 				//calling the right validators for all nodes
-				
+				if (xmlNow.length) {
+					childXsd = this.findTypeDefFromNodeAttr(xsdNow, 'type');
+					validator = this.validatorFactory.getValidator(childXsd, xmlNow[0]);
+					console.log(xmlNow[0], childXsd);
+					_(xmlNow).each(function (elem) {
+						validator.node = elem;
+						var result = validator.validate();
+						if (!result.success) {
+							errors.concat(result.errors);
+						}
+					});
+				}
 
 			} while (xsdNow = this.getNextElement(xsdNow));
 
 			return new XmlValidationResult(errors);
+		},
+		findTypeDefFromNodeAttr: function (node, typeAttr) {
+			var type = node.getAttribute(typeAttr);
+			var parts = type.split(':');
+			var ns = node.lookupNamespaceURI(parts[0]);
+			var def = this.validatorFactory.xsdLibrary.findXsdDefinition(ns, parts[1]);
+			return (!def && ns === Xml.xs) ? parts[1] : def;
 		},
 		parseMinMaxOccurs: function (xsdNode) {
 			var min = xsdNode.getAttribute('minOccurs');
