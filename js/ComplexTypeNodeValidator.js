@@ -3,6 +3,8 @@ define(['underscore', 'wsdl2/objTools', 'wsdl2/Xml', 'wsdl2/NodeValidator',
 function (_, objTools, Xml, NodeValidator, XmlValidationResult, XmlValidationError) {
 	var complexTypeNodeValidator = objTools.make(NodeValidator, {
 		validate: function () {
+			//MISSING: need to handle inheritance/restriction!
+
 			var xsdNow = this.getFirstElement(this.definition);
 			var xmlNow, occurLimit;
 			var errors = [];

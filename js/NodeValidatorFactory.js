@@ -7,13 +7,24 @@ function (_, objTools, Xml, NodeValidator, ComplexTypeNodeValidator) {
 			return this;
 		},
 		getValidator: function (definition, node) {
-			if (!definition) {
-				return new NodeValidator(node, definition, this);
+			if (_(definition).isString()) {
+				return this.getValidatorByString(definition, node);
 			}
-			if (definition.namespaceURI === Xml.xs && definition.localName === 'complexType') {
-				return new ComplexTypeNodeValidator(node, definition, this);
+			else if (definition instanceof Node) {
+				return this.getValidatorByXsdNode(definition, node);
 			}
-			return new NodeValidator(node, definition, this);
+			console.log('nobasszameg');
+			//return new NodeValidator(node, definition, this);
+		},
+		getValidatorByString: function (str, node) {
+			console.log(str, node);
+			return new NodeValidator(node, str, this);
+		},
+		getValidatorByXsdNode: function (xsdNode, node) {
+			if (xsdNode.namespaceURI === Xml.xs && xsdNode.localName === 'complexType') {
+				return new ComplexTypeNodeValidator(node, xsdNode, this);
+			}
+			return new NodeValidator(node, xsdNode, this);
 		}
 	};
 
