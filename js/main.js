@@ -12,20 +12,19 @@ requirejs.config({
 
 requirejs(['underscore', 'wsdl2/gen/wsconfig', 'wsdl2/Xml', 'wsdl2/XmlValidator'],
 function (_, service, Xml, XmlValidator) {
+
 	var xsd = document.getElementById('xsd').value;
 	var validator = new XmlValidator();
 	validator.loadXsd(Xml.parseXml(xsd));
 	console.log(validator);
 
-	console.log(service);
-
-	service.getEventsInRange({
+	/*service.getEventsInRange({
 				timeFrom: new Date('09/18/2013'),
 				timeTo: new Date('11/02/2013')
 			}, 
 			function () { console.log(arguments); }, 
 			function () { console.log(arguments); }
-		);
+		);*/
 
 	var user = service.factory.makeAndFill('user', {
 		id: '11',
@@ -59,12 +58,12 @@ function (_, service, Xml, XmlValidator) {
 
 	var dom = Xml.parseXml(xml);
 	var validationResult = validator.validate(dom);
-	//console.log(validationResult);
+	console.log(validationResult);
 
 	/*var td = service.typeLibrary.getItem('getEventsInRangeResponse');
 	console.log(td, service.serializer.unserialize(xml, 'getEventsInRangeResponse', td));*/
 
-	service.handleSuccess(
+	/*service.handleSuccess(
 		'getEventsInRange',
 		{
 			status: 200,
@@ -72,5 +71,5 @@ function (_, service, Xml, XmlValidator) {
 			responseText: service.getSoapEnvelope(xml)
 		},
 		function () { console.log(arguments); }
-	);
+	);*/
 });

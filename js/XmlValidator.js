@@ -13,10 +13,11 @@ function (_, objTools, Xml, XsdLibrary, NodeValidatorFactory) {
 			xmlNode = xmlNode instanceof Document ? xmlNode.documentElement : xmlNode;
 			var definition = this.xsdLibrary.findXsdDefinition(
 				xmlNode.namespaceURI, 
-				xmlNode.localName
+				type || xmlNode.localName
 			);
-			var validator = this.nodeValidatorFactory.getValidator(definition);
+			var validator = this.nodeValidatorFactory.getValidator(definition, xmlNode);
 			console.log(validator);
+			return validator.validate();
 		}
 		/*,
 		validateWithXsdNode: function (xmlNode, xsdNode) {
@@ -38,22 +39,6 @@ function (_, objTools, Xml, XsdLibrary, NodeValidatorFactory) {
 			return xsdCurrent.nextElementSibling;
 		}*/
 	};
-
-	var xmlValidationResult = {
-		success: true,
-		errors: []
-	};
-	function XmlValidationResult () {
-		return objTools.construct(xmlValidationResult, XmlValidationResult);
-	}
-
-	var xmlValidationError = {
-		failingNode: null,
-		failedSchemaNode: null		
-	};
-	function XmlValidationError () {
-		return objTools.construct(xmlValidationError, XmlValidationError);
-	}
 
 	return function XmlValidator () {
 		var obj = objTools.construct(xmlValidator, XmlValidator);

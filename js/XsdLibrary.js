@@ -1,12 +1,6 @@
 define(['underscore', 'wsdl2/objTools', 'wsdl2/Library'],
 function (_, objTools, Library) {
 	var xsdLibrary = objTools.make(Library, {
-		init: function (defs) {
-			this.items = {};
-			this.type = null;
-			this.addItems(defs);
-			return this;
-		},
 		addItem: function (def, name) {
 			var ns = name || def.documentElement.getAttributeNS(null, 'targetNamespace');
 			var xsdCollection = this.exists(ns) 
@@ -19,7 +13,7 @@ function (_, objTools, Library) {
 			var xsds = this.getItem(namespace);
 			var nodes;
 			for (var i = 0, l = xsds.length; i < l; i++) {
-				nodes = xsds[i].querySelectorAll('complexType[name="' + name + '"]');
+				nodes = xsds[i].querySelectorAll('complexType[name="' + name + '"], simpleType[name="' + name + '"]');
 				if (nodes.length) {
 					return nodes[0];
 				}
