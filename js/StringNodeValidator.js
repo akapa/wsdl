@@ -21,8 +21,7 @@ function (_, objTools, Xml, AnySimpleTypeNodeValidator, XmlValidationResult, Xml
 		},
 		validate: function () {
 			//MISSING: need to handle inheritance/restriction!
-			var errors = [];
-			return new XmlValidationResult(errors);
+			return this.validateFacets();
 		}
 	});
 

@@ -1,7 +1,7 @@
 define(['underscore', 'wsdl2/objTools', 'wsdl2/Xml', 
 	'wsdl2/NodeValidator', 'wsdl2/ComplexTypeNodeValidator', 'wsdl2/AnySimpleTypeNodeValidator', 
 	'wsdl2/StringNodeValidator'],
-function (_, objTools, Xml, NodeValidator, AnySimpleTypeNodeValidator, ComplexTypeNodeValidator, 
+function (_, objTools, Xml, NodeValidator, ComplexTypeNodeValidator, AnySimpleTypeNodeValidator,
 	StringNodeValidator) {
 
 	var nodeValidatorFactory = {

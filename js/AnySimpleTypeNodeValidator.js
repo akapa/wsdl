@@ -19,6 +19,23 @@ function (_, objTools, Xml, NodeValidator, XmlValidationResult, XmlValidationErr
 				return validator.validate();
 			}
 			return new XmlValidationResult();
+		},
+		getValue: function () {
+			return Xml.getNodeText(this.node);
+		},
+		validateFacets: function (extensions) {
+			var errors = [];
+			var facets = this.getFacets(extensions);
+			_(facets).each(_(function (elem, key) {
+				var method = 'validate' + key[0].toUpperCase() + key.slice(1);
+				if (method in this) {
+					var result = this[method](facetValue);
+					if (!result.success) {
+						errors.concat(result.errors);
+					}
+				}
+			}).bind(this));
+			return new XmlValidationResult(errors);
 		}
 	});
 
