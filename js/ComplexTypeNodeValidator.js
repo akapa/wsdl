@@ -16,13 +16,16 @@ function (_, objTools, Xml, NodeValidator, XmlValidationResult, XmlValidationErr
 
 				//minOccurs, maxOccurs check
 				occurLimit = this.parseMinMaxOccurs(xsdNow);
-				if (xmlNow.length > occurLimit.max || xmlNow.length < occurLimit.min) {
-					errors.push(new XmlValidationError(this.node, xsdNow));
+				if (xmlNow.length > occurLimit.max) {
+					errors.push(new XmlValidationError(this.node, xsdNow, 'maxOccurs'));
+				}
+				if (xmlNow.length < occurLimit.min) {
+					errors.push(new XmlValidationError(this.node, xsdNow, 'minOccurs'));
 				}
 
 				//calling the right validators for all nodes
 				if (xmlNow.length) {
-					errors.concat(this.callChildValidators(xmlNow, xsdNow));
+					errors = errors.concat(this.callChildValidators(xmlNow, xsdNow));
 				}
 
 			} while (xsdNow = this.getNextElement(xsdNow));
@@ -37,7 +40,7 @@ function (_, objTools, Xml, NodeValidator, XmlValidationResult, XmlValidationErr
 				validator.node = elem;
 				var result = validator.validate();
 				if (!result.success) {
-					errors.concat(result.errors);
+					errors = errors.concat(result.errors);
 				}
 			});
 			return errors;

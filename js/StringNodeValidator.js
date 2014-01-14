@@ -5,7 +5,8 @@ function (_, objTools, Xml, AnySimpleTypeNodeValidator, XmlValidationResult, Xml
 	var stringNodeValidator = objTools.make(AnySimpleTypeNodeValidator, {
 		getDefaultFacets: function () {
 			return {
-				whiteSpace: 'preserve'
+				whiteSpace: 'preserve',
+				pattern: '[a-z]+'
 			};
 		},
 		getAllowedFacets: function () {
@@ -20,8 +21,18 @@ function (_, objTools, Xml, AnySimpleTypeNodeValidator, XmlValidationResult, Xml
 			];
 		},
 		validate: function () {
+			var facets = {};
 			//MISSING: need to handle inheritance/restriction!
-			return this.validateFacets();
+			return this.validateFacets(facets);
+		},
+		validateMaxLength: function (facetValue) {
+			return this.getValue().length <= facetValue;
+		},
+		validateMinLength: function (facetValue) {
+			return this.getValue().length >= facetValue;
+		},
+		validateLength: function (facetValue) {
+			return this.getValue().length == facetValue;
 		}
 	});
 

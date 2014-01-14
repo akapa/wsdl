@@ -29,13 +29,17 @@ function (_, objTools, Xml, NodeValidator, XmlValidationResult, XmlValidationErr
 			_(facets).each(_(function (elem, key) {
 				var method = 'validate' + key[0].toUpperCase() + key.slice(1);
 				if (method in this) {
-					var result = this[method](facetValue);
-					if (!result.success) {
-						errors.concat(result.errors);
+					var result = this[method](elem);
+					if (!result) {
+						errors.push(new XmlValidationError(this.node, this.definition, key));
 					}
 				}
 			}).bind(this));
 			return new XmlValidationResult(errors);
+		},
+		validatePattern: function (facetValue) {
+			var r = new RegExp(['^', facetValue, '$'].join(''));
+			return r.test(this.getValue());
 		}
 	});
 
