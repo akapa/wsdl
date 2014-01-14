@@ -10,8 +10,10 @@ function (_, objTools, Xml, XmlValidationResult) {
 		validate: function () {
 			return new XmlValidationResult();
 		},
-		findTypeDefFromNodeAttr: function (node, typeAttr) {
-			var type = node.getAttribute(typeAttr);
+		findTypeDefFromNodeAttr: function (node, typeAttr, typeAttrNS) {
+			var type = typeAttrNS 
+				? node.getAttributeNS(typeAttrNS, typeAttr)
+				: node.getAttribute(typeAttr);
 			var parts = type.split(':');
 			var ns = node.lookupNamespaceURI(parts[0]);
 			var def = this.validatorFactory.xsdLibrary.findXsdDefinition(ns, parts[1]);

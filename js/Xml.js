@@ -1,6 +1,7 @@
 define(function () {
 	var Xml = {
 		xs: 'http://www.w3.org/2001/XMLSchema',
+		xsi: 'http://www.w3.org/2001/XMLSchema-instance',
 		makeAttribute: function (key, value) {
 			return [' ', key, '="', value, '"'].join('');
 		},
