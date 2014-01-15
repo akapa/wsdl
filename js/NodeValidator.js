@@ -18,27 +18,7 @@ function (_, objTools, Xml, XmlValidationResult) {
 			var ns = node.lookupNamespaceURI(parts[0]);
 			var def = this.validatorFactory.xsdLibrary.findXsdDefinition(ns, parts[1]);
 			return (!def && ns === Xml.xs) ? parts[1] : def;
-		},
-		parseMinMaxOccurs: function (xsdNode) {
-			var min = xsdNode.getAttribute('minOccurs');
-			if (min === null || min === '') {
-				min = 1;
-			}
-			else {
-				min = parseInt(min, 10);
-			}
-			var max = xsdNode.getAttribute('maxOccurs');
-			if (max === null || max === '') {
-				max = 1;
-			}
-			else if (max === 'unbounded') {
-				max = Infinity;
-			}
-			else {
-				max = parseInt(max, 10);
-			}
-			return { min: min, max: max	};
-		}		
+		}
 	};
 
 	return function NodeValidator () {
