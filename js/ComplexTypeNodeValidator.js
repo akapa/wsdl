@@ -8,7 +8,7 @@ function (_, objTools, Xml, NodeValidator, XmlValidationResult, XmlValidationErr
 
 			//check if the whole node is nil
 			if (this.node.getAttributeNS(Xml.xs, 'nil') === 'true') {
- 				if (!this.parseNillable(this.definition)) {
+ 				if (xsdNode.getAttribute('nillable') !== 'true') {
  					errors.push(new XmlValidationError(elem, xsdNode, 'nillable'));
 				}
 			}
@@ -45,7 +45,7 @@ function (_, objTools, Xml, NodeValidator, XmlValidationResult, XmlValidationErr
 			//selecting the right validator for the job
 			var typeDef = this.findTypeDefFromNodeAttr(xsdNode, 'type');
 			var validator = this.validatorFactory.getValidator(typeDef, xmlNodes[0]);
-			var nillable = this.parseNillable(xsdNode);
+			var nillable = xsdNode.getAttribute('nillable') === 'true';
 
 			_(xmlNodes).each(function (elem) {
 				//check for nil elements
@@ -91,9 +91,6 @@ function (_, objTools, Xml, NodeValidator, XmlValidationResult, XmlValidationErr
 				max = parseInt(max, 10);
 			}
 			return { min: min, max: max	};
-		},
-		parseNillable: function (xsdNode) {
-			return xsdNode.getAttribute('nillable') === 'true';
 		}
 	});
 
