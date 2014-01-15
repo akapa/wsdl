@@ -14,31 +14,36 @@ function (_, objTools, Xml, NodeValidator, XmlValidationResult, XmlValidationErr
 			}
 			else {
 				var xsdNow = this.getFirstElement(this.definition);
-				var xmlNow, occurLimit;
 				do {
-					//collecting XML nodes that are to be validated by the current XSD node
-					xmlNow = _(this.node.children).filter(function (elem) {
-						return elem.tagName === xsdNow.getAttribute('name');
-					});
-
-					//minOccurs, maxOccurs check
-					occurLimit = this.parseMinMaxOccurs(xsdNow);
-					if (xmlNow.length > occurLimit.max) {
-						errors.push(new XmlValidationError(this.node, xsdNow, 'maxOccurs'));
-					}
-					if (xmlNow.length < occurLimit.min) {
-						errors.push(new XmlValidationError(this.node, xsdNow, 'minOccurs'));
-					}
-
-					//calling the right validators for all nodes
-					if (xmlNow.length) {
-						errors = errors.concat(this.callChildValidators(xmlNow, xsdNow));
-					}
-
+					errors = errors.concat(this.validateChild(xsdNow));
 				} while (xsdNow = this.getNextElement(xsdNow));
 			}
 
 			return new XmlValidationResult(errors);
+		},
+		validateChild: function (xsdNow) {
+			var errors = [];
+
+			//collecting XML nodes that are to be validated by the current XSD node
+			var xmlNow = _(this.node.children).filter(function (elem) {
+				return elem.tagName === xsdNow.getAttribute('name');
+			});
+
+			//minOccurs, maxOccurs check
+			var occurLimit = this.parseMinMaxOccurs(xsdNow);
+			if (xmlNow.length > occurLimit.max) {
+				errors.push(new XmlValidationError(this.node, xsdNow, 'maxOccurs'));
+			}
+			if (xmlNow.length < occurLimit.min) {
+				errors.push(new XmlValidationError(this.node, xsdNow, 'minOccurs'));
+			}
+
+			//calling the right validators for all nodes
+			if (xmlNow.length) {
+				errors = errors.concat(this.callChildValidators(xmlNow, xsdNow));
+			}
+
+			return errors;
 		},
 		callChildValidators: function (xmlNodes, xsdNode) {
 			var errors = [];
