@@ -13,11 +13,6 @@ requirejs.config({
 requirejs(['underscore', 'wsdl2/gen/wsconfig', 'wsdl2/Xml', 'wsdl2/XmlValidator'],
 function (_, service, Xml, XmlValidator) {
 
-	var xsd = document.getElementById('xsd').value;
-	var validator = new XmlValidator();
-	validator.loadXsd(Xml.parseXml(xsd));
-	console.log(validator);
-
 	/*service.getEventsInRange({
 				timeFrom: new Date('09/18/2013'),
 				timeTo: new Date('11/02/2013')
@@ -54,11 +49,24 @@ function (_, service, Xml, XmlValidator) {
 	});
 
 	var xml = service.serializer.serialize(resp, 'getEventsInRangeResponse');
-	document.getElementById('show').innerText = Xml.format(xml);
+	document.getElementById('show').value = Xml.format(xml);
 
-	var dom = Xml.parseXml(xml);
-	var validationResult = validator.validate(dom);
-	console.log(validationResult);
+	var doValidate = function () {
+		var xsd = Xml.parseXml(document.getElementById('xsd').value);
+		var dom = Xml.parseXml(document.getElementById('show').value);
+		console.group('XML Validation on ', dom, ' with ', xsd);
+
+		var validator = new XmlValidator();
+		validator.loadXsd(xsd);
+		console.log(validator);
+
+		var validationResult = validator.validate(dom);
+		console.log(validationResult);
+
+		console.groupEnd();
+	};
+	doValidate();
+	document.getElementById('validate').addEventListener('click', doValidate);
 
 	/*var td = service.typeLibrary.getItem('getEventsInRangeResponse');
 	console.log(td, service.serializer.unserialize(xml, 'getEventsInRangeResponse', td));*/

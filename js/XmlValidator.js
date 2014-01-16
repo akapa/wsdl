@@ -16,7 +16,7 @@ function (_, objTools, Xml, XsdLibrary, NodeValidatorFactory) {
 				xmlNode.localName
 			);
 			var validator = this.nodeValidatorFactory.getValidator(definition, xmlNode);
-			console.log(validator);
+			console.log('Validating document with', validator);
 			return validator.validate();
 		}
 	};

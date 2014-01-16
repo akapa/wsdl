@@ -4,6 +4,7 @@ define(['underscore', 'wsdl2/objTools'], function (_, objTools) {
 			this.failingNode = failingNode || null;
 			this.failedXsdNode = failedXsdNode || null;
 			this.type = type;
+			console.error('Validation error created:', this);
 			return this;
 		}
 	};

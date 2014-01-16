@@ -25,7 +25,7 @@ function (_, objTools, Xml, NodeValidator, ComplexTypeNodeValidator, AnySimpleTy
 				return new ComplexTypeNodeValidator(node, xsdElement, this);
 			}
 
-			console.log('No suitable validator found for "', xsdElement, '".');
+			console.warn('No suitable validator found for "', xsdElement, '".');
 			return new NodeValidator(node, xsdElement, this);
 		}
 	};
