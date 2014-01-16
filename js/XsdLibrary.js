@@ -1,5 +1,5 @@
-define(['underscore', 'wsdl2/objTools', 'wsdl2/Library'],
-function (_, objTools, Library) {
+define(['underscore', 'wsdl2/objTools', 'wsdl2/Library', 'wsdl2/Xml'],
+function (_, objTools, Library, Xml) {
 	var xsdLibrary = objTools.make(Library, {
 		addItem: function (def, name) {
 			var ns = name || def.documentElement.getAttributeNS(null, 'targetNamespace');
@@ -8,18 +8,48 @@ function (_, objTools, Library) {
 				: [];
 			xsdCollection.push(def);
 			this.items[ns] = xsdCollection;
-		},		
-		findXsdDefinition: function (namespace, name) {
+		},
+		findElement: function (namespace, name) {
 			var xsds = this.getItem(namespace) || [];
-			var nodes;
+			var element;
 			for (var i = 0, l = xsds.length; i < l; i++) {
-				nodes = xsds[i].querySelectorAll('complexType[name="' + name + '"], simpleType[name="' + name + '"]');
-				if (nodes.length) {
-					return nodes[0];
+				element = _(xsds[i].documentElement.children).find(function (child) {
+					return child.namespaceURI === Xml.xs
+						&& child.localName === 'element'
+						&& child.getAttribute('name') === name;
+				});
+				if (element) {
+					return element;
 				}
 			}
 			return null;
-		}
+		},
+		findTypeDefinition: function (namespace, name) {
+			var xsds = this.getItem(namespace) || [];
+			var selector = 'complexType[name="' + name + '"], simpleType[name="' + name + '"]';
+			var xsdNodes;
+			for (var i = 0, l = xsds.length; i < l; i++) {
+				xsdNodes = xsds[i].querySelectorAll(selector);
+				if (xsdNodes.length > 0) {
+					return xsdNodes[0];
+				}
+			}
+			return null;
+		},
+		getTypeFromNodeAttr: function (node, typeAttr, typeAttrNS) {
+			var type = typeAttrNS 
+				? node.getAttributeNS(typeAttrNS, typeAttr)
+				: node.getAttribute(typeAttr);
+			var parts = type.split(':');
+			return {
+				namespaceURI: node.lookupNamespaceURI(parts[0]),
+				name: parts[1]
+			};
+		},
+		findTypeDefinitionFromNodeAttr: function (node, typeAttr, typeAttrNS) {
+			var type = this.getTypeFromNodeAttr(node, typeAttr, typeAttrNS);
+			return this.findTypeDefinition(type.namespaceURI, type.name);
+		}		
 	});
 
 	return function XsdLibrary () {

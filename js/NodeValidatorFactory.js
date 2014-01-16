@@ -9,28 +9,24 @@ function (_, objTools, Xml, NodeValidator, ComplexTypeNodeValidator, AnySimpleTy
 			this.xsdLibrary = xsdLibrary;
 			return this;
 		},
-		getValidator: function (definition, node) {
-			if (_(definition).isString()) {
-				return this.getValidatorByString(definition, node);
+		getValidator: function (xsdElement, node, type) {
+			//looking up a typeDefinition (complexType, simpleType or null)
+			type = type || this.xsdLibrary.getTypeFromNodeAttr(xsdElement, 'type');
+			var xsdNode = this.xsdLibrary.findTypeDefinition(type.namespaceURI, type.name);
+
+			//if it is a base simple type, choose a pre-defined validator
+			if (xsdNode === null && type.namespaceURI === Xml.xs) {
+				if (type.name in strMappings) {
+					return new strMappings[type.name](node, xsdElement, this);
+				}
 			}
-			else if (definition instanceof Node) {
-				return this.getValidatorByXsdNode(definition, node);
+			//complex type validator
+			else if (xsdNode.namespaceURI === Xml.xs && xsdNode.localName === 'complexType') {
+				return new ComplexTypeNodeValidator(node, xsdElement, this);
 			}
-			console.log('No suitable validator found for "' + definition + '".');
-		},
-		getValidatorByString: function (str, node) {
-			if (str in strMappings) {
-				return new strMappings[str](node, null, this);
-			}
-			console.log('No suitable validator found for "' + str + '".');
-			return new NodeValidator(node, null, this);
-		},
-		getValidatorByXsdNode: function (xsdNode, node) {
-			if (xsdNode.namespaceURI === Xml.xs && xsdNode.localName === 'complexType') {
-				return new ComplexTypeNodeValidator(node, xsdNode, this);
-			}
-			console.log('No suitable validator found for "' + xsdNode + '".');
-			return new NodeValidator(node, xsdNode, this);
+
+			console.log('No suitable validator found for "', xsdElement, '".');
+			return new NodeValidator(node, xsdElement, this);
 		}
 	};
 

@@ -8,12 +8,13 @@ function (_, objTools, Xml, NodeValidator, XmlValidationResult, XmlValidationErr
 
 			//check if the whole node is nil
 			if (this.node.getAttributeNS(Xml.xs, 'nil') === 'true') {
- 				if (xsdNode.getAttribute('nillable') !== 'true') {
- 					errors.push(new XmlValidationError(elem, xsdNode, 'nillable'));
+ 				if (this.definition.getAttribute('nillable') !== 'true') {
+ 					errors.push(new XmlValidationError(elem, this.definition, 'nillable'));
 				}
 			}
 			else {
-				var xsdNow = this.getFirstElement(this.definition);
+				var typeDef = this.xsdLibrary.findTypeDefinitionFromNodeAttr(this.definition, 'type');
+				var xsdNow = this.getFirstElement(typeDef);
 				do {
 					errors = errors.concat(this.validateChild(xsdNow));
 				} while (xsdNow = this.getNextElement(xsdNow));
@@ -48,8 +49,7 @@ function (_, objTools, Xml, NodeValidator, XmlValidationResult, XmlValidationErr
 		callChildValidators: function (xmlNodes, xsdNode) {
 			var errors = [];
 			//selecting the right validator for the job
-			var typeDef = this.findTypeDefFromNodeAttr(xsdNode, 'type');
-			var validator = this.validatorFactory.getValidator(typeDef, xmlNodes[0]);
+			var validator = this.validatorFactory.getValidator(xsdNode, xmlNodes[0]);
 			var nillable = xsdNode.getAttribute('nillable') === 'true';
 
 			_(xmlNodes).each(function (elem) {

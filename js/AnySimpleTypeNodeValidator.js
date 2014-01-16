@@ -13,12 +13,9 @@ function (_, objTools, Xml, NodeValidator, XmlValidationResult, XmlValidationErr
 			return _(this.getDefaultFacets()).extend(_(extensions).pick(this.getAllowedFacets()));
 		},
 		validate: function () {
-			var typeDef = this.findTypeDefFromNodeAttr(this.node, 'type', Xml.xsi);
-			if (typeDef) {
-				var validator = this.validatorFactory.getValidator(typeDef, this.node);
-				return validator.validate();
-			}
-			return new XmlValidationResult();
+			var type = this.getTypeFromNodeAttr(this.node, 'type', Xml.xsi);
+			var validator = this.validatorFactory.getValidator(typeDef, this.node, type);
+			return validator.validate();
 		},
 		getValue: function () {
 			return Xml.getNodeText(this.node);
