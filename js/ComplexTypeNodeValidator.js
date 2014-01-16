@@ -43,7 +43,6 @@ function (_, objTools, Xml, NodeValidator, XmlValidationResult, XmlValidationErr
 			if (xmlNow.length) {
 				errors = errors.concat(this.callChildValidators(xmlNow, xsdNow));
 			}
-
 			return errors;
 		},
 		callChildValidators: function (xmlNodes, xsdNode) {

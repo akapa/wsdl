@@ -1,4 +1,7 @@
-define(['underscore', 'wsdl2/objTools', 'wsdl2/Serializer', 'wsdl2/Xml'], function (_, objTools, Serializer, Xml) {
+define(['underscore', 'wsdl2/objTools', 'wsdl2/Serializer', 'wsdl2/Xml',
+	'wsdl2/primitiveSerializers', 'wsdl2/primitiveUnserializers'],
+function (_, objTools, Serializer, Xml, primitiveSerializers, primitiveUnserializers) {
+
 	var xmlSerializer = objTools.make(Serializer, {
 		init: function (typeLibrary, factory, namespaces) {
 			this.typeLibrary = typeLibrary;
@@ -101,100 +104,9 @@ define(['underscore', 'wsdl2/objTools', 'wsdl2/Serializer', 'wsdl2/Xml'], functi
 		}
 	});
 
-	var primitiveSerializers = {
-		'boolean': function (value) {
-			return value ? 'true' : 'false';
-		},
-		'float': function (value) {
-			switch (value) {
-				case Number.POSITIVE_INFINITY: 
-					return 'INF';
-				break;
-				case Number.NEGATIVE_INFINITY: 
-					return '-INF';
-				break;
-			}
-			if (isNaN(value)) {
-				return 'NaN';
-			}
-			return value.toExponential();
-		},
-		'dateTime': function (value) {
-			return value.toISOString();
-		},
-		'date': function (value) {
-			return value.toISOString().replace(/T[^Z+\-]*/, '');
-		},
-		'time': function (value) {
-			return value.toISOString().replace(/^[^T]*T/, '');
-		},
-		'gYearMonth': function (value) {
-			return value.toISOString().replace(/-[0-9]{2}T[^Z+\-]*/, '');
-		},
-		'gMonthDay': function (value) {
-			return value.toISOString()
-				.replace(/T[^Z+\-]*/, '')
-				.replace(/^[0-9]{4}-/, '');
-		}
-	};
-
-	var primitiveUnserializers = {
-		'boolean': function (s) {
-			return s === 'true';
-		},
-		'float': function (s) {
-			switch (s) {
-				case 'INF':
-					return Number.POSITIVE_INFINITY;
-				break;
-				case '-INF':
-					return Number.NEGATIVE_INFINITY;
-				break;
-			}
-			return parseFloat(s);
-		},
-		'decimal': function (s) {
-			return parseFloat(s);
-		},
-		'int': function (s) {
-			switch (s) {
-				case 'INF':
-					return Number.POSITIVE_INFINITY;
-				break;
-				case '-INF':
-					return Number.NEGATIVE_INFINITY;
-				break;
-			}
-			return parseInt(s, 10);
-		},
-		'integer': function (s) {
-			return this.int(s);
-		},
-		'dateTime': function (s) {
-			return new Date(s);
-		},
-		'date': function (s) {
-			return new Date(s);
-		},
-		'time': function (s) {
-			var time = s.match(/(\d{2}):(\d{2}):(\d{2}).(\d{3})/);
-			var d = new Date();
-			d.setUTCHours(time[1]);
-			d.setUTCMinutes(time[2]);
-			d.setUTCSeconds(time[3]);
-			d.setUTCMilliseconds(time[4]);
-			return d;
-		},
-		'gYearMonth': function (s) {
-			return new Date(s);
-		},
-		'gMonthDay': function (s) {
-			return new Date(s);
-		}
-	};
-
 	return function XmlSerializer () {
 		var obj = objTools.construct(xmlSerializer, XmlSerializer);
 		return obj.init.apply(obj, arguments);
 	};
+	
 });

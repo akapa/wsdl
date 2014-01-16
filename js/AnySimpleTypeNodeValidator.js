@@ -1,8 +1,10 @@
 define(['underscore', 'wsdl2/objTools', 'wsdl2/Xml', 'wsdl2/NodeValidator',
-	 'wsdl2/XmlValidationResult', 'wsdl2/XmlValidationError'],
-function (_, objTools, Xml, NodeValidator, XmlValidationResult, XmlValidationError) {
+	'wsdl2/primitiveUnserializers', 'wsdl2/XmlValidationResult', 'wsdl2/XmlValidationError'],
+function (_, objTools, Xml, NodeValidator, primitiveUnserializers,
+	XmlValidationResult, XmlValidationError) {
 	
 	var anySimpleTypeNodeValidator = objTools.make(NodeValidator, {
+		type: 'anySimpleType',
 		getDefaultFacets: function () {
 			return {};
 		},
@@ -20,6 +22,12 @@ function (_, objTools, Xml, NodeValidator, XmlValidationResult, XmlValidationErr
 		getValue: function () {
 			return Xml.getNodeText(this.node);
 		},
+		getRealValue: function (type, value) {
+			var v = value || this.getValue();
+			return type in primitiveUnserializers 
+				? primitiveUnserializers[type](v)
+				: v;
+		},
 		validateFacets: function (extensions) {
 			var errors = [];
 			var facets = this.getFacets(extensions);
@@ -32,11 +40,23 @@ function (_, objTools, Xml, NodeValidator, XmlValidationResult, XmlValidationErr
 					}
 				}
 			}).bind(this));
-			return new XmlValidationResult(errors);
+			return errors;
 		},
 		validatePattern: function (facetValue) {
 			var r = new RegExp(['^', facetValue, '$'].join(''));
 			return r.test(this.getValue());
+		},
+		validateMaxInclusive: function (facetValue) {
+			return this.getRealValue(this.type) <= this.getRealValue(this.type, facetValue);
+		},
+		validateMinInclusive: function (facetValue) {
+			return this.getRealValue(this.type) >= this.getRealValue(this.type, facetValue);
+		},
+		validateMaxExclusive: function (facetValue) {
+			return this.getRealValue(this.type) < this.getRealValue(this.type, facetValue);
+		},
+		validateMinExclusive: function (facetValue) {
+			return this.getRealValue(this.type) > this.getRealValue(this.type, facetValue);
 		}
 	});
 

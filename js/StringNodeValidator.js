@@ -3,6 +3,7 @@ define(['underscore', 'wsdl2/objTools', 'wsdl2/Xml', 'wsdl2/AnySimpleTypeNodeVal
 function (_, objTools, Xml, AnySimpleTypeNodeValidator, XmlValidationResult, XmlValidationError) {
 	
 	var stringNodeValidator = objTools.make(AnySimpleTypeNodeValidator, {
+		type: 'string',
 		getDefaultFacets: function () {
 			return {
 				whiteSpace: 'preserve'
@@ -22,7 +23,7 @@ function (_, objTools, Xml, AnySimpleTypeNodeValidator, XmlValidationResult, Xml
 		validate: function () {
 			var facets = {};
 			//MISSING: need to handle inheritance/restriction!
-			return this.validateFacets(facets);
+			return new XmlValidationResult(this.validateFacets(facets));
 		},
 		validateMaxLength: function (facetValue) {
 			return this.getValue().length <= facetValue;
