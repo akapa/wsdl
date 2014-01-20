@@ -49,7 +49,23 @@ function (_, objTools, Library, Xml) {
 		findTypeDefinitionFromNodeAttr: function (node, typeAttr, typeAttrNS) {
 			var type = this.getTypeFromNodeAttr(node, typeAttr, typeAttrNS);
 			return this.findTypeDefinition(type.namespaceURI, type.name);
-		}		
+		},
+		findBaseTypeFor: function (node) {
+			var xsdNow = node;
+			var basetype;
+			do {
+				basetype = this.findRestrictedType(xsdNow);
+				xsdNow = this.findTypeDefinition(basetype.namespaceURI, basetype.name);
+			} while (xsdNow !== null);
+			return basetype.name;
+		},
+		findRestrictedType: function (node) {
+			var	element = _(node.children).find(function (child) {
+				return child.namespaceURI === Xml.xs
+					&& child.localName === 'restriction';
+			});
+			return this.getTypeFromNodeAttr(element, 'base');
+		}
 	});
 
 	return function XsdLibrary () {

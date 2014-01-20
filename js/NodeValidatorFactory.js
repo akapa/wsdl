@@ -20,6 +20,13 @@ function (_, objTools, Xml, NodeValidator, ComplexTypeNodeValidator, AnySimpleTy
 					return new strMappings[type.name](node, xsdElement, this);
 				}
 			}
+			//simple type
+			else if (xsdNode.namespaceURI === Xml.xs && xsdNode.localName === 'simpleType') {
+				var basetype = this.xsdLibrary.findBaseTypeFor(xsdNode);
+				if (basetype in strMappings) {
+					return new strMappings[basetype](node, xsdElement, this);
+				}
+			}
 			//complex type validator
 			else if (xsdNode.namespaceURI === Xml.xs && xsdNode.localName === 'complexType') {
 				return new ComplexTypeNodeValidator(node, xsdElement, this);

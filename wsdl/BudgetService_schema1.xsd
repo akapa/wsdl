@@ -18,15 +18,15 @@
   <xs:element name="storeObjects" nillable="true" type="tns:storeObjects"/>
 
   <xs:simpleType name="pos">
-    <restriction base="xs:int">
-      <minExclusive value="0"/>
-    </restriction>
+    <xs:restriction base="xs:int">
+      <xs:minExclusive value="0"/>
+    </xs:restriction>
   </xs:simpleType>
 
   <xs:simpleType name="id">
-    <restriction base="tns:pos">
-      <maxExclusive value="40"/>
-    </restriction>
+    <xs:restriction base="tns:pos">
+      <xs:maxExclusive value="40"/>
+    </xs:restriction>
   </xs:simpleType>
 
   <xs:complexType name="getRecentEvents">

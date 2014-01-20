@@ -29,10 +29,10 @@ function (_, objTools, Xml, NodeValidator, primitiveUnserializers,
 				: v;
 		},
 		validateFacets: function (extensions) {
-			return _([
+			return _.chain([
 				_(this.getBaseFacets()).map(_(this.validateFacet).bind(this)),
 				_(this.getFacets(extensions)).map(_(this.validateFacet).bind(this))
-			]).flatten();
+			]).flatten().compact().value();
 		},
 		validateFacet: function (facetValue, facetName) {
 			var method = 'validate' + facetName[0].toUpperCase() + facetName.slice(1);
