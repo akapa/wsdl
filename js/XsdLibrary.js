@@ -54,17 +54,24 @@ function (_, objTools, Library, Xml) {
 			var xsdNow = node;
 			var basetype;
 			do {
-				basetype = this.findRestrictedType(xsdNow);
+				basetype = this.getRestrictedType(xsdNow);
 				xsdNow = this.findTypeDefinition(basetype.namespaceURI, basetype.name);
 			} while (xsdNow !== null);
 			return basetype.name;
 		},
-		findRestrictedType: function (node) {
+		getRestrictedType: function (node) {
 			var	element = _(node.children).find(function (child) {
 				return child.namespaceURI === Xml.xs
 					&& child.localName === 'restriction';
 			});
 			return this.getTypeFromNodeAttr(element, 'base');
+		},
+		findRestrictingFacets: function (node) {
+			var	element = _(node.children).find(function (child) {
+				return child.namespaceURI === Xml.xs
+					&& child.localName === 'restriction';
+			});
+			return element.children;
 		}
 	});
 

@@ -15,9 +15,8 @@ function (_, objTools, Xml, AnySimpleTypeNodeValidator, XmlValidationResult, Xml
 			];
 		},
 		validate: function () {
-			var facets = {};
-			//MISSING: need to handle inheritance/restriction!
-			return new XmlValidationResult(this.validateFacets(facets));
+			var errors = [];
+			return new XmlValidationResult(errors);
 		},
 		validateMaxLength: function (facetValue) {
 			return this.getValue().length <= facetValue;

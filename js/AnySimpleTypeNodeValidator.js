@@ -29,15 +29,22 @@ function (_, objTools, Xml, NodeValidator, primitiveUnserializers,
 				: v;
 		},
 		validateFacets: function (extensions) {
-			return _.chain([
+			/*return _.chain([
 				_(this.getBaseFacets()).map(_(this.validateFacet).bind(this)),
 				_(this.getFacets(extensions)).map(_(this.validateFacet).bind(this))
-			]).flatten().compact().value();
+			]).flatten().compact().value();*/
 		},
-		validateFacet: function (facetValue, facetName) {
+		validateFacet: function (facetNode, validatedFacets) {
+			var facetName = facetNode.localName;
+			
+			//handle validated facets and fixed
+
 			var method = 'validate' + facetName[0].toUpperCase() + facetName.slice(1);
-			if (method in this && !this[method](facetValue)) {
-				return new XmlValidationError(this.node, this.definition, facetName);
+			if (method in this) {
+				validatedFacets.push(facetName);
+				if (!this[method](facetNode.getAttribute('value'))) {
+					return new XmlValidationError(this.node, facetNode, facetName);
+				}
 			}
 		},
 		validatePattern: function (facetValue) {
