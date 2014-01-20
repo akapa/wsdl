@@ -4,9 +4,9 @@ function (_, objTools, Xml, AnySimpleTypeNodeValidator, XmlValidationResult, Xml
 	
 	var floatNodeValidator = objTools.make(AnySimpleTypeNodeValidator, {
 		type: 'float',
-		getDefaultFacets: function () {
+		getBaseFacets: function () {
 			return {
-				whiteSpace: 'collapse'
+				'pattern': /^(\+|-)?([0-9]+(\.[0-9]*)?|\.[0-9]+)([Ee](\+|-)?[0-9]+)?|(\+|-)?INF|NaN$/
 			};
 		},
 		getAllowedFacets: function () {
@@ -22,15 +22,9 @@ function (_, objTools, Xml, AnySimpleTypeNodeValidator, XmlValidationResult, Xml
 		},
 		validate: function () {
 			var errors = [];
-			var pattern = /^(\+|-)?([0-9]+(\.[0-9]*)?|\.[0-9]+)([Ee](\+|-)?[0-9]+)?|(\+|-)?INF|NaN$/;
-			if (!pattern.test(this.getValue())) {
-				errors.push(new XmlValidationError(this.node, this.definition, 'baseType'));
-			}
-			else {
-				var facets = {};
-				//MISSING: need to handle inheritance/restriction!
-				errors = this.validateFacets(facets);
-			}
+			var facets = {};
+			//MISSING: need to handle inheritance/restriction!
+			errors = this.validateFacets(facets);
 			return new XmlValidationResult(errors);
 		}
 	});

@@ -5,14 +5,14 @@ function (_, objTools, Xml, NodeValidator, primitiveUnserializers,
 	
 	var anySimpleTypeNodeValidator = objTools.make(NodeValidator, {
 		type: 'anySimpleType',
-		getDefaultFacets: function () {
+		getBaseFacets: function () {
 			return {};
 		},
 		getAllowedFacets: function () {
 			return [];
 		},
 		getFacets: function (extensions) {
-			return _(this.getDefaultFacets()).extend(_(extensions).pick(this.getAllowedFacets()));
+			return _(extensions).pick(this.getAllowedFacets());
 		},
 		validate: function () {
 			var type = this.getTypeFromNodeAttr(this.node, 'type', Xml.xsi);
@@ -29,21 +29,21 @@ function (_, objTools, Xml, NodeValidator, primitiveUnserializers,
 				: v;
 		},
 		validateFacets: function (extensions) {
-			var errors = [];
-			var facets = this.getFacets(extensions);
-			_(facets).each(_(function (elem, key) {
-				var method = 'validate' + key[0].toUpperCase() + key.slice(1);
-				if (method in this) {
-					var result = this[method](elem);
-					if (!result) {
-						errors.push(new XmlValidationError(this.node, this.definition, key));
-					}
-				}
-			}).bind(this));
-			return errors;
+			return _([
+				_(this.getBaseFacets()).map(_(this.validateFacet).bind(this)),
+				_(this.getFacets(extensions)).map(_(this.validateFacet).bind(this))
+			]).flatten();
+		},
+		validateFacet: function (facetValue, facetName) {
+			var method = 'validate' + facetName[0].toUpperCase() + facetName.slice(1);
+			if (method in this && !this[method](facetValue)) {
+				return new XmlValidationError(this.node, this.definition, facetName);
+			}
 		},
 		validatePattern: function (facetValue) {
-			var r = new RegExp(['^', facetValue, '$'].join(''));
+			var r = _(facetValue).isRegExp() 
+				? facetValue 
+				: new RegExp(['^', facetValue, '$'].join(''));
 			return r.test(this.getValue());
 		},
 		validateMaxInclusive: function (facetValue) {

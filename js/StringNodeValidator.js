@@ -4,11 +4,6 @@ function (_, objTools, Xml, AnySimpleTypeNodeValidator, XmlValidationResult, Xml
 	
 	var stringNodeValidator = objTools.make(AnySimpleTypeNodeValidator, {
 		type: 'string',
-		getDefaultFacets: function () {
-			return {
-				whiteSpace: 'preserve'
-			};
-		},
 		getAllowedFacets: function () {
 			return [
 				'whiteSpace', 
