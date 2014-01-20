@@ -19,14 +19,6 @@ define(['underscore'], function (_) {
 			return parseFloat(s);
 		},
 		'int': function (s) {
-			switch (s) {
-				case 'INF':
-					return Number.POSITIVE_INFINITY;
-				break;
-				case '-INF':
-					return Number.NEGATIVE_INFINITY;
-				break;
-			}
 			return parseInt(s, 10);
 		},
 		'integer': function (s) {

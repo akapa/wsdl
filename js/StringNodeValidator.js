@@ -6,7 +6,6 @@ function (_, objTools, Xml, AnySimpleTypeNodeValidator, XmlValidationResult, Xml
 		type: 'string',
 		getAllowedFacets: function () {
 			return [
-				'whiteSpace', 
 				'length', 
 				'minLength', 
 				'maxLength', 

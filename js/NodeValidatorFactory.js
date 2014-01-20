@@ -1,8 +1,8 @@
 define(['underscore', 'wsdl2/objTools', 'wsdl2/Xml', 
 	'wsdl2/NodeValidator', 'wsdl2/ComplexTypeNodeValidator', 'wsdl2/AnySimpleTypeNodeValidator', 
-	'wsdl2/StringNodeValidator', 'wsdl2/FloatNodeValidator'],
+	'wsdl2/StringNodeValidator', 'wsdl2/FloatNodeValidator', 'wsdl2/DecimalNodeValidator'],
 function (_, objTools, Xml, NodeValidator, ComplexTypeNodeValidator, AnySimpleTypeNodeValidator,
-	StringNodeValidator, FloatNodeValidator) {
+	StringNodeValidator, FloatNodeValidator, DecimalNodeValidator) {
 
 	var nodeValidatorFactory = {
 		init: function (xsdLibrary) {
@@ -33,7 +33,9 @@ function (_, objTools, Xml, NodeValidator, ComplexTypeNodeValidator, AnySimpleTy
 	var strMappings = {
 		'anySimpleType': AnySimpleTypeNodeValidator,
 		'string': StringNodeValidator,
-		'float': FloatNodeValidator
+		'float': FloatNodeValidator,
+		'decimal': DecimalNodeValidator,
+		'int': DecimalNodeValidator,
 	};
 
 	return function NodeValidatorFactory () {
