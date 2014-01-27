@@ -23,8 +23,6 @@ function (_, objTools, Xml, AnySimpleTypeNodeValidator, XmlValidationResult, Xml
 		validate: function () {
 			var errors = [];
 
-			//validate base type stuff
-
 			errors = errors.concat(this.validateFacets());
 
 			return new XmlValidationResult(errors);

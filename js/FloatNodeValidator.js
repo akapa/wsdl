@@ -14,8 +14,8 @@ function (_, objTools, Xml, AnySimpleTypeNodeValidator, XmlValidationResult, Xml
 				'pattern', 
 				'enumeration',
 				'maxInclusive',
-				'maxExclusive',
 				'minInclusive',
+				'maxExclusive',
 				'minExclusive',
 				'assertions'
 			];

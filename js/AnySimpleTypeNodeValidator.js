@@ -29,7 +29,7 @@ function (_, objTools, Xml, NodeValidator, primitiveUnserializers,
 				: v;
 		},
 		validateFacets: function () {
-			var errors = [];
+			var errors = [];	
 			var type = this.xsdLibrary.getTypeFromNodeAttr(this.definition, 'type');
 			var current, findings;
 			var validatedFacets = [];
@@ -41,23 +41,40 @@ function (_, objTools, Xml, NodeValidator, primitiveUnserializers,
 				errors = errors.concat(_(findings).compact());
 				type = this.xsdLibrary.getRestrictedType(current);
 			}
+			errors = errors.concat(this.validateBaseFacets());
 			return errors;
 		},
 		validateFacet: function (facetNode, validatedFacets) {
 			var facetName = facetNode.localName;
+			
+			if (this.getAllowedFacets().indexOf(facetName) === -1) {
+				return;
+			}
 			
 			var fixed = facetNode.getAttribute('fixed') === 'true';
 			if (!fixed && validatedFacets.indexOf(facetName) !== -1) {
 				return;
 			}
 
+			validatedFacets.push(facetName);
+			return this.invokeFacetValidation(facetName, facetNode.getAttribute('value'), facetNode);
+		},
+		invokeFacetValidation: function (facetName, facetValue, facetNode) {
 			var method = 'validate' + facetName[0].toUpperCase() + facetName.slice(1);
+			var text = facetNode ? facetName : 'baseType';
+			facetNode = facetNode || this.definition;
 			if (method in this) {
-				validatedFacets.push(facetName);
-				if (!this[method](facetNode.getAttribute('value'))) {
-					return new XmlValidationError(this.node, facetNode, facetName);
+				if (!this[method](facetValue)) {
+					return new XmlValidationError(this.node, facetNode, text);
 				}
 			}
+		},
+		validateBaseFacets: function () {
+			var findings = _(this.getBaseFacets())
+				.map(_(function (value, name) { 
+					this.invokeFacetValidation(name, value);
+				}).bind(this));
+			return _(findings).compact();
 		},
 		validatePattern: function (facetValue) {
 			var r = _(facetValue).isRegExp() 
