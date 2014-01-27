@@ -31,13 +31,20 @@ function (_, objTools, Xml, NodeValidator, primitiveUnserializers,
 		validateFacets: function () {
 			var errors = [];	
 			var type = this.xsdLibrary.getTypeFromNodeAttr(this.definition, 'type');
-			var current, findings;
+			var current, findings, facets, enums;
 			var validatedFacets = [];
 			while (current = this.xsdLibrary.findTypeDefinition(type.namespaceURI, type.name)) {
-				findings = _(this.xsdLibrary.findRestrictingFacets(current))
-					.map(_(function (elem) { 
-						this.validateFacet(elem, validatedFacets);
-					}).bind(this));
+				facets = this.xsdLibrary.findRestrictingFacets(current);
+				enums = [];
+				findings = _(facets).map(_(function (elem) {
+					if (elem.localName === 'enumeration') {
+						enums.push(elem);
+					}
+					else return this.validateFacet(elem, validatedFacets);
+				}).bind(this));
+				if (enums.length) {
+					findings.push(this.validateFacet(enums, validatedFacets));
+				}
 				errors = errors.concat(_(findings).compact());
 				type = this.xsdLibrary.getRestrictedType(current);
 			}
@@ -45,19 +52,25 @@ function (_, objTools, Xml, NodeValidator, primitiveUnserializers,
 			return errors;
 		},
 		validateFacet: function (facetNode, validatedFacets) {
-			var facetName = facetNode.localName;
+			var enumMode = _(facetNode).isArray();
+			var facetName = enumMode ? facetNode[0].localName : facetNode.localName;
+			var facetValue = enumMode 
+				? _(facetNode).map(function (elem) {
+						return elem.getAttribute('value');
+					})
+				: facetNode.getAttribute('value');
 			
 			if (this.getAllowedFacets().indexOf(facetName) === -1) {
 				return;
 			}
 			
-			var fixed = facetNode.getAttribute('fixed') === 'true';
+			var fixed = enumMode ? false : facetNode.getAttribute('fixed') === 'true';
 			if (!fixed && validatedFacets.indexOf(facetName) !== -1) {
 				return;
 			}
 
 			validatedFacets.push(facetName);
-			return this.invokeFacetValidation(facetName, facetNode.getAttribute('value'), facetNode);
+			return this.invokeFacetValidation(facetName, facetValue, facetNode);
 		},
 		invokeFacetValidation: function (facetName, facetValue, facetNode) {
 			var method = 'validate' + facetName[0].toUpperCase() + facetName.slice(1);
@@ -93,6 +106,9 @@ function (_, objTools, Xml, NodeValidator, primitiveUnserializers,
 		},
 		validateMinExclusive: function (facetValue) {
 			return this.getRealValue(this.type) > this.getRealValue(this.type, facetValue);
+		},
+		validateEnumeration: function (values) {
+			return values.indexOf(this.getValue()) !== -1;
 		}
 	});
 
