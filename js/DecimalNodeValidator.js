@@ -22,19 +22,10 @@ function (_, objTools, Xml, AnySimpleTypeNodeValidator, XmlValidationResult, Xml
 		},
 		validate: function () {
 			var errors = [];
-			var type = this.xsdLibrary.getTypeFromNodeAttr(this.definition, 'type');
-			var current, findings;
-			var validatedFacets = [];
-			while (current = this.xsdLibrary.findTypeDefinition(type.namespaceURI, type.name)) {
-				findings = _(this.xsdLibrary.findRestrictingFacets(current))
-					.map(_(function (elem) { 
-						this.validateFacet(elem, validatedFacets);
-					}).bind(this));
-				errors = errors.concat(_(findings).compact());
-				type = this.xsdLibrary.getRestrictedType(current);
-			}
 
 			//validate base type stuff
+
+			errors = errors.concat(this.validateFacets());
 
 			return new XmlValidationResult(errors);
 		}

@@ -28,16 +28,28 @@ function (_, objTools, Xml, NodeValidator, primitiveUnserializers,
 				? primitiveUnserializers[type](v)
 				: v;
 		},
-		validateFacets: function (extensions) {
-			/*return _.chain([
-				_(this.getBaseFacets()).map(_(this.validateFacet).bind(this)),
-				_(this.getFacets(extensions)).map(_(this.validateFacet).bind(this))
-			]).flatten().compact().value();*/
+		validateFacets: function () {
+			var errors = [];
+			var type = this.xsdLibrary.getTypeFromNodeAttr(this.definition, 'type');
+			var current, findings;
+			var validatedFacets = [];
+			while (current = this.xsdLibrary.findTypeDefinition(type.namespaceURI, type.name)) {
+				findings = _(this.xsdLibrary.findRestrictingFacets(current))
+					.map(_(function (elem) { 
+						this.validateFacet(elem, validatedFacets);
+					}).bind(this));
+				errors = errors.concat(_(findings).compact());
+				type = this.xsdLibrary.getRestrictedType(current);
+			}
+			return errors;
 		},
 		validateFacet: function (facetNode, validatedFacets) {
 			var facetName = facetNode.localName;
 			
-			//handle validated facets and fixed
+			var fixed = facetNode.getAttribute('fixed') === 'true';
+			if (!fixed && validatedFacets.indexOf(facetName) !== -1) {
+				return;
+			}
 
 			var method = 'validate' + facetName[0].toUpperCase() + facetName.slice(1);
 			if (method in this) {
