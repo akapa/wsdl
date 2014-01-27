@@ -11,6 +11,8 @@ function (_, objTools, Xml, AnySimpleTypeNodeValidator, XmlValidationResult, Xml
 		},
 		getAllowedFacets: function () {
 			return [
+				'totalDigits',
+				'fractionDigits',
 				'pattern', 
 				'enumeration',
 				'maxInclusive',
@@ -26,6 +28,16 @@ function (_, objTools, Xml, AnySimpleTypeNodeValidator, XmlValidationResult, Xml
 			errors = errors.concat(this.validateFacets());
 
 			return new XmlValidationResult(errors);
+		},
+		validateTotalDigits: function (facetValue) {
+			return this.getValue().replace(/\D/g, '').length <= facetValue;
+		},
+		validateFractionDigits: function (facetValue) {
+			var v = this.getValue();
+			var fracDigits = v.indexOf('.') === -1
+				? 0
+				: v.split('.')[1].length;
+			return fracDigits <= facetValue;
 		}
 	});
 
