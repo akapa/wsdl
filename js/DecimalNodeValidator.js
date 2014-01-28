@@ -1,8 +1,8 @@
-define(['underscore', 'wsdl2/objTools', 'wsdl2/Xml', 'wsdl2/AnySimpleTypeNodeValidator',
+define(['underscore', 'wsdl2/objTools', 'wsdl2/Xml', 'wsdl2/SimpleTypeNodeValidator',
 	'wsdl2/XmlValidationResult', 'wsdl2/XmlValidationError'],
-function (_, objTools, Xml, AnySimpleTypeNodeValidator, XmlValidationResult, XmlValidationError) {
+function (_, objTools, Xml, SimpleTypeNodeValidator, XmlValidationResult, XmlValidationError) {
 	
-	var decimalNodeValidator = objTools.make(AnySimpleTypeNodeValidator, {
+	var decimalNodeValidator = objTools.make(SimpleTypeNodeValidator, {
 		type: 'decimal',
 		getBaseFacets: function () {
 			return {
@@ -21,13 +21,6 @@ function (_, objTools, Xml, AnySimpleTypeNodeValidator, XmlValidationResult, Xml
 				'minExclusive',
 				'assertions'
 			];
-		},
-		validate: function () {
-			var errors = [];
-
-			errors = errors.concat(this.validateFacets());
-
-			return new XmlValidationResult(errors);
 		},
 		validateTotalDigits: function (facetValue) {
 			return this.getValue().replace(/\D/g, '').length <= facetValue;

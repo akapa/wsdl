@@ -1,8 +1,8 @@
-define(['underscore', 'wsdl2/objTools', 'wsdl2/Xml', 'wsdl2/AnySimpleTypeNodeValidator',
+define(['underscore', 'wsdl2/objTools', 'wsdl2/Xml', 'wsdl2/SimpleTypeNodeValidator',
 	'wsdl2/XmlValidationResult', 'wsdl2/XmlValidationError'],
-function (_, objTools, Xml, AnySimpleTypeNodeValidator, XmlValidationResult, XmlValidationError) {
+function (_, objTools, Xml, SimpleTypeNodeValidator, XmlValidationResult, XmlValidationError) {
 	
-	var floatNodeValidator = objTools.make(AnySimpleTypeNodeValidator, {
+	var floatNodeValidator = objTools.make(SimpleTypeNodeValidator, {
 		type: 'float',
 		getBaseFacets: function () {
 			return {
@@ -19,10 +19,6 @@ function (_, objTools, Xml, AnySimpleTypeNodeValidator, XmlValidationResult, Xml
 				'minExclusive',
 				'assertions'
 			];
-		},
-		validate: function () {
-			var errors = [];
-			return new XmlValidationResult(errors);
 		}
 	});
 

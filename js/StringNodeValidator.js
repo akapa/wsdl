@@ -1,8 +1,8 @@
-define(['underscore', 'wsdl2/objTools', 'wsdl2/Xml', 'wsdl2/AnySimpleTypeNodeValidator',
+define(['underscore', 'wsdl2/objTools', 'wsdl2/Xml', 'wsdl2/SimpleTypeNodeValidator',
 	 'wsdl2/XmlValidationResult', 'wsdl2/XmlValidationError'],
-function (_, objTools, Xml, AnySimpleTypeNodeValidator, XmlValidationResult, XmlValidationError) {
+function (_, objTools, Xml, SimpleTypeNodeValidator, XmlValidationResult, XmlValidationError) {
 	
-	var stringNodeValidator = objTools.make(AnySimpleTypeNodeValidator, {
+	var stringNodeValidator = objTools.make(SimpleTypeNodeValidator, {
 		type: 'string',
 		getAllowedFacets: function () {
 			return [
@@ -13,10 +13,6 @@ function (_, objTools, Xml, AnySimpleTypeNodeValidator, XmlValidationResult, Xml
 				'enumeration', 
 				'assertions'
 			];
-		},
-		validate: function () {
-			var errors = [];
-			return new XmlValidationResult(errors);
 		},
 		validateMaxLength: function (facetValue) {
 			return this.getValue().length <= facetValue;
