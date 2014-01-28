@@ -33,20 +33,22 @@ function (_, objTools, Xml, NodeValidator, primitiveUnserializers,
 			var type = this.xsdLibrary.getTypeFromNodeAttr(this.definition, 'type');
 			var current, findings, facets, enums;
 			var validatedFacets = [];
-			while (current = this.xsdLibrary.findTypeDefinition(type.namespaceURI, type.name)) {
-				facets = this.xsdLibrary.findRestrictingFacets(current);
-				enums = [];
-				findings = _(facets).map(_(function (elem) {
-					if (elem.localName === 'enumeration') {
-						enums.push(elem);
+			while (current = type 
+				? this.xsdLibrary.findTypeDefinition(type.namespaceURI, type.name)
+				: this.definition[0]) {
+					facets = this.xsdLibrary.findRestrictingFacets(current);
+					enums = [];
+					findings = _(facets).map(_(function (elem) {
+						if (elem.localName === 'enumeration') {
+							enums.push(elem);
+						}
+						else return this.validateFacet(elem, validatedFacets);
+					}).bind(this));
+					if (enums.length) {
+						findings.push(this.validateFacet(enums, validatedFacets));
 					}
-					else return this.validateFacet(elem, validatedFacets);
-				}).bind(this));
-				if (enums.length) {
-					findings.push(this.validateFacet(enums, validatedFacets));
-				}
-				errors = errors.concat(_(findings).compact());
-				type = this.xsdLibrary.getRestrictedType(current);
+					errors = errors.concat(_(findings).compact());
+					type = this.xsdLibrary.getRestrictedType(current);
 			}
 			errors = errors.concat(this.validateBaseFacets());
 			return errors;

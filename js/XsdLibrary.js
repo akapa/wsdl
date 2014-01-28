@@ -40,11 +40,14 @@ function (_, objTools, Library, Xml) {
 			var type = typeAttrNS 
 				? node.getAttributeNS(typeAttrNS, typeAttr)
 				: node.getAttribute(typeAttr);
-			var parts = type.split(':');
-			return {
-				namespaceURI: node.lookupNamespaceURI(parts[0]),
-				name: parts[1]
-			};
+			if (type) {
+				var parts = type.split(':');
+				return {
+					namespaceURI: node.lookupNamespaceURI(parts[0]),
+					name: parts[1]
+				};
+			}
+			else return null;
 		},
 		findTypeDefinitionFromNodeAttr: function (node, typeAttr, typeAttrNS) {
 			var type = this.getTypeFromNodeAttr(node, typeAttr, typeAttrNS);

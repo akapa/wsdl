@@ -12,11 +12,13 @@ function (_, objTools, Xml, NodeValidator, ComplexTypeNodeValidator, AnySimpleTy
 		getValidator: function (xsdElement, node, type) {
 			//looking up a typeDefinition (complexType, simpleType or null)
 			type = type || this.xsdLibrary.getTypeFromNodeAttr(xsdElement, 'type');
-			var xsdNode = this.xsdLibrary.findTypeDefinition(type.namespaceURI, type.name);
+			var xsdNode = type
+				? this.xsdLibrary.findTypeDefinition(type.namespaceURI, type.name)
+				: xsdElement.children[0];
 
 			//if it is a base simple type, choose a pre-defined validator
-			if (xsdNode === null && type.namespaceURI === Xml.xs) {
-				if (type.name in strMappings) {
+			if (!xsdNode) {
+				if (type && type.namespaceURI === Xml.xs && type.name in strMappings) {
 					return new strMappings[type.name](node, xsdElement, this);
 				}
 			}
