@@ -2,7 +2,7 @@ define(['underscore'], function (_) {
 
 	return {
 		'boolean': function (s) {
-			return s === 'true';
+			return ['true', '1'].indexOf(s) !== -1;
 		},
 		'float': function (s) {
 			switch (s) {
