@@ -1,9 +1,10 @@
 define(['underscore', 'wsdl2/objTools', 'wsdl2/Xml', 
 	'wsdl2/NodeValidator', 'wsdl2/ComplexTypeNodeValidator', 'wsdl2/AnySimpleTypeNodeValidator', 
 	'wsdl2/StringNodeValidator', 'wsdl2/FloatNodeValidator', 'wsdl2/DecimalNodeValidator',
-	'wsdl2/BooleanNodeValidator'],
+	'wsdl2/BooleanNodeValidator', 'wsdl2/DateTimeNodeValidator'],
 function (_, objTools, Xml, NodeValidator, ComplexTypeNodeValidator, AnySimpleTypeNodeValidator,
-	StringNodeValidator, FloatNodeValidator, DecimalNodeValidator, BooleanNodeValidator) {
+	StringNodeValidator, FloatNodeValidator, DecimalNodeValidator, BooleanNodeValidator,
+	DateTimeNodeValidator) {
 
 	var nodeValidatorFactory = {
 		init: function (xsdLibrary) {
@@ -44,7 +45,9 @@ function (_, objTools, Xml, NodeValidator, ComplexTypeNodeValidator, AnySimpleTy
 		'anySimpleType': AnySimpleTypeNodeValidator,
 		'string': StringNodeValidator,
 		'float': FloatNodeValidator,
+		'double': FloatNodeValidator,
 		'decimal': DecimalNodeValidator,
+		'dateTime': DateTimeNodeValidator,
 		'int': DecimalNodeValidator,
 		'boolean': BooleanNodeValidator
 	};
