@@ -43,7 +43,16 @@ define(['underscore'], function (_) {
 			return new Date(s);
 		},
 		'gMonthDay': function (s) {
-			return new Date(s);
+			return new Date('2004-' + s);
+		},
+		'gYear': function (s) {
+			return this.int(s);
+		},
+		'gDay': function (s) {
+			return this.int(s);
+		},
+		'gMonth': function (s) {
+			return this.int(s);
 		}
 	};
 

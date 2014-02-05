@@ -48,7 +48,6 @@ function (_, objTools, Xml, NodeValidator, ComplexTypeNodeValidator, AnySimpleTy
 		'double': FloatNodeValidator,
 		'decimal': DecimalNodeValidator,
 		'dateTime': DateTimeNodeValidator,
-		'int': DecimalNodeValidator,
 		'boolean': BooleanNodeValidator
 	};
 

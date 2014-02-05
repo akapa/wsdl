@@ -2,7 +2,8 @@
     baseUrl: "js",
     exclude: ["underscore"],
     paths: {
-        underscore: "lib/underscore"
+        underscore: "lib/underscore",
+        text: 'lib/text'
     },
     name: "wsdl2",
     optimize: "none",

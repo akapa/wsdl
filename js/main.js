@@ -1,7 +1,8 @@
 requirejs.config({
 	paths: {
 		'underscore': 'lib/underscore',
-		'wsdl2': '.'
+		'wsdl2': '.',
+        'text': 'lib/text'
 	},
 	shim: {
 		'underscore': {

@@ -1,6 +1,14 @@
-define(['underscore', 'wsdl2/objTools', 'wsdl2/Library', 'wsdl2/Xml'],
-function (_, objTools, Library, Xml) {
+define(['underscore', 'wsdl2/objTools', 'wsdl2/Library', 'wsdl2/Xml', 
+	'text!basetypes.xsd'],
+function (_, objTools, Library, Xml, basetypesXsd) {
+
 	var xsdLibrary = objTools.make(Library, {
+		init: function (defs) {
+			defs = defs || [];
+			var xsd = Xml.parseXml(basetypesXsd);
+			(new Library).init.call(this, defs.concat([xsd]));
+			return this;
+		},
 		addItem: function (def, name) {
 			var ns = name || def.documentElement.getAttributeNS(null, 'targetNamespace');
 			var xsdCollection = this.exists(ns) 
@@ -60,6 +68,7 @@ function (_, objTools, Library, Xml) {
 				basetype = this.getRestrictedType(xsdNow);
 				xsdNow = this.findTypeDefinition(basetype.namespaceURI, basetype.name);
 			} while (xsdNow !== null);
+			console.log(node, basetype.name);
 			return basetype.name;
 		},
 		getRestrictedType: function (node) {
