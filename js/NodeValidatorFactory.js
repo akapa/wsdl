@@ -1,7 +1,8 @@
 define(['underscore', 'wsdl2/objTools', 'wsdl2/Xml', 
-	'wsdl2/NodeValidator', 'wsdl2/ComplexTypeNodeValidator', 'wsdl2/AnySimpleTypeNodeValidator', 
-	'wsdl2/StringNodeValidator', 'wsdl2/FloatNodeValidator', 'wsdl2/DecimalNodeValidator',
-	'wsdl2/BooleanNodeValidator', 'wsdl2/DateTimeNodeValidator'],
+	'wsdl2/validator/NodeValidator', 'wsdl2/validator/ComplexTypeNodeValidator', 
+	'wsdl2/validator/AnySimpleTypeNodeValidator', 'wsdl2/validator/StringNodeValidator',
+	'wsdl2/validator/FloatNodeValidator', 'wsdl2/validator/DecimalNodeValidator',
+	'wsdl2/validator/BooleanNodeValidator', 'wsdl2/validator/DateTimeNodeValidator'],
 function (_, objTools, Xml, NodeValidator, ComplexTypeNodeValidator, AnySimpleTypeNodeValidator,
 	StringNodeValidator, FloatNodeValidator, DecimalNodeValidator, BooleanNodeValidator,
 	DateTimeNodeValidator) {
@@ -42,6 +43,7 @@ function (_, objTools, Xml, NodeValidator, ComplexTypeNodeValidator, AnySimpleTy
 	};
 
 	var strMappings = {
+		'anyType': AnyTypeNodeValidator,
 		'anySimpleType': AnySimpleTypeNodeValidator,
 		'string': StringNodeValidator,
 		'float': FloatNodeValidator,

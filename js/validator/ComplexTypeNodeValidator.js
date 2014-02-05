@@ -1,4 +1,4 @@
-define(['underscore', 'wsdl2/objTools', 'wsdl2/Xml', 'wsdl2/NodeValidator',
+define(['underscore', 'wsdl2/objTools', 'wsdl2/Xml', 'wsdl2/validator/NodeValidator',
 	 'wsdl2/XmlValidationResult', 'wsdl2/XmlValidationError'],
 function (_, objTools, Xml, NodeValidator, XmlValidationResult, XmlValidationError) {
 	var complexTypeNodeValidator = objTools.make(NodeValidator, {

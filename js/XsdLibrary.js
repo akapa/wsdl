@@ -68,7 +68,6 @@ function (_, objTools, Library, Xml, basetypesXsd) {
 				basetype = this.getRestrictedType(xsdNow);
 				xsdNow = this.findTypeDefinition(basetype.namespaceURI, basetype.name);
 			} while (xsdNow !== null);
-			console.log(node, basetype.name);
 			return basetype.name;
 		},
 		getRestrictedType: function (node) {

@@ -1,4 +1,4 @@
-define(['underscore', 'wsdl2/objTools', 'wsdl2/Xml', 'wsdl2/SimpleTypeNodeValidator',
+define(['underscore', 'wsdl2/objTools', 'wsdl2/Xml', 'wsdl2/validator/SimpleTypeNodeValidator',
 	 'wsdl2/XmlValidationResult', 'wsdl2/XmlValidationError'],
 function (_, objTools, Xml, SimpleTypeNodeValidator, XmlValidationResult, XmlValidationError) {
 	
