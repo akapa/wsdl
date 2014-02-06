@@ -73,8 +73,19 @@ function (_, objTools, Xml, NodeValidator, XmlValidationResult, XmlValidationErr
 			var elems = xsdNode.getElementsByTagNameNS(xsdNode.namespaceURI, 'element');
 			return elems.length ? elems[0] : null;
 		},
-		getNextElement: function (xsdCurrent) {
-			return xsdCurrent.nextElementSibling;
+		getNextElement: function (childCurrent) {
+			var next = childCurrent.nextElementSibling;
+			//if there are no more elements, let's get to possible extended defs
+			if (next === null) {
+				//find closest extension parent
+				var extension = Xml.getClosestAncestor(childCurrent, Xml.xs, 'extension');
+				if (extension) {
+					var extendedType = this.xsdLibrary
+						.findTypeDefinitionFromNodeAttr(extension, 'base');
+					next = this.getFirstElement(extendedType);
+				}
+			}
+			return next;
 		},
 		parseMinMaxOccurs: function (xsdNode) {
 			var min = xsdNode.getAttribute('minOccurs');

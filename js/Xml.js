@@ -48,6 +48,16 @@ define(function () {
 		domToXml: function (dom) {
 			return new XMLSerializer().serializeToString(dom);
 		},
+		getClosestAncestor: function (node, namespace, tagname) {
+			var node = node.parentElement;
+			while (!(node.namespaceURI === namespace && node.localName === tagname)) {
+				node = node.parentElement;
+				if (!node) {
+					return null;
+				}
+			}
+			return node;
+		},
 		createDocument: function (name, namespaces) {
 			var doc = document.implementation.createDocument(namespaces[0], name, null);
 			_(namespaces).each(function (ns, nskey) {
