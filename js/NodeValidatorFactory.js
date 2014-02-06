@@ -1,11 +1,12 @@
 define(['underscore', 'wsdl2/objTools', 'wsdl2/Xml', 
 	'wsdl2/validator/NodeValidator', 'wsdl2/validator/ComplexTypeNodeValidator', 
-	'wsdl2/validator/AnySimpleTypeNodeValidator', 'wsdl2/validator/StringNodeValidator',
+	'wsdl2/validator/AnyTypeNodeValidator', 'wsdl2/validator/AnySimpleTypeNodeValidator',
 	'wsdl2/validator/FloatNodeValidator', 'wsdl2/validator/DecimalNodeValidator',
-	'wsdl2/validator/BooleanNodeValidator', 'wsdl2/validator/DateTimeNodeValidator'],
-function (_, objTools, Xml, NodeValidator, ComplexTypeNodeValidator, AnySimpleTypeNodeValidator,
-	StringNodeValidator, FloatNodeValidator, DecimalNodeValidator, BooleanNodeValidator,
-	DateTimeNodeValidator) {
+	'wsdl2/validator/BooleanNodeValidator', 'wsdl2/validator/DateTimeNodeValidator', 
+	'wsdl2/validator/StringNodeValidator'],
+function (_, objTools, Xml, NodeValidator, ComplexTypeNodeValidator, AnyTypeNodeValidator,
+	AnySimpleTypeNodeValidator, FloatNodeValidator, DecimalNodeValidator, 
+	BooleanNodeValidator, DateTimeNodeValidator, StringNodeValidator) {
 
 	var nodeValidatorFactory = {
 		init: function (xsdLibrary) {
@@ -32,7 +33,7 @@ function (_, objTools, Xml, NodeValidator, ComplexTypeNodeValidator, AnySimpleTy
 					return new strMappings[basetype](node, xsdElement, this);
 				}
 			}
-			//complex type validator
+			//complex type
 			else if (xsdNode.namespaceURI === Xml.xs && xsdNode.localName === 'complexType') {
 				return new ComplexTypeNodeValidator(node, xsdElement, this);
 			}
