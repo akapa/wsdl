@@ -1,8 +1,10 @@
 requirejs.config({
 	paths: {
+		'wsdl': '.',
 		'underscore': 'lib/underscore',
-		'wsdl2': '.',
-        'text': 'lib/text'
+        'Xml': 'lib/Xml',
+        'Library': 'lib/Library',
+        'objTools': 'lib/objTools'
 	},
 	shim: {
 		'underscore': {
@@ -11,16 +13,16 @@ requirejs.config({
 	}
 });
 
-requirejs(['underscore', 'wsdl2/gen/wsconfig', 'wsdl2/Xml', 'wsdl2/XmlValidator'],
-function (_, service, Xml, XmlValidator) {
+requirejs(['underscore', 'wsdl/gen/wsconfig', 'Xml'],
+function (_, service, Xml) {
 
-	/*service.getEventsInRange({
+	service.getEventsInRange({
 				timeFrom: new Date('09/18/2013'),
 				timeTo: new Date('11/02/2013')
 			}, 
 			function () { console.log(arguments); }, 
 			function () { console.log(arguments); }
-		);*/
+		);
 
 	var user = service.factory.makeAndFill('user', {
 		id: '11',
@@ -52,27 +54,10 @@ function (_, service, Xml, XmlValidator) {
 	var xml = service.serializer.serialize(resp, 'getEventsInRangeResponse');
 	document.getElementById('show').value = Xml.format(xml);
 
-	var doValidate = function () {
-		var xsd = Xml.parseXml(document.getElementById('xsd').value);
-		var dom = Xml.parseXml(document.getElementById('show').value);
-		console.group('XML Validation on ', dom, ' with ', xsd);
+	var td = service.typeLibrary.getItem('getEventsInRangeResponse');
+	console.log(td, service.serializer.unserialize(xml, 'getEventsInRangeResponse', td));
 
-		var validator = new XmlValidator();
-		validator.loadXsd(xsd);
-		console.log(validator);
-
-		var validationResult = validator.validate(dom);
-		console.log(validationResult);
-
-		console.groupEnd();
-	};
-	doValidate();
-	document.getElementById('validate').addEventListener('click', doValidate);
-
-	/*var td = service.typeLibrary.getItem('getEventsInRangeResponse');
-	console.log(td, service.serializer.unserialize(xml, 'getEventsInRangeResponse', td));*/
-
-	/*service.handleSuccess(
+	service.handleSuccess(
 		'getEventsInRange',
 		{
 			status: 200,
@@ -80,5 +65,5 @@ function (_, service, Xml, XmlValidator) {
 			responseText: service.getSoapEnvelope(xml)
 		},
 		function () { console.log(arguments); }
-	);*/
+	);
 });

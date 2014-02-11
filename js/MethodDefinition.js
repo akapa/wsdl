@@ -1,4 +1,4 @@
-define(['wsdl2/objTools'], function (objTools) {
+define(['objTools'], function (objTools) {
 	var methodDefinition = {
 		name: null,
 		requestObj: null,

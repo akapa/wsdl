@@ -1,11 +1,13 @@
 ({
-    baseUrl: "js",
-    exclude: ["underscore"],
+    baseUrl: 'js',
+    exclude: ['underscore'],
     paths: {
-        underscore: "lib/underscore",
-        text: 'lib/text'
+        'underscore': 'lib/underscore',
+        'Xml': 'lib/Xml',
+        'Library': 'lib/Library',
+        'objTools': 'lib/objTools'
     },
-    name: "wsdl2",
+    name: 'wsdl',
     optimize: "none",
-    out: "dist/wsdl2.js"
+    out: "dist/wsdl.js"
 })

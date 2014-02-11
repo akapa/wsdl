@@ -27,10 +27,10 @@
 	<target name="dist" depends="compile" description="generate the distribution">
 	</target>
 
-        <target name="clean" description="clean up">
-	    <!-- Delete the ${out} and ${dist} directory trees -->
-                <delete dir="${out}"/>
-                <delete dir="${dist}"/>
-        </target>
+    <target name="clean" description="clean up">
+    <!-- Delete the ${out} and ${dist} directory trees -->
+            <delete dir="${out}"/>
+            <delete dir="${dist}"/>
+    </target>
 
 </project>

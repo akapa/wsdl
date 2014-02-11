@@ -2,7 +2,7 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xs="http://www.w3.org/2001/XMLSchema" version="1.0">
 <xsl:output method="text" omit-xml-declaration="yes"/>   
 <xsl:template match="/">
-define(['underscore', 'wsdl2/objTools', 'wsdl2/TypeLibrary', 'wsdl2/TypeDefinition', 'wsdl2/TypeEnsurer'], 
+define(['underscore', 'objTools', 'wsdl/TypeLibrary', 'wsdl/TypeDefinition', 'wsdl/TypeEnsurer'], 
 function (_, objTools, TypeLibrary, TypeDefinition, TypeEnsurer) {
 	var namespaces = {
 		0: '<xsl:value-of select="xs:schema/@targetNamespace"/>',

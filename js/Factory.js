@@ -1,4 +1,4 @@
-define(['wsdl2/objTools'], function (objTools) {
+define(['objTools'], function (objTools) {
 	var factory = {
 		init: function (typeLib) {
 			this.typeLibrary = typeLib;

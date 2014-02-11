@@ -1,4 +1,4 @@
-define(['underscore', 'wsdl2/objTools', 'wsdl2/Xml'], function (_, objTools, Xml) {
+define(['underscore', 'objTools', 'Xml'], function (_, objTools, Xml) {
 	var webService = {
 		init: function (name, serializer, factory, methodLibrary, typeLibrary) {
 			this.name = name;

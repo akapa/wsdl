@@ -1,4 +1,4 @@
-define(['underscore', 'wsdl2/objTools', 'wsdl2/Library', 'wsdl2/TypeDefinition'],
+define(['underscore', 'objTools', 'Library', 'wsdl/TypeDefinition'],
 function (_, objTools, Library, TypeDefinition) {
 	var capitalizeFirst = function (s) {
 		return s[0].toUpperCase() + s.slice(1);
