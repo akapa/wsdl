@@ -1,4 +1,4 @@
-define(['underscore', 'objTools', 'Xml'], function (_, objTools, Xml) {
+define(['underscore', 'objTools', 'xml'], function (_, objTools, xml) {
 	var webService = {
 		init: function (name, serializer, factory, methodLibrary, typeLibrary) {
 			this.name = name;
@@ -50,12 +50,13 @@ define(['underscore', 'objTools', 'Xml'], function (_, objTools, Xml) {
 			onError(errorObj, xhr.status, xhr.statusText);
 		},
 		getSoapEnvelope: function (contents) {
-			return Xml.makeXmlHeader()
-				+ Xml.makeTag(
-					'soap:Envelope', 
-					Xml.makeTag('soap:Body', contents), 
-					{ 'xmlns:soap' : 'http://schemas.xmlsoap.org/soap/envelope/' }
-				);
+			var soapNs = 'http://schemas.xmlsoap.org/soap/envelope/';
+			var doc = xml.createDocument('Envelope', { '0' : soapNs });
+			var body = doc.createElementNS(soapNs, 'Body');
+			xml.setNodeText(body, '%PH%');
+			doc.documentElement.appendChild(body);
+			return '<?xml version="1.0" encoding="UTF-8"?>'
+				+ xml.serializeToString(doc).replace('%PH%', contents);
 		}
 	};
 

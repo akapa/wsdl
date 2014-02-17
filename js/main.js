@@ -1,10 +1,10 @@
 requirejs.config({
 	paths: {
-		'wsdl': '.',
 		'underscore': 'lib/underscore',
-        'Xml': 'lib/Xml',
+        'xml': 'lib/xml',
         'Library': 'lib/Library',
-        'objTools': 'lib/objTools'
+        'objTools': 'lib/objTools',
+        'wsdl': '.'
 	},
 	shim: {
 		'underscore': {
@@ -13,8 +13,8 @@ requirejs.config({
 	}
 });
 
-requirejs(['underscore', 'wsdl/gen/wsconfig', 'Xml'],
-function (_, service, Xml) {
+requirejs(['underscore', 'wsdl/gen/wsconfig', 'xml'],
+function (_, service, xml) {
 
 	service.getEventsInRange({
 				timeFrom: new Date('09/18/2013'),
@@ -51,19 +51,20 @@ function (_, service, Xml) {
 		return: [ev, ev2]
 	});
 
-	var xml = service.serializer.serialize(resp, 'getEventsInRangeResponse');
-	document.getElementById('show').value = Xml.format(xml);
+	var xmlresp = service.serializer.serialize(resp, 'getEventsInRangeResponse');
+	document.getElementById('show').value = xml.formatString(xmlresp);
 
 	var td = service.typeLibrary.getItem('getEventsInRangeResponse');
-	console.log(td, service.serializer.unserialize(xml, 'getEventsInRangeResponse', td));
+	console.log(td, service.serializer.unserialize(xmlresp, 'getEventsInRangeResponse', td));
 
-	service.handleSuccess(
+	console.log(service.getSoapEnvelope(xmlresp));
+	/*service.handleSuccess(
 		'getEventsInRange',
 		{
 			status: 200,
 			statusText: 'Fasza',
-			responseText: service.getSoapEnvelope(xml)
+			responseText: service.getSoapEnvelope(xmlresp)
 		},
 		function () { console.log(arguments); }
-	);
+	);*/
 });

@@ -1,6 +1,6 @@
-define(['underscore', 'objTools', 'wsdl/Serializer', 'Xml',
+define(['underscore', 'objTools', 'wsdl/Serializer', 'xml',
 	'wsdl/primitiveSerializers', 'wsdl/primitiveUnserializers'],
-function (_, objTools, Serializer, Xml, primitiveSerializers, primitiveUnserializers) {
+function (_, objTools, Serializer, xml, primitiveSerializers, primitiveUnserializers) {
 
 	var xmlSerializer = objTools.make(Serializer, {
 		init: function (typeLibrary, factory, namespaces) {
@@ -12,7 +12,7 @@ function (_, objTools, Serializer, Xml, primitiveSerializers, primitiveUnseriali
 			return this;
 		},
 		serialize: function (value, name) {
-			return Xml.domToXml(this.serializeToDOM(value, name));
+			return xml.serializeToString(this.serializeToDOM(value, name));
 		},
 		serializeToDOM: function (value, name, typeDef, doc) {
 			if (!typeDef) {
@@ -35,7 +35,7 @@ function (_, objTools, Serializer, Xml, primitiveSerializers, primitiveUnseriali
 			}
 			else {
 				if (!doc) {
-					doc = Xml.createDocument('my:' + name, this.ns);
+					doc = xml.createDocument('my:' + name, this.ns);
 					elem = doc.documentElement;
 				}
 				else {
@@ -58,7 +58,7 @@ function (_, objTools, Serializer, Xml, primitiveSerializers, primitiveUnseriali
 					}
 				}
 				else {
-					Xml.setNodeText(elem, typeDef.type in primitiveSerializers
+					xml.setNodeText(elem, typeDef.type in primitiveSerializers
 						? this.primitiveSerializers[typeDef.type](value, typeDef)
 						: value);
 				}
@@ -67,7 +67,7 @@ function (_, objTools, Serializer, Xml, primitiveSerializers, primitiveUnseriali
 		},
 		unserialize: function (s, name, typeDef) {
 			typeDef = this.typeLibrary.getItem(name) || typeDef;
-			return this.unserializeDOM(Xml.parseXml(s), name, typeDef);
+			return this.unserializeDOM(xml.parseToDom(s), name, typeDef);
 		},
 		unserializeDOM: function (dom, name, typeDef) {
 			var res;
@@ -95,10 +95,10 @@ function (_, objTools, Serializer, Xml, primitiveSerializers, primitiveUnseriali
 				}, this);
 			}
 			else if (typeDef.type in primitiveUnserializers) {
-				return this.primitiveUnserializers[typeDef.type](Xml.getNodeText(elem), typeDef);
+				return this.primitiveUnserializers[typeDef.type](xml.getNodeText(elem), typeDef);
 			}
 			else {
-				return Xml.getNodeText(elem);
+				return xml.getNodeText(elem);
 			}
 			return res;
 		}

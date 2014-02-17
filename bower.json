@@ -1,0 +1,35 @@
+{
+  "name": "kapa/wsdl",
+  "version": "0.0.1",
+  "description": "Use WSDL Webservices, serialize/unserialize objects based on XSD",
+  "main": "dist/wsdl.js",
+  "dependencies": {
+    "requirejs": "latest",
+    "underscore": "latest",
+    "xml": "file:///home/kapa/galina/kapa/xml/.git/",
+    "Library": "file:///home/kapa/galina/kapa/Library/.git/",
+    "objTools": "file:///home/kapa/galina/kapa/objTools/.git/"    
+  },
+  "install": {
+    "path": {
+      "js": "js/lib"
+    }
+  },
+  "keywords": [
+    "wsdl",
+    "xsd",
+    "webservices",
+    "serialization"
+  ],
+  "authors": [
+    "Kapa"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
