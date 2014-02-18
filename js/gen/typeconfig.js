@@ -2,7 +2,7 @@
 define(['underscore', 'objTools', 'wsdl/TypeLibrary', 'wsdl/TypeDefinition', 'wsdl/TypeEnsurer'], 
 function (_, objTools, TypeLibrary, TypeDefinition, TypeEnsurer) {
 	var namespaces = {
-		0: 'http://budget.kapa.org/',
+		'myns': 'http://budget.kapa.org/',
 		'xs': 'http://www.w3.org/2001/XMLSchema',
 		'xsi': 'http://www.w3.org/2001/XMLSchema-instance'
 	};

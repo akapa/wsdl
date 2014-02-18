@@ -5,7 +5,7 @@
 define(['underscore', 'objTools', 'wsdl/TypeLibrary', 'wsdl/TypeDefinition', 'wsdl/TypeEnsurer'], 
 function (_, objTools, TypeLibrary, TypeDefinition, TypeEnsurer) {
 	var namespaces = {
-		0: '<xsl:value-of select="xs:schema/@targetNamespace"/>',
+		'myns': '<xsl:value-of select="xs:schema/@targetNamespace"/>',
 		'xs': 'http://www.w3.org/2001/XMLSchema',
 		'xsi': 'http://www.w3.org/2001/XMLSchema-instance'
 	};

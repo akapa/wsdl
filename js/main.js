@@ -57,8 +57,7 @@ function (_, service, xml) {
 	var td = service.typeLibrary.getItem('getEventsInRangeResponse');
 	console.log(td, service.serializer.unserialize(xmlresp, 'getEventsInRangeResponse', td));
 
-	console.log(service.getSoapEnvelope(xmlresp));
-	/*service.handleSuccess(
+	service.handleSuccess(
 		'getEventsInRange',
 		{
 			status: 200,
@@ -66,5 +65,5 @@ function (_, service, xml) {
 			responseText: service.getSoapEnvelope(xmlresp)
 		},
 		function () { console.log(arguments); }
-	);*/
+	);
 });

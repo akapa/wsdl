@@ -23,7 +23,7 @@ define(['underscore', 'objTools', 'xml'], function (_, objTools, xml) {
 			req.open('post', methodDef.endpoint, true);
 			req.setRequestHeader('Content-Type', 'text/xml');
 			var stuff = [
-				this.serializer.ns[0].replace(/\/+$/, ''),
+				this.serializer.ns['myns'].replace(/\/+$/, ''),
 				this.name, 
 				methodDef.name
 			];
@@ -51,8 +51,8 @@ define(['underscore', 'objTools', 'xml'], function (_, objTools, xml) {
 		},
 		getSoapEnvelope: function (contents) {
 			var soapNs = 'http://schemas.xmlsoap.org/soap/envelope/';
-			var doc = xml.createDocument('Envelope', { '0' : soapNs });
-			var body = doc.createElementNS(soapNs, 'Body');
+			var doc = xml.createDocument('Envelope', { 'soap' : soapNs }, 'soap');
+			var body = doc.createElementNS(soapNs, 'soap:Body');
 			xml.setNodeText(body, '%PH%');
 			doc.documentElement.appendChild(body);
 			return '<?xml version="1.0" encoding="UTF-8"?>'

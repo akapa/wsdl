@@ -5,7 +5,7 @@ function (_, objTools, WebService, MethodLibrary, MethodDefinition, XmlSerialize
 	Factory, typeLib) {
 	
 	var namespaces = {
-		0: 'http://budget.kapa.org/',
+		'myns': 'http://budget.kapa.org/',
 		'xs': 'http://www.w3.org/2001/XMLSchema',
 		'xsi': 'http://www.w3.org/2001/XMLSchema-instance'
 	};

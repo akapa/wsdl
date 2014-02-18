@@ -35,7 +35,7 @@ function (_, objTools, Serializer, xml, primitiveSerializers, primitiveUnseriali
 			}
 			else {
 				if (!doc) {
-					doc = xml.createDocument('my:' + name, this.ns);
+					doc = xml.createDocument(name, this.ns, 'myns');
 					elem = doc.documentElement;
 				}
 				else {
@@ -54,7 +54,7 @@ function (_, objTools, Serializer, xml, primitiveSerializers, primitiveUnseriali
 
 					var objType = this.typeLibrary.getObjectType(value);
 					if (this.typeLibrary.exists(objType)) {
-						elem.setAttributeNS(this.ns['xsi'], 'xsi:type', 'my:' + objType);
+						elem.setAttributeNS(this.ns['xsi'], 'xsi:type', 'myns:' + objType);
 					}
 				}
 				else {

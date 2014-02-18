@@ -5,7 +5,7 @@
 define(['underscore', 'objTools', 'wsdl/WebService', 'wsdl/MethodLibrary', 'wsdl/MethodDefinition', 'wsdl/XmlSerializer', 'wsdl/Factory', 'wsdl/gen/typeconfig'], 
 function (_, objTools, WebService, MethodLibrary, MethodDefinition, XmlSerializer, Factory, typeLib) {
 	var namespaces = {
-		0: '<xsl:value-of select="wsdl:definitions/@targetNamespace"/>',
+		'myns': '<xsl:value-of select="wsdl:definitions/@targetNamespace"/>',
 		'xs': 'http://www.w3.org/2001/XMLSchema',
 		'xsi': 'http://www.w3.org/2001/XMLSchema-instance'
 	};
