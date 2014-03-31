@@ -9,6 +9,7 @@
     "grunt-contrib-jshint": "~0.6.3",
     "grunt-contrib-requirejs": "~0.4.1",
     "grunt-jsdoc": "~0.5.1",
-    "amdclean": "latest"
+    "amdclean": "latest",
+    "grunt-xsltproc": "~0.3.0"
   }
 }

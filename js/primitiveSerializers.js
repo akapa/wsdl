@@ -5,13 +5,11 @@ define(['underscore'], function (_) {
 			return value ? 'true' : 'false';
 		},
 		'float': function (value) {
-			switch (value) {
-				case Number.POSITIVE_INFINITY: 
-					return 'INF';
-				break;
-				case Number.NEGATIVE_INFINITY: 
-					return '-INF';
-				break;
+			if (value === Number.POSITIVE_INFINITY) {
+				return 'INF';
+			}
+			if (value === Number.NEGATIVE_INFINITY) {
+				return '-INF';
 			}
 			if (isNaN(value)) {
 				return 'NaN';

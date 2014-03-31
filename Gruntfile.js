@@ -15,7 +15,7 @@ module.exports = function(grunt) {
               objTools: 'lib/objTools',
               wsdl: '.'
           },
-          name: 'webservice',
+          name: 'gen/wsconfig',
           skipModuleInsertion: false,
           optimize: 'none',
           out: 'dist/wsdl.js',
@@ -49,14 +49,25 @@ module.exports = function(grunt) {
         ignores: ['js/lib/*.js']
       },
       all: ['Gruntfile.js', 'js/*.js', 'test/*.js']
+    },
+    xsltproc: {
+      options: {
+        stylesheet: 'xslt/wsdl2js.xslt'
+      },
+      compile: {
+        files: {
+          'js/gen/wsconfig.js': ['example/example.wsdl']
+        }
+      }
     }
   });
 
   grunt.loadNpmTasks('grunt-jsdoc');
   grunt.loadNpmTasks('grunt-contrib-requirejs');
   grunt.loadNpmTasks('grunt-contrib-jshint');
+  grunt.loadNpmTasks('grunt-xsltproc');
 
   // Default task(s).
-  grunt.registerTask('default', ['jshint', 'requirejs', 'jsdoc']);
+  grunt.registerTask('default', ['jshint', 'requirejs', /*'jsdoc'*/]);
 
 };

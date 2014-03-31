@@ -29,9 +29,9 @@ function (_, objTools) {
 					return this.ensurers[typeDef.type](value, typeDef);
 				}
 				catch (e) {
-					throw e instanceof TypeError
-						? new TypeError(errPrefix + 'value should be a(n) ' + typeDef.type + '.')
-						: e;
+					throw e instanceof TypeError ?
+						new TypeError(errPrefix + 'value should be a(n) ' + typeDef.type + '.') :
+						e;
 				}
 			}
 			else if (typeDef.complex) {

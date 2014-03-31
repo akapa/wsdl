@@ -43,7 +43,7 @@ function (_, objTools, Serializer, xml, primitiveSerializers, primitiveUnseriali
 				}
 
 				if (_(value).isNull() || _(value).isUndefined()) {
-					elem.setAttributeNS(this.ns['xsi'], 'xsi:nil', 'true');
+					elem.setAttributeNS(this.ns.xsi, 'xsi:nil', 'true');
 				}
 				else if (typeDef.complex || typeDef.type === 'anyType') {
 					typeDef = this.typeLibrary.getItem(this.typeLibrary.getObjectType(value));
@@ -54,13 +54,13 @@ function (_, objTools, Serializer, xml, primitiveSerializers, primitiveUnseriali
 
 					var objType = this.typeLibrary.getObjectType(value);
 					if (this.typeLibrary.exists(objType)) {
-						elem.setAttributeNS(this.ns['xsi'], 'xsi:type', 'myns:' + objType);
+						elem.setAttributeNS(this.ns.xsi, 'xsi:type', 'myns:' + objType);
 					}
 				}
 				else {
-					xml.setNodeText(elem, typeDef.type in primitiveSerializers
-						? this.primitiveSerializers[typeDef.type](value, typeDef)
-						: value);
+					xml.setNodeText(elem, typeDef.type in primitiveSerializers ?
+						this.primitiveSerializers[typeDef.type](value, typeDef) :
+						value);
 				}
 			}
 			return elem;
@@ -71,10 +71,10 @@ function (_, objTools, Serializer, xml, primitiveSerializers, primitiveUnseriali
 		},
 		unserializeDOM: function (dom, name, typeDef) {
 			var res;
-			var elem = dom.tagName === name 
-				? dom 
-				: dom.getElementsByTagNameNS(this.ns[0], name)[0]
-					|| dom.getElementsByTagName(name)[0];
+			var elem = dom.tagName === name ?
+				dom :
+				dom.getElementsByTagNameNS(this.ns[0], name)[0]	|| 
+					dom.getElementsByTagName(name)[0];
 			if (typeDef.multiple) {
 				res = [];
 				while (elem && elem.tagName === name) {
@@ -83,7 +83,7 @@ function (_, objTools, Serializer, xml, primitiveSerializers, primitiveUnseriali
 					elem = elem.nextSibling;
 				}
 			}
-			else if (elem.getAttributeNS(this.ns['xsi'], 'nil') === 'true') {
+			else if (elem.getAttributeNS(this.ns.xsi, 'nil') === 'true') {
 				res = null;
 			}
 			else if (typeDef.complex || typeDef.type === 'anyType') {

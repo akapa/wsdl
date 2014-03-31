@@ -23,7 +23,7 @@ define(['underscore', 'objTools', 'xml'], function (_, objTools, xml) {
 			req.open('post', methodDef.endpoint, true);
 			req.setRequestHeader('Content-Type', 'text/xml');
 			var stuff = [
-				this.serializer.ns['myns'].replace(/\/+$/, ''),
+				this.serializer.ns.myns.replace(/\/+$/, ''),
 				this.name, 
 				methodDef.name
 			];
@@ -40,9 +40,9 @@ define(['underscore', 'objTools', 'xml'], function (_, objTools, xml) {
 		},
 		handleSuccess: function (method, xhr, onSuccess) {
 			var methodDef = this.methodLibrary.getItem(method);
-			var obj = methodDef.responseObject
-				? this.serializer.unserialize(xhr.responseText, methodDef.responseObject)
-				: {};
+			var obj = methodDef.responseObject ?
+				this.serializer.unserialize(xhr.responseText, methodDef.responseObject) :
+				{};
 			onSuccess(obj, xhr.status, xhr.statusText);
 		},
 		handleError: function (method, xhr, onError) {
@@ -55,8 +55,8 @@ define(['underscore', 'objTools', 'xml'], function (_, objTools, xml) {
 			var body = doc.createElementNS(soapNs, 'soap:Body');
 			xml.setNodeText(body, '%PH%');
 			doc.documentElement.appendChild(body);
-			return '<?xml version="1.0" encoding="UTF-8"?>'
-				+ xml.serializeToString(doc).replace('%PH%', contents);
+			return '<?xml version="1.0" encoding="UTF-8"?>'	+
+				xml.serializeToString(doc).replace('%PH%', contents);
 		}
 	};
 

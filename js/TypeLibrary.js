@@ -31,13 +31,18 @@ function (_, objTools, Library, TypeDefinition) {
 			if (_(s).isObject() && _(s.get).isFunction()) {
 				return s(key);
 			}
+			var ret;
 			switch (s) {
 				case 'gettersetter':
-					return obj['get' + capitalizeFirst(key)]();
+					ret = obj['get' + capitalizeFirst(key)]();
+				break;
 				case 'property':
+					ret = obj[key];
+				break;
 				default:
-					return obj[key];
+					ret = obj[key];
 			}
+			return ret;
 		},
 		setValue: function (obj, key, value) {
 			if (this.typeEnsurer) {
@@ -52,7 +57,10 @@ function (_, objTools, Library, TypeDefinition) {
 				switch (s) {
 					case 'gettersetter':
 						obj['set' + capitalizeFirst(key)](value);
+					break;
 					case 'property':
+						obj[key] = value;
+					break;
 					default:
 						obj[key] = value;
 				}
