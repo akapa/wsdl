@@ -90,9 +90,10 @@ function (_, objTools, TypeLibrary, TypeDefinition, TypeEnsurer) {
 
 <xsl:template name="iscomplex">
 	<xsl:variable name="prefix" select="substring-before(@type, ':')"/>
-	<xsl:if test="$prefix != '' and namespace::*[local-name()=$prefix] = /xs:schema/@targetNamespace">
+	<xsl:variable name="lname" select="substring-after(@type, ':')"/>
+	<xsl:if test="$prefix != '' and namespace::*[local-name()=$prefix] = /xs:schema/@targetNamespace and local-name(/*/*[@name=$lname])='complexType'">
 		<xsl:text>
-					complex: true,</xsl:text>
+				complex: true,</xsl:text>
 	</xsl:if>
 </xsl:template>
 

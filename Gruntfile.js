@@ -3,6 +3,24 @@ module.exports = function(grunt) {
   // Project configuration.
   grunt.initConfig({
     pkg: grunt.file.readJSON('bower.json'),
+    xsltproc: {
+      wsdl: {
+        options: {
+          stylesheet: 'xslt/wsdl2js.xslt'
+        },
+        files: {
+          'js/gen/wsconfig.js': ['example/example.wsdl']
+        }
+      },
+      xsd: {
+        options: {
+          stylesheet: 'xslt/xsd2js.xslt'
+        },
+        files: {
+          'js/gen/typeconfig.js': ['example/example.xsd']
+        }
+      }
+    },
     requirejs: {
       compile: {
         options: {
@@ -49,16 +67,6 @@ module.exports = function(grunt) {
         ignores: ['js/lib/*.js']
       },
       all: ['Gruntfile.js', 'js/*.js', 'test/*.js']
-    },
-    xsltproc: {
-      options: {
-        stylesheet: 'xslt/wsdl2js.xslt'
-      },
-      compile: {
-        files: {
-          'js/gen/wsconfig.js': ['example/example.wsdl']
-        }
-      }
     }
   });
 

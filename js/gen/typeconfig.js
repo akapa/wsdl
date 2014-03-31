@@ -49,9 +49,33 @@ function (_, objTools, TypeLibrary, TypeDefinition, TypeEnsurer) {
 		properties: {
 			'return': objTools.make(TypeDefinition, {
 				multiple: true,
-					complex: true,
+				complex: true,
 				ns: 'http://budget.kapa.org/',
 				type: 'event'
+			}),
+		}
+	});
+	
+	//verybasic
+
+	objects['verybasic'] = {
+		'stuff': '',
+		classify: function () { return 'verybasic'; }
+	};
+
+	constructors['verybasic'] = function Verybasic () {
+		return objTools.construct(objects['verybasic'], Verybasic);
+	};
+
+	types['verybasic'] = objTools.make(TypeDefinition, {
+		type: 'verybasic',
+		ns: namespaces[0],
+		complex: true,
+		constructorFunction: constructors['verybasic'],
+		properties: {
+			'stuff': objTools.make(TypeDefinition, {
+				ns: 'http://www.w3.org/2001/XMLSchema',
+				type: 'string'
 			}),
 		}
 	});
@@ -59,11 +83,12 @@ function (_, objTools, TypeLibrary, TypeDefinition, TypeEnsurer) {
 	//basic
 
 	objects['basic'] = {
+		'additional': '',
 		classify: function () { return 'basic'; }
 	};
 
 	constructors['basic'] = function Basic () {
-		return objTools.construct(objects['basic'], Basic);
+		return objTools.construct(objTools.make(new constructors['verybasic'], objects['basic']), Basic);
 	};
 
 	types['basic'] = objTools.make(TypeDefinition, {
@@ -71,8 +96,12 @@ function (_, objTools, TypeLibrary, TypeDefinition, TypeEnsurer) {
 		ns: namespaces[0],
 		complex: true,
 		constructorFunction: constructors['basic'],
-		properties: {
-		}
+		properties: objTools.make(types['verybasic'].properties, {
+			'additional': objTools.make(TypeDefinition, {
+				ns: 'http://www.w3.org/2001/XMLSchema',
+				type: 'string'
+			}),
+		})
 	});
 	
 	//event
@@ -80,7 +109,7 @@ function (_, objTools, TypeLibrary, TypeDefinition, TypeEnsurer) {
 	objects['event'] = {
 		'amount': 0,
 		'description': '',
-		'id': 0,
+		'id': null,
 		'time': null,
 		'type': '',
 		'user': null,
@@ -106,8 +135,8 @@ function (_, objTools, TypeLibrary, TypeDefinition, TypeEnsurer) {
 				type: 'string'
 			}),
 			'id': objTools.make(TypeDefinition, {
-				ns: 'http://www.w3.org/2001/XMLSchema',
-				type: 'int'
+				ns: 'http://budget.kapa.org/',
+				type: 'id'
 			}),
 			'time': objTools.make(TypeDefinition, {
 				ns: 'http://www.w3.org/2001/XMLSchema',
@@ -118,7 +147,7 @@ function (_, objTools, TypeLibrary, TypeDefinition, TypeEnsurer) {
 				type: 'string'
 			}),
 			'user': objTools.make(TypeDefinition, {
-					complex: true,
+				complex: true,
 				ns: 'http://budget.kapa.org/',
 				type: 'user'
 			}),
@@ -129,7 +158,7 @@ function (_, objTools, TypeLibrary, TypeDefinition, TypeEnsurer) {
 
 	objects['user'] = {
 		'events': [],
-		'id': 0,
+		'id': null,
 		'name': '',
 		classify: function () { return 'user'; }
 	};
@@ -146,13 +175,13 @@ function (_, objTools, TypeLibrary, TypeDefinition, TypeEnsurer) {
 		properties: objTools.make(types['basic'].properties, {
 			'events': objTools.make(TypeDefinition, {
 				multiple: true,
-					complex: true,
+				complex: true,
 				ns: 'http://budget.kapa.org/',
 				type: 'event'
 			}),
 			'id': objTools.make(TypeDefinition, {
-				ns: 'http://www.w3.org/2001/XMLSchema',
-				type: 'int'
+				ns: 'http://budget.kapa.org/',
+				type: 'id'
 			}),
 			'name': objTools.make(TypeDefinition, {
 				ns: 'http://www.w3.org/2001/XMLSchema',
@@ -209,7 +238,7 @@ function (_, objTools, TypeLibrary, TypeDefinition, TypeEnsurer) {
 		properties: {
 			'return': objTools.make(TypeDefinition, {
 				multiple: true,
-					complex: true,
+				complex: true,
 				ns: 'http://budget.kapa.org/',
 				type: 'event'
 			}),
@@ -235,7 +264,7 @@ function (_, objTools, TypeLibrary, TypeDefinition, TypeEnsurer) {
 		properties: {
 			'objects': objTools.make(TypeDefinition, {
 				multiple: true,
-					complex: true,
+				complex: true,
 				ns: 'http://budget.kapa.org/',
 				type: 'basic'
 			}),
@@ -304,7 +333,7 @@ function (_, objTools, TypeLibrary, TypeDefinition, TypeEnsurer) {
 		properties: {
 			'objects': objTools.make(TypeDefinition, {
 				multiple: true,
-					complex: true,
+				complex: true,
 				ns: 'http://budget.kapa.org/',
 				type: 'basic'
 			}),
