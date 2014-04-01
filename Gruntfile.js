@@ -33,7 +33,7 @@ module.exports = function(grunt) {
               objTools: 'lib/objTools',
               wsdl: '.'
           },
-          name: 'gen/wsconfig',
+          name: 'ws',
           skipModuleInsertion: false,
           optimize: 'none',
           out: 'dist/wsdl.js',
@@ -67,6 +67,12 @@ module.exports = function(grunt) {
         ignores: ['js/lib/*.js']
       },
       all: ['Gruntfile.js', 'js/*.js', 'test/*.js']
+    },
+    copy: {
+      main: {
+        src: 'js/bootstrap.js',
+        dest: 'dist/bootstrap.js'
+      }
     }
   });
 
@@ -74,8 +80,9 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-requirejs');
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-xsltproc');
+  grunt.loadNpmTasks('grunt-contrib-copy');
 
   // Default task(s).
-  grunt.registerTask('default', ['jshint', 'requirejs', /*'jsdoc'*/]);
+  grunt.registerTask('default', ['xsltproc', 'jshint', 'requirejs', 'copy', /*'jsdoc'*/]);
 
 };

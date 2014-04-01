@@ -1,3 +1,3 @@
-define(['underscore', 'objTools', 'xml'],
-function (underscore, objTools, xml) {
+define(['underscore', 'objTools', 'Library', 'xml'],
+function (underscore, objTools, Library, xml) {
 

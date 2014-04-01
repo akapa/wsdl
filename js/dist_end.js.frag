@@ -1,4 +1,4 @@
 
-	return WebService;
+	return ws;
 
 });

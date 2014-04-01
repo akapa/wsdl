@@ -1,5 +1,5 @@
-define(['underscore', 'objTools', 'xml'],
-function (underscore, objTools, xml) {
+define(['underscore', 'objTools', 'Library', 'xml'],
+function (underscore, objTools, Library, xml) {
 
 var wsdl_WebService = function (_, objTools, xml) {
         var webService = {
@@ -32,6 +32,12 @@ var wsdl_WebService = function (_, objTools, xml) {
                     req.setRequestHeader('SOAPAction', stuff.join('/'));
                     req.send(envelope);
                 },
+                callWithPlainObject: function (method, params, onSuccess, onError) {
+                    var reqObjName = this.methodLibrary.getItem(method).requestObject;
+                    var reqConstr = this.typeLibrary.getItem(reqObjName).constructorFunction;
+                    var reqObj = objTools.make(reqConstr, params);
+                    this.call(method, reqObj, onSuccess, onError);
+                },
                 handleResponse: function (method, xhr, onSuccess, onError) {
                     if (this.responseSuccessRegex.test(xhr.status) && onSuccess) {
                         this.handleSuccess(method, xhr, onSuccess);
@@ -57,10 +63,8 @@ var wsdl_WebService = function (_, objTools, xml) {
                     return '<?xml version="1.0" encoding="UTF-8"?>' + xml.serializeToString(doc).replace('%PH%', contents);
                 }
             };
-        return function WebService() {
-            var obj = objTools.construct(webService, WebService);
-            return obj.init.apply(obj, arguments);
-        };
+        return objTools.makeConstructor(function WebService() {
+        }, webService);
     }(underscore, objTools, xml);
 var wsdl_MethodDefinition = function (objTools) {
         var methodDefinition = {
@@ -69,9 +73,8 @@ var wsdl_MethodDefinition = function (objTools) {
                 responseObj: null,
                 endpoint: ''
             };
-        return function MethodDefinition() {
-            return objTools.construct(methodDefinition, MethodDefinition);
-        };
+        return objTools.makeConstructor(function MethodDefinition() {
+        }, methodDefinition);
     }(objTools);
 var wsdl_MethodLibrary = function (_, objTools, Library, MethodDefinition) {
         var methodLibrary = objTools.make(Library, {
@@ -83,10 +86,8 @@ var wsdl_MethodLibrary = function (_, objTools, Library, MethodDefinition) {
                     return this;
                 }
             });
-        return function MethodLibrary() {
-            var obj = objTools.construct(methodLibrary, MethodLibrary);
-            return obj.init.apply(obj, arguments);
-        };
+        return objTools.makeConstructor(function MethodLibrary() {
+        }, methodLibrary);
     }(underscore, objTools, Library, wsdl_MethodDefinition);
 var wsdl_Serializer = function (objTools) {
         var serializer = {
@@ -97,9 +98,8 @@ var wsdl_Serializer = function (objTools) {
                     return JSON.parse(s);
                 }
             };
-        return function Serializer() {
-            return objTools.construct(serializer, Serializer);
-        };
+        return objTools.makeConstructor(function Serializer() {
+        }, serializer);
     }(objTools);
 var wsdl_primitiveSerializers = function (_) {
         return {
@@ -279,10 +279,8 @@ var wsdl_XmlSerializer = function (_, objTools, Serializer, xml, primitiveSerial
                     return res;
                 }
             });
-        return function XmlSerializer() {
-            var obj = objTools.construct(xmlSerializer, XmlSerializer);
-            return obj.init.apply(obj, arguments);
-        };
+        return objTools.makeConstructor(function XmlSerializer() {
+        }, xmlSerializer);
     }(underscore, objTools, wsdl_Serializer, xml, wsdl_primitiveSerializers, wsdl_primitiveUnserializers);
 var wsdl_Factory = function (objTools) {
         var factory = {
@@ -302,10 +300,8 @@ var wsdl_Factory = function (objTools) {
                     return obj;
                 }
             };
-        return function Factory() {
-            var obj = objTools.construct(factory, Factory);
-            return obj.init.apply(obj, arguments);
-        };
+        return objTools.makeConstructor(function Factory() {
+        }, factory);
     }(objTools);
 var wsdl_TypeDefinition = function (objTools) {
         var typeDefinition = {
@@ -317,9 +313,8 @@ var wsdl_TypeDefinition = function (objTools) {
                 constructorFunction: null,
                 valueStrategy: 'property'
             };
-        return function TypeDefinition() {
-            return objTools.construct(typeDefinition, TypeDefinition);
-        };
+        return objTools.makeConstructor(function TypeDefinition() {
+        }, typeDefinition);
     }(objTools);
 var wsdl_TypeLibrary = function (_, objTools, Library, TypeDefinition) {
         var capitalizeFirst = function (s) {
@@ -386,10 +381,8 @@ var wsdl_TypeLibrary = function (_, objTools, Library, TypeDefinition) {
                     }
                 }
             });
-        return function TypeLibrary() {
-            var obj = objTools.construct(typeLibrary, TypeLibrary);
-            return obj.init.apply(obj, arguments);
-        };
+        return objTools.makeConstructor(function TypeLibrary() {
+        }, typeLibrary);
     }(underscore, objTools, Library, wsdl_TypeDefinition);
 var wsdl_TypeEnsurer = function (_, objTools) {
         var typeEnsurer = {
@@ -499,12 +492,45 @@ var wsdl_TypeEnsurer = function (_, objTools) {
                     throw new TypeError();
                 }
             };
-        return function TypeEnsurer() {
-            var obj = objTools.construct(typeEnsurer, TypeEnsurer);
-            return obj.init.apply(obj, arguments);
-        };
+        return objTools.makeConstructor(function TypeEnsurer() {
+        }, typeEnsurer);
     }(underscore, objTools);
-var wsdl_gen_typeconfig = function (_, objTools, TypeLibrary, TypeDefinition, TypeEnsurer) {
+var wsdl_gen_wsconfig = function (objTools, MethodDefinition) {
+        //WSDL METHOD DEFINITIONS
+        return [
+            objTools.make(MethodDefinition, {
+                name: 'deleteObjects',
+                requestObject: 'deleteObjects',
+                responseObject: null,
+                endpoint: 'REPLACE_WITH_ACTUAL_URL'
+            }),
+            objTools.make(MethodDefinition, {
+                name: 'getRecentEvents',
+                requestObject: 'getRecentEvents',
+                responseObject: 'getRecentEventsResponse',
+                endpoint: 'REPLACE_WITH_ACTUAL_URL'
+            }),
+            objTools.make(MethodDefinition, {
+                name: 'storeObjects',
+                requestObject: 'storeObjects',
+                responseObject: null,
+                endpoint: 'REPLACE_WITH_ACTUAL_URL'
+            }),
+            objTools.make(MethodDefinition, {
+                name: 'getEventsInRange',
+                requestObject: 'getEventsInRange',
+                responseObject: 'getEventsInRangeResponse',
+                endpoint: 'REPLACE_WITH_ACTUAL_URL'
+            }),
+            objTools.make(MethodDefinition, {
+                name: 'getAmount',
+                requestObject: 'getAmount',
+                responseObject: 'getAmountResponse',
+                endpoint: 'REPLACE_WITH_ACTUAL_URL'
+            })
+        ];
+    }(objTools, wsdl_MethodDefinition);
+var wsdl_gen_typeconfig = function (objTools, TypeDefinition) {
         var namespaces = {
                 'myns': 'http://budget.kapa.org/',
                 'xs': 'http://www.w3.org/2001/XMLSchema',
@@ -519,9 +545,8 @@ var wsdl_gen_typeconfig = function (_, objTools, TypeLibrary, TypeDefinition, Ty
                 return 'getRecentEvents';
             }
         };
-        constructors['getRecentEvents'] = function GetRecentEvents() {
-            return objTools.construct(objects['getRecentEvents'], GetRecentEvents);
-        };
+        constructors['getRecentEvents'] = objTools.makeConstructor(function GetRecentEvents() {
+        }, objects['getRecentEvents']);
         types['getRecentEvents'] = objTools.make(TypeDefinition, {
             type: 'getRecentEvents',
             ns: namespaces[0],
@@ -536,9 +561,8 @@ var wsdl_gen_typeconfig = function (_, objTools, TypeLibrary, TypeDefinition, Ty
                 return 'getRecentEventsResponse';
             }
         };
-        constructors['getRecentEventsResponse'] = function GetRecentEventsResponse() {
-            return objTools.construct(objects['getRecentEventsResponse'], GetRecentEventsResponse);
-        };
+        constructors['getRecentEventsResponse'] = objTools.makeConstructor(function GetRecentEventsResponse() {
+        }, objects['getRecentEventsResponse']);
         types['getRecentEventsResponse'] = objTools.make(TypeDefinition, {
             type: 'getRecentEventsResponse',
             ns: namespaces[0],
@@ -553,27 +577,53 @@ var wsdl_gen_typeconfig = function (_, objTools, TypeLibrary, TypeDefinition, Ty
                 })
             }
         });
+        //verybasic
+        objects['verybasic'] = {
+            'stuff': '',
+            classify: function () {
+                return 'verybasic';
+            }
+        };
+        constructors['verybasic'] = objTools.makeConstructor(function Verybasic() {
+        }, objects['verybasic']);
+        types['verybasic'] = objTools.make(TypeDefinition, {
+            type: 'verybasic',
+            ns: namespaces[0],
+            complex: true,
+            constructorFunction: constructors['verybasic'],
+            properties: {
+                'stuff': objTools.make(TypeDefinition, {
+                    ns: 'http://www.w3.org/2001/XMLSchema',
+                    type: 'string'
+                })
+            }
+        });
         //basic
         objects['basic'] = {
+            'additional': '',
             classify: function () {
                 return 'basic';
             }
         };
-        constructors['basic'] = function Basic() {
-            return objTools.construct(objects['basic'], Basic);
-        };
+        constructors['basic'] = objTools.makeConstructor(function Basic() {
+        }, objTools.make(new constructors['verybasic'](), objects['basic']));
         types['basic'] = objTools.make(TypeDefinition, {
             type: 'basic',
             ns: namespaces[0],
             complex: true,
             constructorFunction: constructors['basic'],
-            properties: {}
+            properties: objTools.make(types['verybasic'].properties, {
+                'additional': objTools.make(TypeDefinition, {
+                    ns: 'http://www.w3.org/2001/XMLSchema',
+                    type: 'string'
+                })
+            })
         });
         //event
         objects['event'] = {
             'amount': 0,
             'description': '',
-            'id': 0,
+            'id': null,
             'time': null,
             'type': '',
             'user': null,
@@ -581,9 +631,8 @@ var wsdl_gen_typeconfig = function (_, objTools, TypeLibrary, TypeDefinition, Ty
                 return 'event';
             }
         };
-        constructors['event'] = function Event() {
-            return objTools.construct(objTools.make(new constructors['basic'](), objects['event']), Event);
-        };
+        constructors['event'] = objTools.makeConstructor(function Event() {
+        }, objTools.make(new constructors['basic'](), objects['event']));
         types['event'] = objTools.make(TypeDefinition, {
             type: 'event',
             ns: namespaces[0],
@@ -599,8 +648,8 @@ var wsdl_gen_typeconfig = function (_, objTools, TypeLibrary, TypeDefinition, Ty
                     type: 'string'
                 }),
                 'id': objTools.make(TypeDefinition, {
-                    ns: 'http://www.w3.org/2001/XMLSchema',
-                    type: 'int'
+                    ns: 'http://budget.kapa.org/',
+                    type: 'id'
                 }),
                 'time': objTools.make(TypeDefinition, {
                     ns: 'http://www.w3.org/2001/XMLSchema',
@@ -620,15 +669,14 @@ var wsdl_gen_typeconfig = function (_, objTools, TypeLibrary, TypeDefinition, Ty
         //user
         objects['user'] = {
             'events': [],
-            'id': 0,
+            'id': null,
             'name': '',
             classify: function () {
                 return 'user';
             }
         };
-        constructors['user'] = function User() {
-            return objTools.construct(objTools.make(new constructors['basic'](), objects['user']), User);
-        };
+        constructors['user'] = objTools.makeConstructor(function User() {
+        }, objTools.make(new constructors['basic'](), objects['user']));
         types['user'] = objTools.make(TypeDefinition, {
             type: 'user',
             ns: namespaces[0],
@@ -642,8 +690,8 @@ var wsdl_gen_typeconfig = function (_, objTools, TypeLibrary, TypeDefinition, Ty
                     type: 'event'
                 }),
                 'id': objTools.make(TypeDefinition, {
-                    ns: 'http://www.w3.org/2001/XMLSchema',
-                    type: 'int'
+                    ns: 'http://budget.kapa.org/',
+                    type: 'id'
                 }),
                 'name': objTools.make(TypeDefinition, {
                     ns: 'http://www.w3.org/2001/XMLSchema',
@@ -659,9 +707,8 @@ var wsdl_gen_typeconfig = function (_, objTools, TypeLibrary, TypeDefinition, Ty
                 return 'getEventsInRange';
             }
         };
-        constructors['getEventsInRange'] = function GetEventsInRange() {
-            return objTools.construct(objects['getEventsInRange'], GetEventsInRange);
-        };
+        constructors['getEventsInRange'] = objTools.makeConstructor(function GetEventsInRange() {
+        }, objects['getEventsInRange']);
         types['getEventsInRange'] = objTools.make(TypeDefinition, {
             type: 'getEventsInRange',
             ns: namespaces[0],
@@ -685,9 +732,8 @@ var wsdl_gen_typeconfig = function (_, objTools, TypeLibrary, TypeDefinition, Ty
                 return 'getEventsInRangeResponse';
             }
         };
-        constructors['getEventsInRangeResponse'] = function GetEventsInRangeResponse() {
-            return objTools.construct(objects['getEventsInRangeResponse'], GetEventsInRangeResponse);
-        };
+        constructors['getEventsInRangeResponse'] = objTools.makeConstructor(function GetEventsInRangeResponse() {
+        }, objects['getEventsInRangeResponse']);
         types['getEventsInRangeResponse'] = objTools.make(TypeDefinition, {
             type: 'getEventsInRangeResponse',
             ns: namespaces[0],
@@ -709,9 +755,8 @@ var wsdl_gen_typeconfig = function (_, objTools, TypeLibrary, TypeDefinition, Ty
                 return 'storeObjects';
             }
         };
-        constructors['storeObjects'] = function StoreObjects() {
-            return objTools.construct(objects['storeObjects'], StoreObjects);
-        };
+        constructors['storeObjects'] = objTools.makeConstructor(function StoreObjects() {
+        }, objects['storeObjects']);
         types['storeObjects'] = objTools.make(TypeDefinition, {
             type: 'storeObjects',
             ns: namespaces[0],
@@ -732,9 +777,8 @@ var wsdl_gen_typeconfig = function (_, objTools, TypeLibrary, TypeDefinition, Ty
                 return 'getAmount';
             }
         };
-        constructors['getAmount'] = function GetAmount() {
-            return objTools.construct(objects['getAmount'], GetAmount);
-        };
+        constructors['getAmount'] = objTools.makeConstructor(function GetAmount() {
+        }, objects['getAmount']);
         types['getAmount'] = objTools.make(TypeDefinition, {
             type: 'getAmount',
             ns: namespaces[0],
@@ -749,9 +793,8 @@ var wsdl_gen_typeconfig = function (_, objTools, TypeLibrary, TypeDefinition, Ty
                 return 'getAmountResponse';
             }
         };
-        constructors['getAmountResponse'] = function GetAmountResponse() {
-            return objTools.construct(objects['getAmountResponse'], GetAmountResponse);
-        };
+        constructors['getAmountResponse'] = objTools.makeConstructor(function GetAmountResponse() {
+        }, objects['getAmountResponse']);
         types['getAmountResponse'] = objTools.make(TypeDefinition, {
             type: 'getAmountResponse',
             ns: namespaces[0],
@@ -771,9 +814,8 @@ var wsdl_gen_typeconfig = function (_, objTools, TypeLibrary, TypeDefinition, Ty
                 return 'deleteObjects';
             }
         };
-        constructors['deleteObjects'] = function DeleteObjects() {
-            return objTools.construct(objects['deleteObjects'], DeleteObjects);
-        };
+        constructors['deleteObjects'] = objTools.makeConstructor(function DeleteObjects() {
+        }, objects['deleteObjects']);
         types['deleteObjects'] = objTools.make(TypeDefinition, {
             type: 'deleteObjects',
             ns: namespaces[0],
@@ -788,87 +830,24 @@ var wsdl_gen_typeconfig = function (_, objTools, TypeLibrary, TypeDefinition, Ty
                 })
             }
         });
-        var tlib = new TypeLibrary(_(types).toArray());
-        tlib.typeEnsurer = new TypeEnsurer(tlib);
-        return tlib;
-    }(underscore, objTools, wsdl_TypeLibrary, wsdl_TypeDefinition, wsdl_TypeEnsurer);
-var gen_wsconfig = function (_, objTools, WebService, MethodLibrary, MethodDefinition, XmlSerializer, Factory, typeLib) {
-        var namespaces = {
-                'myns': 'http://budget.kapa.org/',
-                'xs': 'http://www.w3.org/2001/XMLSchema',
-                'xsi': 'http://www.w3.org/2001/XMLSchema-instance'
-            };
-        //WSDL METHOD DEFINITIONS
-        var methods = [
-                objTools.make(MethodDefinition, {
-                    name: 'deleteObjects',
-                    requestObject: 'deleteObjects',
-                    responseObject: null,
-                    endpoint: 'REPLACE_WITH_ACTUAL_URL'
-                }),
-                objTools.make(MethodDefinition, {
-                    name: 'getRecentEvents',
-                    requestObject: 'getRecentEvents',
-                    responseObject: 'getRecentEventsResponse',
-                    endpoint: 'REPLACE_WITH_ACTUAL_URL'
-                }),
-                objTools.make(MethodDefinition, {
-                    name: 'storeObjects',
-                    requestObject: 'storeObjects',
-                    responseObject: null,
-                    endpoint: 'REPLACE_WITH_ACTUAL_URL'
-                }),
-                objTools.make(MethodDefinition, {
-                    name: 'getEventsInRange',
-                    requestObject: 'getEventsInRange',
-                    responseObject: 'getEventsInRangeResponse',
-                    endpoint: 'REPLACE_WITH_ACTUAL_URL'
-                }),
-                objTools.make(MethodDefinition, {
-                    name: 'getAmount',
-                    requestObject: 'getAmount',
-                    responseObject: 'getAmountResponse',
-                    endpoint: 'REPLACE_WITH_ACTUAL_URL'
-                })
-            ];
-        //initializing Method Library with wsdl methods
-        var methodLib = new MethodLibrary(methods);
-        //creating Factory and Serializer
-        var factory = new Factory(typeLib);
-        var serializer = new XmlSerializer(typeLib, factory, namespaces);
-        //creating the Web Service
-        var ws = new WebService('BudgetService', serializer, factory, methodLib, typeLib);
-        //adding Web Service methods to easily call WSDL methods
-        _(ws).extend({
-            'deleteObjects': function (params, onSuccess, onError) {
-                var reqObjName = this.methodLibrary.getItem('deleteObjects').requestObject;
-                var reqObj = objTools.make(this.typeLibrary.getItem(reqObjName).constructorFunction, params);
-                this.call('deleteObjects', reqObj, onSuccess, onError);
-            },
-            'getRecentEvents': function (params, onSuccess, onError) {
-                var reqObjName = this.methodLibrary.getItem('getRecentEvents').requestObject;
-                var reqObj = objTools.make(this.typeLibrary.getItem(reqObjName).constructorFunction, params);
-                this.call('getRecentEvents', reqObj, onSuccess, onError);
-            },
-            'storeObjects': function (params, onSuccess, onError) {
-                var reqObjName = this.methodLibrary.getItem('storeObjects').requestObject;
-                var reqObj = objTools.make(this.typeLibrary.getItem(reqObjName).constructorFunction, params);
-                this.call('storeObjects', reqObj, onSuccess, onError);
-            },
-            'getEventsInRange': function (params, onSuccess, onError) {
-                var reqObjName = this.methodLibrary.getItem('getEventsInRange').requestObject;
-                var reqObj = objTools.make(this.typeLibrary.getItem(reqObjName).constructorFunction, params);
-                this.call('getEventsInRange', reqObj, onSuccess, onError);
-            },
-            'getAmount': function (params, onSuccess, onError) {
-                var reqObjName = this.methodLibrary.getItem('getAmount').requestObject;
-                var reqObj = objTools.make(this.typeLibrary.getItem(reqObjName).constructorFunction, params);
-                this.call('getAmount', reqObj, onSuccess, onError);
-            }
-        });
-        return ws;
-    }(underscore, objTools, wsdl_WebService, wsdl_MethodLibrary, wsdl_MethodDefinition, wsdl_XmlSerializer, wsdl_Factory, wsdl_gen_typeconfig);
+        return {
+            types: types,
+            namespaces: namespaces
+        };
+    }(objTools, wsdl_TypeDefinition);
+var ws = function (_, objTools, WebService, MethodLibrary, XmlSerializer, Factory, TypeLibrary, TypeEnsurer, methods, typeConf) {
+        return {
+            WebService: WebService,
+            MethodLibrary: MethodLibrary,
+            XmlSerializer: XmlSerializer,
+            Factory: Factory,
+            TypeLibrary: TypeLibrary,
+            TypeEnsurer: TypeEnsurer,
+            methods: methods,
+            typeConf: typeConf
+        };
+    }(underscore, objTools, wsdl_WebService, wsdl_MethodLibrary, wsdl_XmlSerializer, wsdl_Factory, wsdl_TypeLibrary, wsdl_TypeEnsurer, wsdl_gen_wsconfig, wsdl_gen_typeconfig);
 
-	return WebService;
+	return ws;
 
 });
