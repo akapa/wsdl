@@ -6,9 +6,9 @@
   "dependencies": {
     "requirejs": "latest",
     "underscore": "latest",
-    "xml": "file:///home/kapa/galina/kapa/xml/.git/",
-    "Library": "file:///home/kapa/galina/kapa/Library/.git/",
-    "objTools": "file:///home/kapa/galina/kapa/objTools/.git/"    
+    "xml": "bazmegakapa/kapa-xml",
+    "Library": "bazmegakapa/kapa-Library",
+    "objTools": "bazmegakapa/kapa-objTools"
   },
   "install": {
     "path": {
