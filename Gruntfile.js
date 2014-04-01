@@ -83,6 +83,6 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-copy');
 
   // Default task(s).
-  grunt.registerTask('default', ['xsltproc', 'jshint', 'requirejs', 'copy', /*'jsdoc'*/]);
+  grunt.registerTask('default', ['xsltproc', 'jshint', 'requirejs', 'copy', 'jsdoc']);
 
 };

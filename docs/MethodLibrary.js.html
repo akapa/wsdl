@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Index</title>
+    <title>JSDoc: Source: MethodLibrary.js</title>
     
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,40 +17,48 @@
 
 <div id="main">
     
-    <h1 class="page-title">Index</h1>
+    <h1 class="page-title">Source: MethodLibrary.js</h1>
     
     
 
 
     
-
-
-    <h3> </h3>
-
-
-
-
-
-
-
-
-
-    
-
-
-
-
     <section>
-        <article><h2>What's this</h2>
-<p>A library to communicate with WSDL/XSD based webservices. Through XSLT, it helps you create Javascript definitions from the WSDL and XSD files, and then you can simply create Javascript objects defined in the XSD, call the methods defined in the WSDL and receive XSD-defined Javascript objects back from the server.</p>
-<h2>Requirements</h2>
-<p>Defined in a <a href="http://requirejs.org/">RequireJS</a> format, so you need an AMD loader.</p>
-<p>Uses: 
- - <a href="http://underscorejs.org/">Underscore.js</a>
- - Some of my own projects: <a href="https://github.com/bazmegakapa/kapa-xsd">kapa-xml</a>, <a href="https://github.com/bazmegakapa/">kapa-objTools</a>, <a href="kapa-Library">kapa-Library</a>.</p></article>
+        <article>
+            <pre class="prettyprint source"><code>define(['underscore', 'objTools', 'Library', 'wsdl/MethodDefinition'],
+function (_, objTools, Library, MethodDefinition) {
+
+	/**
+	 * A basic library/collection used to store and retrieve items.
+	 * @external Library
+	 * @see {@link https://github.com/bazmegakapa/kapa-Library}
+	 */
+
+	var methodLibrary = objTools.make(Library, 
+		/**
+		 * @lends MethodLibrary.prototype
+		 */
+		{
+			/**
+			 * @constructor MethodLibrary
+			 * @classdesc Stores MethodDefinition objects.
+			 * @extends external:Library
+			 * @param {MethodDefinition[]} defs - An array of MethodDefinition objects to store initially.
+			 */
+			init: function (defs) {
+				this.items = {};
+				this.type = MethodDefinition;
+				this.nameProperty = 'name';
+				this.addItems(defs);
+				return this;
+			},
+	});
+
+	return objTools.makeConstructor(function MethodLibrary () {}, methodLibrary);
+
+});</code></pre>
+        </article>
     </section>
-
-
 
 
 

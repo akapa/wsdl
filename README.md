@@ -9,3 +9,7 @@ Defined in a [RequireJS](http://requirejs.org/) format, so you need an AMD loade
 Uses: 
  - [Underscore.js](http://underscorejs.org/)
  - Some of my own projects: [kapa-xml](https://github.com/bazmegakapa/kapa-xsd), [kapa-objTools](https://github.com/bazmegakapa/), [kapa-Library](kapa-Library).
+
+##Documentation
+
+All the methods are documented with [JSDoc3](https://github.com/jsdoc3/jsdoc), you can find the generated HTML documentation in the **docs** folder.
