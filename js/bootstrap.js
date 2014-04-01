@@ -1,4 +1,4 @@
-define(['underscore', 'objTools', 'wsdl/ws'], 
+define(['underscore', 'objTools', 'wsdl/wsdl'], 
 function (_, objTools, ws) {
 
 	//creating TypeLibrary
