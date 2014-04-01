@@ -1,15 +1,8 @@
-
-define(['underscore', 'objTools', 'wsdl/WebService', 'wsdl/MethodLibrary', 'wsdl/MethodDefinition', 'wsdl/XmlSerializer', 'wsdl/Factory', 'wsdl/gen/typeconfig'], 
-function (_, objTools, WebService, MethodLibrary, MethodDefinition, XmlSerializer, Factory, typeLib) {
-	var namespaces = {
-		'myns': 'http://budget.kapa.org/',
-		'xs': 'http://www.w3.org/2001/XMLSchema',
-		'xsi': 'http://www.w3.org/2001/XMLSchema-instance'
-	};
+define(['objTools', 'wsdl/MethodDefinition'], function (objTools, MethodDefinition) {
 
 	//WSDL METHOD DEFINITIONS
 
-	var methods = [
+	return [
 	
 		objTools.make(MethodDefinition, {
 			name: 'deleteObjects',
@@ -48,50 +41,4 @@ function (_, objTools, WebService, MethodLibrary, MethodDefinition, XmlSerialize
 	
 	];
 
-	//initializing Method Library with wsdl methods
-	var methodLib = new MethodLibrary(methods);
-
-	//creating Factory and Serializer
-	var factory = new Factory(typeLib);
-	var serializer = new XmlSerializer(typeLib, factory, namespaces);
-
-	//creating the Web Service
-	var ws = new WebService('BudgetService', serializer, factory, methodLib, typeLib);
-
-	//adding Web Service methods to easily call WSDL methods
-	_(ws).extend({
-	
-		'deleteObjects': function (params, onSuccess, onError) {
-			var reqObjName = this.methodLibrary.getItem('deleteObjects').requestObject;
-			var reqObj = objTools.make(this.typeLibrary.getItem(reqObjName).constructorFunction, params);
-			this.call('deleteObjects', reqObj, onSuccess, onError);
-		},
-	
-		'getRecentEvents': function (params, onSuccess, onError) {
-			var reqObjName = this.methodLibrary.getItem('getRecentEvents').requestObject;
-			var reqObj = objTools.make(this.typeLibrary.getItem(reqObjName).constructorFunction, params);
-			this.call('getRecentEvents', reqObj, onSuccess, onError);
-		},
-	
-		'storeObjects': function (params, onSuccess, onError) {
-			var reqObjName = this.methodLibrary.getItem('storeObjects').requestObject;
-			var reqObj = objTools.make(this.typeLibrary.getItem(reqObjName).constructorFunction, params);
-			this.call('storeObjects', reqObj, onSuccess, onError);
-		},
-	
-		'getEventsInRange': function (params, onSuccess, onError) {
-			var reqObjName = this.methodLibrary.getItem('getEventsInRange').requestObject;
-			var reqObj = objTools.make(this.typeLibrary.getItem(reqObjName).constructorFunction, params);
-			this.call('getEventsInRange', reqObj, onSuccess, onError);
-		},
-	
-		'getAmount': function (params, onSuccess, onError) {
-			var reqObjName = this.methodLibrary.getItem('getAmount').requestObject;
-			var reqObj = objTools.make(this.typeLibrary.getItem(reqObjName).constructorFunction, params);
-			this.call('getAmount', reqObj, onSuccess, onError);
-		},
-	
-	});
-
-	return ws;
 });

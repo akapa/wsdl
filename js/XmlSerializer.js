@@ -104,9 +104,6 @@ function (_, objTools, Serializer, xml, primitiveSerializers, primitiveUnseriali
 		}
 	});
 
-	return function XmlSerializer () {
-		var obj = objTools.construct(xmlSerializer, XmlSerializer);
-		return obj.init.apply(obj, arguments);
-	};
+	return objTools.makeConstructor(function XmlSerializer () {}, xmlSerializer);
 	
 });

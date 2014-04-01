@@ -1,4 +1,5 @@
 define(['objTools'], function (objTools) {
+
 	var factory = {
 		init: function (typeLib) {
 			this.typeLibrary = typeLib;
@@ -17,8 +18,6 @@ define(['objTools'], function (objTools) {
 		}
 	};
 
-	return function Factory () {
-		var obj = objTools.construct(factory, Factory);
-		return obj.init.apply(obj, arguments);
-	};
+	return objTools.makeConstructor(function Factory () {}, factory);
+
 });

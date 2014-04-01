@@ -2,8 +2,8 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xs="http://www.w3.org/2001/XMLSchema" version="1.0">
 <xsl:output method="text" omit-xml-declaration="yes"/>   
 <xsl:template match="/">
-define(['underscore', 'objTools', 'wsdl/TypeLibrary', 'wsdl/TypeDefinition', 'wsdl/TypeEnsurer'], 
-function (_, objTools, TypeLibrary, TypeDefinition, TypeEnsurer) {
+define(['objTools', 'wsdl/TypeDefinition'], function (objTools, TypeDefinition) {
+
 	var namespaces = {
 		'myns': '<xsl:value-of select="xs:schema/@targetNamespace"/>',
 		'xs': 'http://www.w3.org/2001/XMLSchema',
@@ -15,9 +15,11 @@ function (_, objTools, TypeLibrary, TypeDefinition, TypeEnsurer) {
 	var types = {};
 	<xsl:apply-templates select=".//xs:complexType[not(descendant::xs:extension)]" mode="OBJECT" />
 
-	var tlib = new TypeLibrary(_(types).toArray());
-	tlib.typeEnsurer = new TypeEnsurer(tlib);
-	return tlib;
+	return {
+		types: types,
+		namespaces: namespaces
+	};
+
 });
 </xsl:template>
 
@@ -29,9 +31,10 @@ function (_, objTools, TypeLibrary, TypeDefinition, TypeEnsurer) {
 		classify: function () { return '<xsl:value-of select="@name" />'; }
 	};
 
-	constructors['<xsl:value-of select="@name" />'] = function <xsl:call-template name="capitalizeName" /> () {
-		return objTools.construct(<xsl:if test=".//xs:extension">objTools.make(new constructors['<xsl:value-of select="$base" />'], </xsl:if>objects['<xsl:value-of select="@name" />']<xsl:if test=".//xs:extension">)</xsl:if>, <xsl:call-template name="capitalizeName" />);
-	};
+	constructors['<xsl:value-of select="@name" />'] = objTools.makeConstructor(
+		function <xsl:call-template name="capitalizeName" /> () {},
+		<xsl:if test=".//xs:extension">objTools.make(new constructors['<xsl:value-of select="$base" />'], </xsl:if>objects['<xsl:value-of select="@name" />']<xsl:if test=".//xs:extension">)</xsl:if>
+	);
 
 	types['<xsl:value-of select="@name" />'] = objTools.make(TypeDefinition, {
 		type: '<xsl:value-of select="@name" />',

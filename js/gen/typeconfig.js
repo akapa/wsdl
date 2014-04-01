@@ -1,6 +1,6 @@
 
-define(['underscore', 'objTools', 'wsdl/TypeLibrary', 'wsdl/TypeDefinition', 'wsdl/TypeEnsurer'], 
-function (_, objTools, TypeLibrary, TypeDefinition, TypeEnsurer) {
+define(['objTools', 'wsdl/TypeDefinition'], function (objTools, TypeDefinition) {
+
 	var namespaces = {
 		'myns': 'http://budget.kapa.org/',
 		'xs': 'http://www.w3.org/2001/XMLSchema',
@@ -17,9 +17,10 @@ function (_, objTools, TypeLibrary, TypeDefinition, TypeEnsurer) {
 		classify: function () { return 'getRecentEvents'; }
 	};
 
-	constructors['getRecentEvents'] = function GetRecentEvents () {
-		return objTools.construct(objects['getRecentEvents'], GetRecentEvents);
-	};
+	constructors['getRecentEvents'] = objTools.makeConstructor(
+		function GetRecentEvents () {},
+		objects['getRecentEvents']
+	);
 
 	types['getRecentEvents'] = objTools.make(TypeDefinition, {
 		type: 'getRecentEvents',
@@ -37,9 +38,10 @@ function (_, objTools, TypeLibrary, TypeDefinition, TypeEnsurer) {
 		classify: function () { return 'getRecentEventsResponse'; }
 	};
 
-	constructors['getRecentEventsResponse'] = function GetRecentEventsResponse () {
-		return objTools.construct(objects['getRecentEventsResponse'], GetRecentEventsResponse);
-	};
+	constructors['getRecentEventsResponse'] = objTools.makeConstructor(
+		function GetRecentEventsResponse () {},
+		objects['getRecentEventsResponse']
+	);
 
 	types['getRecentEventsResponse'] = objTools.make(TypeDefinition, {
 		type: 'getRecentEventsResponse',
@@ -63,9 +65,10 @@ function (_, objTools, TypeLibrary, TypeDefinition, TypeEnsurer) {
 		classify: function () { return 'verybasic'; }
 	};
 
-	constructors['verybasic'] = function Verybasic () {
-		return objTools.construct(objects['verybasic'], Verybasic);
-	};
+	constructors['verybasic'] = objTools.makeConstructor(
+		function Verybasic () {},
+		objects['verybasic']
+	);
 
 	types['verybasic'] = objTools.make(TypeDefinition, {
 		type: 'verybasic',
@@ -87,9 +90,10 @@ function (_, objTools, TypeLibrary, TypeDefinition, TypeEnsurer) {
 		classify: function () { return 'basic'; }
 	};
 
-	constructors['basic'] = function Basic () {
-		return objTools.construct(objTools.make(new constructors['verybasic'], objects['basic']), Basic);
-	};
+	constructors['basic'] = objTools.makeConstructor(
+		function Basic () {},
+		objTools.make(new constructors['verybasic'], objects['basic'])
+	);
 
 	types['basic'] = objTools.make(TypeDefinition, {
 		type: 'basic',
@@ -116,9 +120,10 @@ function (_, objTools, TypeLibrary, TypeDefinition, TypeEnsurer) {
 		classify: function () { return 'event'; }
 	};
 
-	constructors['event'] = function Event () {
-		return objTools.construct(objTools.make(new constructors['basic'], objects['event']), Event);
-	};
+	constructors['event'] = objTools.makeConstructor(
+		function Event () {},
+		objTools.make(new constructors['basic'], objects['event'])
+	);
 
 	types['event'] = objTools.make(TypeDefinition, {
 		type: 'event',
@@ -163,9 +168,10 @@ function (_, objTools, TypeLibrary, TypeDefinition, TypeEnsurer) {
 		classify: function () { return 'user'; }
 	};
 
-	constructors['user'] = function User () {
-		return objTools.construct(objTools.make(new constructors['basic'], objects['user']), User);
-	};
+	constructors['user'] = objTools.makeConstructor(
+		function User () {},
+		objTools.make(new constructors['basic'], objects['user'])
+	);
 
 	types['user'] = objTools.make(TypeDefinition, {
 		type: 'user',
@@ -198,9 +204,10 @@ function (_, objTools, TypeLibrary, TypeDefinition, TypeEnsurer) {
 		classify: function () { return 'getEventsInRange'; }
 	};
 
-	constructors['getEventsInRange'] = function GetEventsInRange () {
-		return objTools.construct(objects['getEventsInRange'], GetEventsInRange);
-	};
+	constructors['getEventsInRange'] = objTools.makeConstructor(
+		function GetEventsInRange () {},
+		objects['getEventsInRange']
+	);
 
 	types['getEventsInRange'] = objTools.make(TypeDefinition, {
 		type: 'getEventsInRange',
@@ -226,9 +233,10 @@ function (_, objTools, TypeLibrary, TypeDefinition, TypeEnsurer) {
 		classify: function () { return 'getEventsInRangeResponse'; }
 	};
 
-	constructors['getEventsInRangeResponse'] = function GetEventsInRangeResponse () {
-		return objTools.construct(objects['getEventsInRangeResponse'], GetEventsInRangeResponse);
-	};
+	constructors['getEventsInRangeResponse'] = objTools.makeConstructor(
+		function GetEventsInRangeResponse () {},
+		objects['getEventsInRangeResponse']
+	);
 
 	types['getEventsInRangeResponse'] = objTools.make(TypeDefinition, {
 		type: 'getEventsInRangeResponse',
@@ -252,9 +260,10 @@ function (_, objTools, TypeLibrary, TypeDefinition, TypeEnsurer) {
 		classify: function () { return 'storeObjects'; }
 	};
 
-	constructors['storeObjects'] = function StoreObjects () {
-		return objTools.construct(objects['storeObjects'], StoreObjects);
-	};
+	constructors['storeObjects'] = objTools.makeConstructor(
+		function StoreObjects () {},
+		objects['storeObjects']
+	);
 
 	types['storeObjects'] = objTools.make(TypeDefinition, {
 		type: 'storeObjects',
@@ -277,9 +286,10 @@ function (_, objTools, TypeLibrary, TypeDefinition, TypeEnsurer) {
 		classify: function () { return 'getAmount'; }
 	};
 
-	constructors['getAmount'] = function GetAmount () {
-		return objTools.construct(objects['getAmount'], GetAmount);
-	};
+	constructors['getAmount'] = objTools.makeConstructor(
+		function GetAmount () {},
+		objects['getAmount']
+	);
 
 	types['getAmount'] = objTools.make(TypeDefinition, {
 		type: 'getAmount',
@@ -297,9 +307,10 @@ function (_, objTools, TypeLibrary, TypeDefinition, TypeEnsurer) {
 		classify: function () { return 'getAmountResponse'; }
 	};
 
-	constructors['getAmountResponse'] = function GetAmountResponse () {
-		return objTools.construct(objects['getAmountResponse'], GetAmountResponse);
-	};
+	constructors['getAmountResponse'] = objTools.makeConstructor(
+		function GetAmountResponse () {},
+		objects['getAmountResponse']
+	);
 
 	types['getAmountResponse'] = objTools.make(TypeDefinition, {
 		type: 'getAmountResponse',
@@ -321,9 +332,10 @@ function (_, objTools, TypeLibrary, TypeDefinition, TypeEnsurer) {
 		classify: function () { return 'deleteObjects'; }
 	};
 
-	constructors['deleteObjects'] = function DeleteObjects () {
-		return objTools.construct(objects['deleteObjects'], DeleteObjects);
-	};
+	constructors['deleteObjects'] = objTools.makeConstructor(
+		function DeleteObjects () {},
+		objects['deleteObjects']
+	);
 
 	types['deleteObjects'] = objTools.make(TypeDefinition, {
 		type: 'deleteObjects',
@@ -341,7 +353,9 @@ function (_, objTools, TypeLibrary, TypeDefinition, TypeEnsurer) {
 	});
 	
 
-	var tlib = new TypeLibrary(_(types).toArray());
-	tlib.typeEnsurer = new TypeEnsurer(tlib);
-	return tlib;
+	return {
+		types: types,
+		namespaces: namespaces
+	};
+
 });

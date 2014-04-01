@@ -13,15 +13,15 @@ requirejs.config({
 	}
 });
 
-requirejs(['underscore', 'wsdl/gen/wsconfig', 'xml'],
+requirejs(['underscore', 'wsdl/bootstrap', 'xml'],
 function (_, service, xml) {
 
-	service.getEventsInRange({
+	service.callWithPlainObject('getEventsInRange', {
 				timeFrom: new Date('09/18/2013'),
 				timeTo: new Date('11/02/2013')
 			}, 
 			function () { console.log(arguments); }, 
-			function () { console.log(arguments); }
+			function () { console.error(arguments); }
 		);
 
 	var user = service.factory.makeAndFill('user', {

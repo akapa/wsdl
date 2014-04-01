@@ -1,4 +1,5 @@
 define(['objTools'], function (objTools) {
+
 	var methodDefinition = {
 		name: null,
 		requestObj: null,
@@ -6,7 +7,6 @@ define(['objTools'], function (objTools) {
 		endpoint: ''
 	};
 
-	return function MethodDefinition() {
-		return objTools.construct(methodDefinition, MethodDefinition);
-	};
+	return objTools.makeConstructor(function MethodDefinition () {}, methodDefinition);
+
 });

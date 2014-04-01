@@ -68,8 +68,6 @@ function (_, objTools, Library, TypeDefinition) {
 		}
 	});
 
-	return function TypeLibrary () {
-		var obj = objTools.construct(typeLibrary, TypeLibrary);
-		return obj.init.apply(obj, arguments);
-	};
+	return objTools.makeConstructor(function TypeLibrary () {}, typeLibrary);
+
 });

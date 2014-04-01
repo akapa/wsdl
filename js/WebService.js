@@ -1,4 +1,5 @@
 define(['underscore', 'objTools', 'xml'], function (_, objTools, xml) {
+
 	var webService = {
 		init: function (name, serializer, factory, methodLibrary, typeLibrary) {
 			this.name = name;
@@ -30,6 +31,12 @@ define(['underscore', 'objTools', 'xml'], function (_, objTools, xml) {
 			req.setRequestHeader('SOAPAction', stuff.join('/'));
 			req.send(envelope);
 		},
+		callWithPlainObject: function (method, params, onSuccess, onError) {
+			var reqObjName = this.methodLibrary.getItem(method).requestObject;
+			var reqConstr = this.typeLibrary.getItem(reqObjName).constructorFunction;
+			var reqObj = objTools.make(reqConstr, params);
+			this.call(method, reqObj, onSuccess, onError);		
+		},
 		handleResponse: function (method, xhr, onSuccess, onError) {
 			if (this.responseSuccessRegex.test(xhr.status) && onSuccess) {
 				this.handleSuccess(method, xhr, onSuccess);
@@ -60,8 +67,6 @@ define(['underscore', 'objTools', 'xml'], function (_, objTools, xml) {
 		}
 	};
 
-	return function WebService () {
-		var obj = objTools.construct(webService, WebService);
-		return obj.init.apply(obj, arguments);
-	};
+	return objTools.makeConstructor(function WebService () {}, webService);
+
 });

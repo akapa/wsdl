@@ -109,8 +109,6 @@ function (_, objTools) {
 		}
 	};
 
-	return function TypeEnsurer () {
-		var obj = objTools.construct(typeEnsurer, TypeEnsurer);
-		return obj.init.apply(obj, arguments);
-	};
+	return objTools.makeConstructor(function TypeEnsurer () {}, typeEnsurer);
+
 });
