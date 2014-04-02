@@ -33,7 +33,7 @@ module.exports = function(grunt) {
               objTools: 'lib/objTools',
               wsdl: '.'
           },
-          name: 'ws',
+          name: 'wsdl/wsdl',
           skipModuleInsertion: false,
           optimize: 'none',
           out: 'dist/wsdl.js',
@@ -71,7 +71,7 @@ module.exports = function(grunt) {
     copy: {
       main: {
         src: 'js/bootstrap.js',
-        dest: 'dist/bootstrap.js'
+        dest: 'dist/wsdl-bootstrap.js'
       }
     }
   });

@@ -14,7 +14,7 @@ define(['underscore', 'objTools', 'xml'], function (_, objTools, xml) {
 			 * The name of the web service.
 			 * @member {string} WebService#name
 			 */
-		 	this.name = name;
+			this.name = name;
 			/**
 			 * The serializer used by this service to serialize/unserialize request data.
 			 * @member {Serializer} WebService#serializer

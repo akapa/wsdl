@@ -2,13 +2,40 @@ define(['underscore', 'objTools', 'Library', 'xml'],
 function (underscore, objTools, Library, xml) {
 
 var wsdl_WebService = function (_, objTools, xml) {
+        /**
+        * @lends WebService.prototype
+        */
         var webService = {
                 init: function (name, serializer, factory, methodLibrary, typeLibrary) {
+                    /**
+                    * The name of the web service.
+                    * @member {string} WebService#name
+                    */
                     this.name = name;
+                    /**
+                    * The serializer used by this service to serialize/unserialize request data.
+                    * @member {Serializer} WebService#serializer
+                    */
                     this.serializer = serializer;
+                    /**
+                    * The factory used by this service.
+                    * @member {Factory} WebService#factory
+                    */
                     this.factory = factory;
+                    /**
+                    * The library that describes the methods of this webservice.
+                    * @member {MethodLibrary} WebService#methodLibrary
+                    */
                     this.methodLibrary = methodLibrary;
+                    /**
+                    * The type library to be used by the webservice.
+                    * @member {TypeLibrary} WebService#typeLibrary
+                    */
                     this.typeLibrary = typeLibrary;
+                    /**
+                    * A regex that can be used to decide whether an HTTP response status code means "success".
+                    * @member {RegExp} WebService#responseSuccessRegex
+                    */
                     this.responseSuccessRegex = /^(20\d|1223)$/;
                     return this;
                 },
@@ -67,6 +94,10 @@ var wsdl_WebService = function (_, objTools, xml) {
         }, webService);
     }(underscore, objTools, xml);
 var wsdl_MethodDefinition = function (objTools) {
+        /**
+        * @constructor MethodDefinition
+        * @classdesc Stores data about a web service method.
+        */
         var methodDefinition = {
                 name: null,
                 requestObj: null,
@@ -77,6 +108,11 @@ var wsdl_MethodDefinition = function (objTools) {
         }, methodDefinition);
     }(objTools);
 var wsdl_MethodLibrary = function (_, objTools, Library, MethodDefinition) {
+        /**
+        * A basic library/collection used to store and retrieve items.
+        * @external Library
+        * @see {@link https://github.com/bazmegakapa/kapa-Library}
+        */
         var methodLibrary = objTools.make(Library, {
                 init: function (defs) {
                     this.items = {};
@@ -90,6 +126,11 @@ var wsdl_MethodLibrary = function (_, objTools, Library, MethodDefinition) {
         }, methodLibrary);
     }(underscore, objTools, Library, wsdl_MethodDefinition);
 var wsdl_Serializer = function (objTools) {
+        /**
+        * @constructor Serializer
+        * @abstract
+        * @classdesc A very basic serializer/unserializer.
+        */
         var serializer = {
                 serialize: function (value, name) {
                     return JSON.stringify(value);
@@ -196,8 +237,20 @@ var wsdl_primitiveUnserializers = function (_) {
 var wsdl_XmlSerializer = function (_, objTools, Serializer, xml, primitiveSerializers, primitiveUnserializers) {
         var xmlSerializer = objTools.make(Serializer, {
                 init: function (typeLibrary, factory, namespaces) {
+                    /**
+                    * The type library used by the serializer.
+                    * @member {TypeLibrary} XmlSerializer#typeLibrary
+                    */
                     this.typeLibrary = typeLibrary;
+                    /**
+                    * The factory used by the serializer.
+                    * @member {Factory} XmlSerializer#factory
+                    */
                     this.factory = factory;
+                    /**
+                    * A namespace lookup table (short to full).
+                    * @member {Object.<string, string>} XmlSerializer#ns
+                    */
                     this.ns = namespaces;
                     this.primitiveSerializers = primitiveSerializers;
                     this.primitiveUnserializers = primitiveUnserializers;
@@ -283,8 +336,15 @@ var wsdl_XmlSerializer = function (_, objTools, Serializer, xml, primitiveSerial
         }, xmlSerializer);
     }(underscore, objTools, wsdl_Serializer, xml, wsdl_primitiveSerializers, wsdl_primitiveUnserializers);
 var wsdl_Factory = function (objTools) {
+        /**
+        * @lends Factory.prototype
+        */
         var factory = {
                 init: function (typeLib) {
+                    /**
+                    * The type library used by the factory.
+                    * @member {TypeLibrary} Factory#typeLibrary
+                    */
                     this.typeLibrary = typeLib;
                     return this;
                 },
@@ -304,6 +364,10 @@ var wsdl_Factory = function (objTools) {
         }, factory);
     }(objTools);
 var wsdl_TypeDefinition = function (objTools) {
+        /**
+        * @constructor TypeDefinition
+        * @classdesc Stores data about a type.
+        */
         var typeDefinition = {
                 type: 'anyType',
                 ns: 'http://www.w3.org/2001/XMLSchema',
@@ -326,6 +390,10 @@ var wsdl_TypeLibrary = function (_, objTools, Library, TypeDefinition) {
                     this.type = TypeDefinition;
                     this.nameProperty = 'type';
                     this.addItems(defs);
+                    /**
+                     * The type ensurer to be used when setting values.
+                     * @member {TypeEnsurer} TypeLibrary#typeEnsurer
+                     */
                     this.typeEnsurer = null;
                     return this;
                 },
@@ -345,7 +413,7 @@ var wsdl_TypeLibrary = function (_, objTools, Library, TypeDefinition) {
                 getValue: function (obj, key) {
                     var s = this.getValueStrategy(obj);
                     if (_(s).isObject() && _(s.get).isFunction()) {
-                        return s(key);
+                        return s.get(obj, key);
                     }
                     var ret;
                     switch (s) {
@@ -366,7 +434,7 @@ var wsdl_TypeLibrary = function (_, objTools, Library, TypeDefinition) {
                     }
                     var s = this.getValueStrategy(obj);
                     if (_(s).isObject() && _(s.set).isFunction()) {
-                        s(key, value);
+                        s.set(obj, key, value);
                     } else {
                         switch (s) {
                         case 'gettersetter':
@@ -835,7 +903,7 @@ var wsdl_gen_typeconfig = function (objTools, TypeDefinition) {
             namespaces: namespaces
         };
     }(objTools, wsdl_TypeDefinition);
-var ws = function (_, objTools, WebService, MethodLibrary, XmlSerializer, Factory, TypeLibrary, TypeEnsurer, methods, typeConf) {
+var wsdl_wsdl = function (_, objTools, WebService, MethodLibrary, XmlSerializer, Factory, TypeLibrary, TypeEnsurer, methods, typeConf) {
         return {
             WebService: WebService,
             MethodLibrary: MethodLibrary,
