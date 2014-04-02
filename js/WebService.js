@@ -48,6 +48,7 @@ define(['underscore', 'objTools', 'xml'], function (_, objTools, xml) {
 		 * @param {Object} requestObj - The request object to use for the call.
 		 * @param {Function} onSuccess - The function to be called on success. Receives unserialized response object, status code and status text as parameters.
 		 * @param {Function} onError - The function to be called on error. Receives an error object, status code and status text as parameters.
+		 * @returns {XMLHttpRequest} The XHR object used for the transfer.
 		 */
 		call: function (method, requestObj, onSuccess, onError) {
 			var methodDef = this.methodLibrary.getItem(method);
@@ -69,6 +70,7 @@ define(['underscore', 'objTools', 'xml'], function (_, objTools, xml) {
 			];
 			req.setRequestHeader('SOAPAction', stuff.join('/'));
 			req.send(envelope);
+			return req;
 		},
 		/**
 		 * Convenience method to call web service methods without creating response objects.
@@ -76,12 +78,13 @@ define(['underscore', 'objTools', 'xml'], function (_, objTools, xml) {
 		 * @param {Object} params - The parameters to be set on the request object.
 		 * @param {Function} onSuccess - The function to be called on success. Receives unserialized response object, status code and status text as parameters.
 		 * @param {Function} onError - The function to be called on error. Receives an error object, status code and status text as parameters.
+		 * @returns {XMLHttpRequest} The XHR object used for the transfer.
 		 */
 		callWithPlainObject: function (method, params, onSuccess, onError) {
 			var reqObjName = this.methodLibrary.getItem(method).requestObject;
 			var reqConstr = this.typeLibrary.getItem(reqObjName).constructorFunction;
 			var reqObj = objTools.make(reqConstr, params);
-			this.call(method, reqObj, onSuccess, onError);		
+			return this.call(method, reqObj, onSuccess, onError);		
 		},
 		/**
 		 * Handles a response from the web service.
