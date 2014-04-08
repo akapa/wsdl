@@ -49,7 +49,65 @@
  - <a href="http://underscorejs.org/">Underscore.js</a>
  - Some of my own projects: <a href="https://github.com/bazmegakapa/kapa-xsd">kapa-xml</a>, <a href="https://github.com/bazmegakapa/">kapa-objTools</a>, <a href="kapa-Library">kapa-Library</a>.</p>
 <h2>Documentation</h2>
-<p>All the methods are documented with <a href="https://github.com/jsdoc3/jsdoc">JSDoc3</a>, you can find the generated HTML documentation in the <strong>docs</strong> folder.</p></article>
+<p>All the methods are documented with <a href="https://github.com/jsdoc3/jsdoc">JSDoc3</a>, you can find the generated HTML documentation in the <strong>docs</strong> folder.</p>
+<h2>Usage</h2>
+<h3>Generating definitions from WSDL and XSD</h3>
+<p>The project uses XSLT to take a WSDL and an XSD document (currently only one of each) and create Javascript code (<code>MethodDefinition</code> and <code>TypeDefinition</code> objects) from them. Grunt is used to execute the transformations, so you should install the dev dependencies from <code>package.json</code>.</p>
+<p>To process your own documents, you have to edit the <code>xsltproc</code> task in the <code>Gruntfile.js</code> file to point to your WSDL and XSLT files. The keys you have to edit are <code>xsltproc.wsdl.files['js/gen/wsconfig.js']</code> and <code>xsltproc.xsd.files['js/gen/typeconfig.js']</code>:</p>
+<pre><code>xsltproc: {
+  wsdl: {
+    options: {
+      stylesheet: 'xslt/wsdl2js.xslt'
+    },
+    files: {
+      'js/gen/wsconfig.js': ['yourpath/yourwsdlfile.wsdl']
+    }
+  },
+  xsd: {
+    options: {
+      stylesheet: 'xslt/xsd2js.xslt'
+    },
+    files: {
+      'js/gen/typeconfig.js': ['yourpath/yourxsdfile.xsd']
+    }
+  }
+},</code></pre>
+<p>Then you can simply run <code>grunt xsltproc</code> and the <code>wsconfig.js</code> and <code>typeconfig.js</code> files will be generated.</p>
+<h3>Creating a dist version</h3>
+<p>To bundle all the files (including the XSLT-generated files) into one, you should run <code>grunt requirejs</code>. This will rebuild <code>dist/wsdl.js</code>.</p>
+<h3>Including the dist version in your project</h3>
+<p>You should copy the contents of the <code>dist</code> directory to your project.</p>
+<ul>
+<li><code>wsdl.js</code> contains the project's code and the XSLT-generated method and type definitions. </li>
+<li><code>wsdl-bootstrap.js</code> contains object creation boilerplate code that you could edit to your own liking (overriding modules with your own ones and stuff like that). The module defined in this file should return a <code>WebService</code> object. This file requires <code>wsdl.js</code>.</li>
+</ul>
+<p>In the module you want to use <code>WebService</code>, you should simply add <code>wsdl-bootstrap</code> as a dependency, and it will provide you with a working <code>WebService</code> instance.</p>
+<pre><code>define(['wsdl-bootstrap'], function (webService) {
+    //you can use webService here
+});</code></pre>
+<h3>Using the <code>WebService</code> object</h3>
+<h4>Creating XSD-defined objects</h4>
+<p>For details I suggest you check the documentation in the <code>docs</code> folder, but let's see some quick examples.</p>
+<p>You can create objects defined in the XSD using the factory:</p>
+<pre><code>var user = webService.factory.make('user'); //user is an XSD complextype</code></pre>
+<p>To get/set properties of these objects, you should use the <code>TypeLibrary</code> instead of public properties. This way types will be ensured (for example <code>'0'</code> will be converted to <code>0</code> for a number type, see <code>TypeEnsurer</code>), and if you have set up special setters or getters for a type (manipulating <code>TypeLibrary</code> or creating your own), those will be run.</p>
+<pre><code>var oldName = webService.typeLibrary.getValue('name');
+webService.typeLibrary.setValue('name', 'John Spartan');</code></pre>
+<p>Sometimes it is more convenient to use <code>makeAndFill</code> from the factory, which will create the object like <code>make</code> but also update the desired properties at the same time (using <code>TypeLibrary</code> of course):</p>
+<pre><code>var enemy = webService.factory.makeAndFill('user', { name: 'Simon Phoenix' });</code></pre>
+<h4>Calling a web service method</h4>
+<p>First you need to create a request object that is needed for the method. The name of the request object is stored in <code>MethodLibrary</code>, you can pass that to the factory:</p>
+<pre><code>var reqObjName = webService.methodLibrary.getItem('myWebMethod').requestObject;
+var reqObj = webService.factory.make(reqObjName);</code></pre>
+<p>Then you can manipulate the request object the way you want, then call the web service method:</p>
+<pre><code>var onSuccess = function (respObj, status, statusText) {
+    console.log(respObj); //responseObject defined for this method
+};
+var onError = function (errorObj, status, statusText) {};
+webService.call('myWebMethod', reqObj, onSuccess, onError);</code></pre>
+<p>The request object will be serialized and sent to the server (details of the transfer are set in <code>MethodLibrary</code>). In the case of success, the response object will be unserialized (according to the rules set in <code>TypeLibrary</code>, which is based on the XSD) and passed as the first parameter into your success handler function.</p>
+<p>There is also a convenience method you can use to skip instantiating the request object. You can simply pass the properties you want set on the request object that will be created internally for you.</p>
+<pre><code>webService.callWithPlainObject('myWebMethod', { count: 3 }, onSuccess, onError);</code></pre></article>
     </section>
 
 
@@ -66,7 +124,7 @@
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.2</a> on Wed Apr 02 2014 15:51:07 GMT+0200 (CEST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.2</a> on Tue Apr 08 2014 15:47:51 GMT+0200 (CEST)
 </footer>
 
 <script> prettyPrint(); </script>

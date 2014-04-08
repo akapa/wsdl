@@ -58,12 +58,13 @@ var wsdl_WebService = function (_, objTools, xml) {
                         ];
                     req.setRequestHeader('SOAPAction', stuff.join('/'));
                     req.send(envelope);
+                    return req;
                 },
                 callWithPlainObject: function (method, params, onSuccess, onError) {
                     var reqObjName = this.methodLibrary.getItem(method).requestObject;
                     var reqConstr = this.typeLibrary.getItem(reqObjName).constructorFunction;
                     var reqObj = objTools.make(reqConstr, params);
-                    this.call(method, reqObj, onSuccess, onError);
+                    return this.call(method, reqObj, onSuccess, onError);
                 },
                 handleResponse: function (method, xhr, onSuccess, onError) {
                     if (this.responseSuccessRegex.test(xhr.status) && onSuccess) {
@@ -564,39 +565,41 @@ var wsdl_TypeEnsurer = function (_, objTools) {
         }, typeEnsurer);
     }(underscore, objTools);
 var wsdl_gen_wsconfig = function (objTools, MethodDefinition) {
-        //WSDL METHOD DEFINITIONS
-        return [
-            objTools.make(MethodDefinition, {
-                name: 'deleteObjects',
-                requestObject: 'deleteObjects',
-                responseObject: null,
-                endpoint: 'REPLACE_WITH_ACTUAL_URL'
-            }),
-            objTools.make(MethodDefinition, {
-                name: 'getRecentEvents',
-                requestObject: 'getRecentEvents',
-                responseObject: 'getRecentEventsResponse',
-                endpoint: 'REPLACE_WITH_ACTUAL_URL'
-            }),
-            objTools.make(MethodDefinition, {
-                name: 'storeObjects',
-                requestObject: 'storeObjects',
-                responseObject: null,
-                endpoint: 'REPLACE_WITH_ACTUAL_URL'
-            }),
-            objTools.make(MethodDefinition, {
-                name: 'getEventsInRange',
-                requestObject: 'getEventsInRange',
-                responseObject: 'getEventsInRangeResponse',
-                endpoint: 'REPLACE_WITH_ACTUAL_URL'
-            }),
-            objTools.make(MethodDefinition, {
-                name: 'getAmount',
-                requestObject: 'getAmount',
-                responseObject: 'getAmountResponse',
-                endpoint: 'REPLACE_WITH_ACTUAL_URL'
-            })
-        ];
+        return {
+            name: 'BudgetService',
+            methods: [
+                objTools.make(MethodDefinition, {
+                    name: 'deleteObjects',
+                    requestObject: 'deleteObjects',
+                    responseObject: null,
+                    endpoint: 'REPLACE_WITH_ACTUAL_URL'
+                }),
+                objTools.make(MethodDefinition, {
+                    name: 'getRecentEvents',
+                    requestObject: 'getRecentEvents',
+                    responseObject: 'getRecentEventsResponse',
+                    endpoint: 'REPLACE_WITH_ACTUAL_URL'
+                }),
+                objTools.make(MethodDefinition, {
+                    name: 'storeObjects',
+                    requestObject: 'storeObjects',
+                    responseObject: null,
+                    endpoint: 'REPLACE_WITH_ACTUAL_URL'
+                }),
+                objTools.make(MethodDefinition, {
+                    name: 'getEventsInRange',
+                    requestObject: 'getEventsInRange',
+                    responseObject: 'getEventsInRangeResponse',
+                    endpoint: 'REPLACE_WITH_ACTUAL_URL'
+                }),
+                objTools.make(MethodDefinition, {
+                    name: 'getAmount',
+                    requestObject: 'getAmount',
+                    responseObject: 'getAmountResponse',
+                    endpoint: 'REPLACE_WITH_ACTUAL_URL'
+                })
+            ]
+        };
     }(objTools, wsdl_MethodDefinition);
 var wsdl_gen_typeconfig = function (objTools, TypeDefinition) {
         var namespaces = {
@@ -903,7 +906,7 @@ var wsdl_gen_typeconfig = function (objTools, TypeDefinition) {
             namespaces: namespaces
         };
     }(objTools, wsdl_TypeDefinition);
-var wsdl_wsdl = function (_, objTools, WebService, MethodLibrary, XmlSerializer, Factory, TypeLibrary, TypeEnsurer, methods, typeConf) {
+var wsdl_wsdl = function (_, objTools, WebService, MethodLibrary, XmlSerializer, Factory, TypeLibrary, TypeEnsurer, methodConf, typeConf) {
         return {
             WebService: WebService,
             MethodLibrary: MethodLibrary,
@@ -911,7 +914,7 @@ var wsdl_wsdl = function (_, objTools, WebService, MethodLibrary, XmlSerializer,
             Factory: Factory,
             TypeLibrary: TypeLibrary,
             TypeEnsurer: TypeEnsurer,
-            methods: methods,
+            methodConf: methodConf,
             typeConf: typeConf
         };
     }(underscore, objTools, wsdl_WebService, wsdl_MethodLibrary, wsdl_XmlSerializer, wsdl_Factory, wsdl_TypeLibrary, wsdl_TypeEnsurer, wsdl_gen_wsconfig, wsdl_gen_typeconfig);
