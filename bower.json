@@ -8,6 +8,8 @@
     "underscore": "latest",
     "xml": "bazmegakapa/kapa-xml",
     "Library": "bazmegakapa/kapa-Library",
+    "primitiveSerializers": "bazmegakapa/kapa-primitiveSerializers",
+    "primitiveUnserializers": "bazmegakapa/kapa-primitiveUnserializers",
     "objTools": "bazmegakapa/kapa-objTools"
   },
   "install": {

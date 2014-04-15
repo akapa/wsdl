@@ -1,5 +1,5 @@
 define(['underscore', 'objTools', 'wsdl/Serializer', 'xml',
-	'wsdl/primitiveSerializers', 'wsdl/primitiveUnserializers'],
+	'primitiveSerializers', 'primitiveUnserializers'],
 function (_, objTools, Serializer, xml, primitiveSerializers, primitiveUnserializers) {
 
 	var xmlSerializer = objTools.make(Serializer, 

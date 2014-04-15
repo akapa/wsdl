@@ -25,12 +25,14 @@ module.exports = function(grunt) {
       compile: {
         options: {
           baseUrl: 'js',
-          exclude: ['underscore', 'objTools', 'Library', 'xml'],
+          exclude: ['underscore', 'objTools', 'Library', 'xml', 'primitiveSerializers', 'primitiveUnserializers'],
           paths: {
               underscore: 'lib/underscore',
               xml: 'lib/xml',
               Library: 'lib/Library',
               objTools: 'lib/objTools',
+              primitiveSerializers: 'lib/primitiveSerializers',
+              primitiveUnserializers: 'lib/primitiveUnserializers',
               wsdl: '.'
           },
           name: 'wsdl/wsdl',

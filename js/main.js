@@ -3,6 +3,8 @@ requirejs.config({
 		'underscore': 'lib/underscore',
         'xml': 'lib/xml',
         'Library': 'lib/Library',
+		'primitiveSerializers': 'lib/primitiveSerializers',
+		'primitiveUnserializers': 'lib/primitiveUnserializers',
         'objTools': 'lib/objTools',
         'wsdl': '.'
 	},

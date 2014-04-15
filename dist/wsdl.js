@@ -143,98 +143,6 @@ var wsdl_Serializer = function (objTools) {
         return objTools.makeConstructor(function Serializer() {
         }, serializer);
     }(objTools);
-var wsdl_primitiveSerializers = function (_) {
-        return {
-            'boolean': function (value) {
-                return value ? 'true' : 'false';
-            },
-            'float': function (value) {
-                if (value === Number.POSITIVE_INFINITY) {
-                    return 'INF';
-                }
-                if (value === Number.NEGATIVE_INFINITY) {
-                    return '-INF';
-                }
-                if (isNaN(value)) {
-                    return 'NaN';
-                }
-                return value.toExponential();
-            },
-            'dateTime': function (value) {
-                return value.toISOString();
-            },
-            'date': function (value) {
-                return value.toISOString().replace(/T[^Z+\-]*/, '');
-            },
-            'time': function (value) {
-                return value.toISOString().replace(/^[^T]*T/, '');
-            },
-            'gYearMonth': function (value) {
-                return value.toISOString().replace(/-[0-9]{2}T[^Z+\-]*/, '');
-            },
-            'gMonthDay': function (value) {
-                return value.toISOString().replace(/T[^Z+\-]*/, '').replace(/^[0-9]{4}-/, '');
-            }
-        };
-    }(underscore);
-var wsdl_primitiveUnserializers = function (_) {
-        return {
-            'boolean': function (s) {
-                return [
-                    'true',
-                    '1'
-                ].indexOf(s) !== -1;
-            },
-            'float': function (s) {
-                if (s === 'INF') {
-                    return Number.POSITIVE_INFINITY;
-                }
-                if (s === '-INF') {
-                    return Number.NEGATIVE_INFINITY;
-                }
-                return parseFloat(s);
-            },
-            'decimal': function (s) {
-                return parseFloat(s);
-            },
-            'int': function (s) {
-                return parseInt(s, 10);
-            },
-            'integer': function (s) {
-                return this.int(s);
-            },
-            'dateTime': function (s) {
-                return new Date(s);
-            },
-            'date': function (s) {
-                return new Date(s);
-            },
-            'time': function (s) {
-                var time = s.match(/(\d{2}):(\d{2}):(\d{2}).(\d{3})/);
-                var d = new Date();
-                d.setUTCHours(time[1]);
-                d.setUTCMinutes(time[2]);
-                d.setUTCSeconds(time[3]);
-                d.setUTCMilliseconds(time[4]);
-                return d;
-            },
-            'gYearMonth': function (s) {
-                return new Date(s);
-            },
-            'gMonthDay': function (s) {
-                return new Date('2004-' + s);
-            },
-            'gYear': function (s) {
-                return this.int(s);
-            },
-            'gDay': function (s) {
-                return this.int(s);
-            },
-            'gMonth': function (s) {
-                return this.int(s);
-            }
-        };
-    }(underscore);
 var wsdl_XmlSerializer = function (_, objTools, Serializer, xml, primitiveSerializers, primitiveUnserializers) {
         var xmlSerializer = objTools.make(Serializer, {
                 init: function (typeLibrary, factory, namespaces) {
@@ -335,7 +243,7 @@ var wsdl_XmlSerializer = function (_, objTools, Serializer, xml, primitiveSerial
             });
         return objTools.makeConstructor(function XmlSerializer() {
         }, xmlSerializer);
-    }(underscore, objTools, wsdl_Serializer, xml, wsdl_primitiveSerializers, wsdl_primitiveUnserializers);
+    }(underscore, objTools, wsdl_Serializer, xml, primitiveSerializers, primitiveUnserializers);
 var wsdl_Factory = function (objTools) {
         /**
         * @lends Factory.prototype

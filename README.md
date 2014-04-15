@@ -8,7 +8,7 @@ Defined in a [RequireJS](http://requirejs.org/) format, so you need an AMD loade
 
 Uses: 
  - [Underscore.js](http://underscorejs.org/)
- - Some of my own projects: [kapa-xml](https://github.com/bazmegakapa/kapa-xsd), [kapa-objTools](https://github.com/bazmegakapa/), [kapa-Library](kapa-Library).
+ - Some of my own projects: [kapa-xml](https://github.com/bazmegakapa/kapa-xsd), [kapa-objTools](https://github.com/bazmegakapa/kapa-objTools), [kapa-Library](https://github.com/bazmegakapa/kapa-Library), [kapa-primitiveSerializers](https://github.com/bazmegakapa/kapa-primitiveSerializers), [kapa-primitiveUnerializers](https://github.com/bazmegakapa/kapa-primitiveUnserializers).
 
 ##Documentation
 
@@ -62,9 +62,9 @@ In the module you want to use `WebService`, you should simply add `wsdl-bootstra
 
 ###Using the `WebService` object
 
-####Creating XSD-defined objects
-
 For details I suggest you check the documentation in the `docs` folder, but let's see some quick examples.
+
+####Creating XSD-defined objects
 
 You can create objects defined in the XSD using the factory:
 
